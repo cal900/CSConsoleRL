@@ -22,31 +22,5 @@ namespace CSConsoleRL.Components
             YPositionOnMap = 0;
             Character = character;
         }
-        
-        public override void ReceiveEvent(string eventString)
-        {
-            switch(eventString)
-            {
-                case "TransformUp":
-                    YPositionOnMap++;
-                    return;
-                case "TransformDown":
-                    YPositionOnMap--;
-                    return;
-                case "TransformLeft":
-                    XPositionOnMap--;
-                    return;
-                case "TransformRight":
-                    XPositionOnMap++;
-                    return;
-                default:
-                    return;
-            }
-        }
-
-        public override void OnTick()
-        {
-            
-        }
     }
 }

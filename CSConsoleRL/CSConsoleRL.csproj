@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\UserInputComponent.cs" />
     <Compile Include="Components\Interfaces\IComponent.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Components\DrawableCharComponent.cs" />

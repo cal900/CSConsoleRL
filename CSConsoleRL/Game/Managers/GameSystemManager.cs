@@ -39,6 +39,10 @@ namespace CSConsoleRL.Game.Managers
             {
                 Systems[typeof(CharGraphicsSystem)].AddComponent(entity.Components[typeof(DrawableCharComponent)]);
             }
+            if (entity.Components.ContainsKey(typeof(UserInputComponent)))
+            {
+                Systems[typeof(UserInputSystem)].AddComponent(entity.Components[typeof(UserInputComponent)]);
+            }
 
             return entity;
         }

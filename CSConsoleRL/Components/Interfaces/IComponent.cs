@@ -9,6 +9,6 @@ namespace CSConsoleRL.Components.Interfaces
 {
     public interface IComponent
     {
-        Entity EntityAttachedTo { get; set; }   
+        Entity EntityAttachedTo { get; set; }
     }
 }
