@@ -9,24 +9,15 @@ using CSConsoleRL.Events;
 
 namespace CSConsoleRL.Components
 {
-    public class DrawableCharComponent : IComponent
+    public class CollisionComponent : IComponent
     {
         public Entity EntityAttachedTo { get; set; }
         public List<IComponent> SubscribedComponents { get; set; }
-        public int XPositionOnMap { get; set; }
-        public int YPositionOnMap { get; set; }
-        public char Character { get; set; }
-        public ConsoleColor CharColor { get; set; }
 
-        public DrawableCharComponent(Entity entity, char character, ConsoleColor color)
+        public CollisionComponent(Entity entity)
         {
             EntityAttachedTo = entity;
             SubscribedComponents = new List<IComponent>();
-
-            XPositionOnMap = 0;
-            YPositionOnMap = 0;
-            Character = character;
-            CharColor = color;
         }
 
         public void ReceiveComponentEvent(GameEvent componentEvent)

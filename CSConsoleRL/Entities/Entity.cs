@@ -12,14 +12,10 @@ namespace CSConsoleRL.Entities
             public Guid Id { get; set; }
             public Dictionary<Type, IComponent> Components { get; set; }
 
-            public Entity(params IComponent[] components)
+            public Entity()
             {
                 Id = Guid.NewGuid();
                 Components = new Dictionary<Type, IComponent>();
-                foreach (IComponent currentComponent in components)
-                {
-                    AddComponent(currentComponent);
-                }
             }
 
             public T GetComponent<T>()

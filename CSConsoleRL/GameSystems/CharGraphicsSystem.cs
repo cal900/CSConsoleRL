@@ -53,6 +53,7 @@ namespace CSConsoleRL.GameSystems
             for (int index = 0; index < drawableComponents.Count; index++ )
             {
                 Console.SetCursorPosition(drawableComponents[index].XPositionOnMap - XCurrentPositionOnMap, drawableComponents[index].YPositionOnMap - YCurrentPositionOnMap);
+                Console.ForegroundColor = drawableComponents[index].CharColor;
                 Console.Write(drawableComponents[index].Character);
             }
         }
