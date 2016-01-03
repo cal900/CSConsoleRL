@@ -8,7 +8,7 @@ namespace CSConsoleRL.Events
 {
     public abstract class GameEvent
     {
-        const string EventName;
-        List<object> EventParams;
+        public readonly string EventName;
+        public List<object> EventParams;
     }
 }

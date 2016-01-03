@@ -7,8 +7,8 @@
     <ProjectGuid>{1EBF0C1E-5F95-4ED9-A81E-BD31F2D3AFF0}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CSCosoleRL</RootNamespace>
-    <AssemblyName>CSCosoleRL</AssemblyName>
+    <RootNamespace>CSConsoleRL</RootNamespace>
+    <AssemblyName>CSConsoleRL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,11 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\CollisionComponent.cs" />
+    <Compile Include="Components\MovementComponent.cs" />
     <Compile Include="Components\UserInputComponent.cs" />
     <Compile Include="Components\Interfaces\IComponent.cs" />
+    <Compile Include="Entities\ActorEntity.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Components\DrawableCharComponent.cs" />
+    <Compile Include="Enums\EnumDirections.cs" />
+    <Compile Include="Enums\EnumKeyboard.cs" />
     <Compile Include="Events\GameEvent.cs" />
+    <Compile Include="Events\MovementEvents.cs" />
+    <Compile Include="GameSystems\MovementSystem.cs" />
     <Compile Include="Game\Managers\GameSystemManager.cs" />
     <Compile Include="GameSystems\CharGraphicsSystem.cs" />
     <Compile Include="GameSystems\UserInputSystem.cs" />

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSConsoleRL
+namespace CSConsoleRL.Entities
 {
-    public class Program
+    public class ActorEntity : Entity
     {
-        static void Main(string[] args)
+        public ActorEntity() : base()
         {
 
         }

@@ -12,7 +12,7 @@ namespace CSConsoleRL.GameSystems
     public abstract class GameSystem
     {
         public GameSystemManager SystemManager { get; set; }
-        public void AddComponent(IComponent component); //New components are casted when added rather than when called, implement list in inherting Systems
-        public abstract void HandleMessage(GameEvent evt);
+        public abstract void AddComponent(IComponent component); //New components are casted when added rather than when called, implement list in inherting Systems
+        public abstract void HandleMessage(GameEvent gameEvent);
     }
 }

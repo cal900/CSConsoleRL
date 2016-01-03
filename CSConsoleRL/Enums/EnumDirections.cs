@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSConsoleRL
+namespace CSConsoleRL.Enums
 {
-    public class Program
+    public enum EnumDirections
     {
-        static void Main(string[] args)
-        {
-
-        }
+        North,
+        South,
+        West,
+        East
     }
 }

@@ -15,8 +15,7 @@ namespace CSConsoleRL.Game.Managers
         public event EventHandler WaitingForInput;
         public event EventHandler DoneWithInput;
         public List<Entity> Entities { get; set; }
-        public List<DrawableCharComponent> DrawableCharComponents { get; set; }
-        private Dictionary<Type, GameSystem> Systems { get; set; } 
+        public Dictionary<Type, GameSystem> Systems { get; set; } 
 
         public GameSystemManager()
         {
@@ -35,6 +34,7 @@ namespace CSConsoleRL.Game.Managers
         {
             Entities.Add(entity);
 
+            //If entity contains components governed by a system (graphics, user input etc), add the component to the relevant system
             if(entity.Components.ContainsKey(typeof(DrawableCharComponent)))
             {
                 Systems[typeof(CharGraphicsSystem)].AddComponent(entity.Components[typeof(DrawableCharComponent)]);
@@ -42,6 +42,10 @@ namespace CSConsoleRL.Game.Managers
             if (entity.Components.ContainsKey(typeof(UserInputComponent)))
             {
                 Systems[typeof(UserInputSystem)].AddComponent(entity.Components[typeof(UserInputComponent)]);
+            }
+            if (entity.Components.ContainsKey(typeof(MovementComponent)))
+            {
+                Systems[typeof(MovementSystem)].AddComponent(entity.Components[typeof(MovementComponent)]);
             }
 
             return entity;
@@ -64,7 +68,7 @@ namespace CSConsoleRL.Game.Managers
 
         public void FireEvent(GameEvent evt)
         {
-            Systems.ForEach(s => s.HandleMessage(evt));
+            //Systems.ForEach(s => s.HandleMessage(evt));
         }
 
         public Entity WithId(Guid id)

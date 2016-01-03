@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CSConsoleRL.Game.Managers;
 using CSConsoleRL.Components;
 using CSConsoleRL.Components.Interfaces;
+using CSConsoleRL.Events;
 
 namespace CSConsoleRL.GameSystems
 {
@@ -34,9 +35,14 @@ namespace CSConsoleRL.GameSystems
             drawableComponents = new List<DrawableCharComponent>();
         }
 
-        public void AddComponent(IComponent component)
+        public override void AddComponent(IComponent component)
         {
             drawableComponents.Add((component as DrawableCharComponent));
+        }
+
+        public override void HandleMessage(GameEvent gameEvent)
+        {
+            throw new NotImplementedException();
         }
 
         public void DrawCharGraphics(int XCurrentPositionOnMap, int YCurrentPositionOnMap)
