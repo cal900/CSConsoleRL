@@ -22,12 +22,12 @@ namespace CSConsoleRL.GameSystems
             collisionComponents = new List<MovementComponent>();
         }
 
-        public void AddComponent(IComponent component)
+        public override void AddComponent(IComponent component)
         {
             collisionComponents.Add((component as MovementComponent));
         }
 
-        public void HandleMessage(GameEvent gameEvent)
+        public override void HandleMessage(GameEvent gameEvent)
         {
 
         }

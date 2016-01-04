@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSConsoleRL", "CSConsoleRL\CSConsoleRL.csproj", "{1EBF0C1E-5F95-4ED9-A81E-BD31F2D3AFF0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor", "MapEditor\MapEditor.csproj", "{D704D920-1B45-4E29-B713-91C957CE0C12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1EBF0C1E-5F95-4ED9-A81E-BD31F2D3AFF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EBF0C1E-5F95-4ED9-A81E-BD31F2D3AFF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EBF0C1E-5F95-4ED9-A81E-BD31F2D3AFF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D704D920-1B45-4E29-B713-91C957CE0C12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D704D920-1B45-4E29-B713-91C957CE0C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D704D920-1B45-4E29-B713-91C957CE0C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D704D920-1B45-4E29-B713-91C957CE0C12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

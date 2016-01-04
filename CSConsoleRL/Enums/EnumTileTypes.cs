@@ -11,6 +11,8 @@ namespace CSConsoleRL.Enums
         Grass,
         Snow,
         SnowWalked,
-        Road
+        Road,
+        CabinWall,
+        CabinFloor
     }
 }
