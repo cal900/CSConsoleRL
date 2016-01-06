@@ -48,7 +48,6 @@
     <Compile Include="Entities\ActorEntity.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Components\DrawableCharComponent.cs" />
-    <Compile Include="Enums\EnumTileTypes.cs" />
     <Compile Include="Enums\EnumDirections.cs" />
     <Compile Include="Enums\EnumKeyboard.cs" />
     <Compile Include="Events\GameEvent.cs" />
@@ -61,13 +60,16 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameSystems\GameSystem.cs" />
-    <Compile Include="Tiles\Tile.cs" />
-    <Compile Include="Tiles\TileTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\GameTiles\GameTiles.csproj">
+      <Project>{ecd749d5-6842-4764-9ba1-3b17fd170b8e}</Project>
+      <Name>GameTiles</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

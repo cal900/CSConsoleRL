@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CSConsoleRL.Components.Interfaces;
-using CSConsoleRL.Entities;
-using CSConsoleRL.Enums;
+using GameTiles.Enums;
 
-namespace CSConsoleRL.Tiles
+namespace GameTiles.Tiles
 {
     public struct TileData
     {
