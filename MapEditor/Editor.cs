@@ -88,6 +88,10 @@ namespace MapEditor
                     if (CursorXPosition < TileSet.GetLength(0) - 1) CursorXPosition++;
                     if (CursorXPosition >= WindowXPosition + ScreenWidth) WindowXPosition++;
                 }
+                else if (keyPressed.Key == ConsoleKey.M)
+                {
+                    OpenEditorMenu();
+                }
                 else
                 {
                     HandleTileChangeKeyPressed(keyPressed.Key);
@@ -110,13 +114,13 @@ namespace MapEditor
                     //If the position is out of bounds for the map don't draw anything there
                     if (x < 0 || y < 0 || x >= TileSet.GetLength(0) || y >= TileSet.GetLength(1))
                     {
-                        Console.Write(" "); 
+                        Console.Write("  "); 
                         continue;
                     }
 
                     Console.ForegroundColor = TileDictionary[TileSet[x, y].TileType].Color;
                     if (x == CursorXPosition && y == CursorYPosition) Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write(TileDictionary[TileSet[x, y].TileType].Character);
+                    Console.Write(TileDictionary[TileSet[x, y].TileType].Character + " ");
                 }
                 Console.WriteLine("");
             }
@@ -150,7 +154,69 @@ namespace MapEditor
             {
                 TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.CabinWall;
             }
+            else if (keyPressed == ConsoleKey.D7)
+            {
+                TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.CabinDoor;
+            }
+            else if (keyPressed == ConsoleKey.D8)
+            {
+                TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.Tree;
+            }
+            else if (keyPressed == ConsoleKey.D9)
+            {
+                TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.River;
+            }
+            else if (keyPressed == ConsoleKey.D0)
+            {
+                TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.CabinWindow;
+            }
         }
 
+        public void OpenEditorMenu()
+        {
+            Console.Clear();
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("S");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("ave Map\n");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("L");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("oad Map\n");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("B");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("ack\n");
+
+            ConsoleKeyInfo keyPressed;
+            keyPressed = Console.ReadKey(false);
+            while (keyPressed.Key != ConsoleKey.B)
+            {
+                if (keyPressed.Key == ConsoleKey.S)
+                {
+                    
+                }
+                else if (keyPressed.Key == ConsoleKey.L)
+                {
+
+                }
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("S");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("ave Map\n");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("L");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("oad Map\n");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("B");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("ack\n");
+
+                keyPressed = Console.ReadKey(false);
+            }
+        }
     }
 }

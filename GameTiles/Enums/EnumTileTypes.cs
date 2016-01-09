@@ -13,6 +13,10 @@ namespace GameTiles.Enums
         SnowWalked,
         Road,
         CabinWall,
-        CabinFloor
+        CabinFloor,
+        CabinDoor,
+        Tree,
+        River,
+        CabinWindow
     }
 }
