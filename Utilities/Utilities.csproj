@@ -42,6 +42,12 @@
     <Compile Include="MapFileHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameTiles\GameTiles.csproj">
+      <Project>{ecd749d5-6842-4764-9ba1-3b17fd170b8e}</Project>
+      <Name>GameTiles</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
