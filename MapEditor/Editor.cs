@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GameTiles.Tiles;
 using GameTiles.Enums;
+using Utilities;
 
 namespace MapEditor
 {
@@ -90,7 +91,7 @@ namespace MapEditor
                 }
                 else if (keyPressed.Key == ConsoleKey.M)
                 {
-                    OpenEditorMenu();
+                    var newFileMenu = new MapFileHandler();
                 }
                 else
                 {
@@ -169,53 +170,6 @@ namespace MapEditor
             else if (keyPressed == ConsoleKey.D0)
             {
                 TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.CabinWindow;
-            }
-        }
-
-        public void OpenEditorMenu()
-        {
-            Console.Clear();
-
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("S");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("ave Map\n");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("L");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("oad Map\n");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("B");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("ack\n");
-
-            ConsoleKeyInfo keyPressed;
-            keyPressed = Console.ReadKey(false);
-            while (keyPressed.Key != ConsoleKey.B)
-            {
-                if (keyPressed.Key == ConsoleKey.S)
-                {
-                    
-                }
-                else if (keyPressed.Key == ConsoleKey.L)
-                {
-
-                }
-
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("S");
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("ave Map\n");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("L");
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("oad Map\n");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("B");
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("ack\n");
-
-                keyPressed = Console.ReadKey(false);
             }
         }
     }

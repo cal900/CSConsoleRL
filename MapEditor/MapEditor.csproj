@@ -56,6 +56,10 @@
       <Project>{ecd749d5-6842-4764-9ba1-3b17fd170b8e}</Project>
       <Name>GameTiles</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.csproj">
+      <Project>{da14176e-3fec-43a8-ab9a-b4bd81e2327c}</Project>
+      <Name>Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
