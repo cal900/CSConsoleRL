@@ -14,10 +14,9 @@ namespace Utilities
     {
         MapFileLoadSave mapFileLoadSave;
 
-        public MapFileHandler()
+        public MapFileHandler(ref MapFile mapFileToSave)
         {
-
-            mapFileLoadSave = new MapFileLoadSave();
+            mapFileLoadSave = new MapFileLoadSave(ref mapFileToSave);
             OpenEditorMenu();
         }
 
@@ -42,8 +41,9 @@ namespace Utilities
 
             ConsoleKeyInfo keyPressed;
             keyPressed = Console.ReadKey(false);
-            while (keyPressed.Key != ConsoleKey.B)
+            while (keyPressed.Key != ConsoleKey.B && keyPressed.Key != ConsoleKey.Escape)
             {
+                Console.Clear();
                 if (keyPressed.Key == ConsoleKey.S)
                 {
                     mapFileLoadSave.SaveMapFileBrowser();
@@ -75,34 +75,87 @@ namespace Utilities
 
     public class MapFileLoadSave
     {
+        MapFile mapFile;
+
+        public MapFileLoadSave(ref MapFile mapFileToSave)
+        {
+            mapFile = mapFileToSave;
+        }
+
         public void SaveMapFileBrowser()
         {
+            string[] filesInDirectory = Directory.GetFiles(Directory.GetCurrentDirectory() + @"\Maps", "*.csr");
 
+            string input = "";
+            int tempInt = 0;
+
+            while (string.Compare(input, "exit", true) != 0)
+            {
+                for (int index = 0; index < filesInDirectory.GetLength(0); index++)
+                {
+                    Console.WriteLine((index + 1) + " " + filesInDirectory[index]);
+                }
+
+                input = Console.ReadLine();
+
+                if(int.TryParse(input, out tempInt) && tempInt != 0 && tempInt <= filesInDirectory.GetLength(0))
+                {
+                    SaveMap(filesInDirectory[tempInt - 1]);
+                    Console.Clear();
+                    return;
+                }
+                else if(string.Compare(input, "exit", true) != 0)
+                {
+                    SaveMap(@"Maps\" + input);
+                    Console.Clear();
+                    return;
+                }
+            }
         }
 
         public void LoadMapFileBrowser()
         {
+            string[] filesInDirectory = Directory.GetFiles(Directory.GetCurrentDirectory() + @"\Maps", "*.csr");
 
+            string input = "";
+            int tempInt = 0;
+
+            while (string.Compare(input, "exit", true) != 0)
+            {
+                for (int index = 0; index < filesInDirectory.GetLength(0); index++)
+                {
+                    Console.WriteLine((index + 1) + " " + filesInDirectory[index]);
+                }
+
+                input = Console.ReadLine();
+
+                if (int.TryParse(input, out tempInt) && tempInt != 0 && tempInt <= filesInDirectory.GetLength(0))
+                {
+                    LoadMap(filesInDirectory[tempInt - 1]);
+                    return;
+                }
+                else if (string.Compare(input, "exit", true) != 0)
+                {
+                    LoadMap(@"Maps\" + input);
+                    return;
+                }
+            }
         }
 
-        private void SaveMap(string filePath, MapFile mapFileToSave)
+        private void SaveMap(string filePath)
         {
-            Stream fileStream = File.OpenWrite(filePath);
+            Stream fileStream = File.OpenWrite(filePath + ".csr");
             BinaryFormatter serializer = new BinaryFormatter();
-            serializer.Serialize(fileStream, mapFileToSave);
+            serializer.Serialize(fileStream, mapFile);
             fileStream.Close();
         }
 
-        private MapFile LoadMap(string filePath)
+        private void LoadMap(string filePath)
         {
-            MapFile mapFile = new MapFile();
-
-            Stream fileStream = File.OpenRead(filePath);
+            Stream fileStream = File.OpenRead(filePath + ".csr");
             BinaryFormatter deserializer = new BinaryFormatter();
             mapFile = (MapFile)deserializer.Deserialize(fileStream);
             fileStream.Close();
-
-            return mapFile;
         }
     }
 }

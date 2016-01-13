@@ -7,6 +7,7 @@ using GameTiles.Enums;
 
 namespace GameTiles.Tiles
 {
+    [Serializable()]
     public struct Tile
     {
         public EnumTileTypes TileType;
