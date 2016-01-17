@@ -10,7 +10,7 @@ using System.Runtime.Serialization;
 namespace GameTiles
 {
     [Serializable()]
-    public struct MapFile
+    public struct MapFile : ICloneable
     {
         public MapFile(Tile[,] _tileSet)
         { TileSet = _tileSet; }
