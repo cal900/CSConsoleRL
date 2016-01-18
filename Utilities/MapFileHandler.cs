@@ -16,11 +16,11 @@ namespace Utilities
 
         public MapFileHandler(ref MapFile mapFileToSave)
         {
-            mapFileLoadSave = new MapFileLoadSave(ref mapFileToSave);
-            OpenEditorMenu();
+            mapFileLoadSave = new MapFileLoadSave();
+            OpenEditorMenu(ref mapFileToSave);
         }
 
-        public void OpenEditorMenu()
+        public void OpenEditorMenu(ref MapFile mapFileToSave)
         {
             Console.Clear();
 
@@ -46,11 +46,13 @@ namespace Utilities
                 Console.Clear();
                 if (keyPressed.Key == ConsoleKey.S)
                 {
-                    mapFileLoadSave.SaveMapFileBrowser();
+                    mapFileLoadSave.SaveMapFileBrowser(ref mapFileToSave);
+                    return;
                 }
                 else if (keyPressed.Key == ConsoleKey.L)
                 {
-                    mapFileLoadSave.LoadMapFileBrowser();
+                    mapFileLoadSave.LoadMapFileBrowser(ref mapFileToSave);
+                    return;
                 }
 
                 Console.ForegroundColor = ConsoleColor.White;
@@ -75,14 +77,12 @@ namespace Utilities
 
     public class MapFileLoadSave
     {
-        MapFile mapFile;
-
-        public MapFileLoadSave(ref MapFile mapFileToSave)
+        public MapFileLoadSave()
         {
-            mapFile = mapFileToSave;
+            
         }
 
-        public void SaveMapFileBrowser()
+        public void SaveMapFileBrowser(ref MapFile mapFileToSave)
         {
             string[] filesInDirectory = Directory.GetFiles(Directory.GetCurrentDirectory() + @"\Maps", "*.csr");
 
@@ -93,27 +93,27 @@ namespace Utilities
             {
                 for (int index = 0; index < filesInDirectory.GetLength(0); index++)
                 {
-                    Console.WriteLine((index + 1) + " " + filesInDirectory[index]);
+                    Console.WriteLine((index + 1) + ": " + filesInDirectory[index]);
                 }
 
                 input = Console.ReadLine();
 
                 if(int.TryParse(input, out tempInt) && tempInt != 0 && tempInt <= filesInDirectory.GetLength(0))
                 {
-                    SaveMap(filesInDirectory[tempInt - 1]);
+                    SaveMap(filesInDirectory[tempInt - 1], ref mapFileToSave);
                     Console.Clear();
                     return;
                 }
                 else if(string.Compare(input, "exit", true) != 0)
                 {
-                    SaveMap(@"Maps\" + input);
+                    SaveMap(@"Maps\" + input, ref mapFileToSave);
                     Console.Clear();
                     return;
                 }
             }
         }
 
-        public void LoadMapFileBrowser()
+        public void LoadMapFileBrowser(ref MapFile mapFileToLoadTo)
         {
             string[] filesInDirectory = Directory.GetFiles(Directory.GetCurrentDirectory() + @"\Maps", "*.csr");
 
@@ -124,38 +124,43 @@ namespace Utilities
             {
                 for (int index = 0; index < filesInDirectory.GetLength(0); index++)
                 {
-                    Console.WriteLine((index + 1) + " " + filesInDirectory[index]);
+                    Console.WriteLine((index + 1) + ": " + filesInDirectory[index]);
                 }
 
                 input = Console.ReadLine();
 
                 if (int.TryParse(input, out tempInt) && tempInt != 0 && tempInt <= filesInDirectory.GetLength(0))
                 {
-                    LoadMap(filesInDirectory[tempInt - 1]);
+                    LoadMap(filesInDirectory[tempInt - 1], ref mapFileToLoadTo);
                     return;
                 }
                 else if (string.Compare(input, "exit", true) != 0)
                 {
-                    LoadMap(@"Maps\" + input);
+                    LoadMap(@"Maps\" + input, ref mapFileToLoadTo);
                     return;
                 }
             }
         }
 
-        private void SaveMap(string filePath)
+        private void SaveMap(string filePath, ref MapFile mapFileToSave)
         {
-            Stream fileStream = File.OpenWrite(filePath + ".csr");
+            if (filePath.Substring(filePath.Length - 4) != ".csr") filePath = filePath + ".csr";
+            Stream fileStream = File.OpenWrite(filePath);
             BinaryFormatter serializer = new BinaryFormatter();
-            serializer.Serialize(fileStream, mapFile);
+            serializer.Serialize(fileStream, mapFileToSave);
             fileStream.Close();
         }
 
-        private void LoadMap(string filePath)
+        private void LoadMap(string filePath, ref MapFile mapFileToLoadTo)
         {
-            Stream fileStream = File.OpenRead(filePath + ".csr");
+            if (filePath.Substring(filePath.Length - 4) != ".csr") filePath = filePath + ".csr";
+            MapFile loadedMapFile;
+            Stream fileStream = File.OpenRead(filePath);
             BinaryFormatter deserializer = new BinaryFormatter();
-            mapFile = (MapFile)deserializer.Deserialize(fileStream);
+            loadedMapFile = (MapFile)deserializer.Deserialize(fileStream);
             fileStream.Close();
+
+            mapFileToLoadTo = (MapFile)loadedMapFile.Clone();
         }
     }
 }
