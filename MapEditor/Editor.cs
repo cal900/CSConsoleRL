@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GameTiles;
 using GameTiles.Tiles;
 using GameTiles.Enums;
+using GameTiles.Spawns;
 using Utilities;
 
 namespace MapEditor
@@ -33,7 +34,7 @@ namespace MapEditor
             WindowXPosition = 0;
             WindowYPosition = 0;
 
-            mapInfo = new MapFile(new Tile[30, 30]);
+            mapInfo = new MapFile(new Tile[30, 30], new List<Spawn>());
             for (int y = 0; y < mapInfo.TileSet.GetLength(1); y++)
             {
                 for (int x = 0; x < mapInfo.TileSet.GetLength(0); x++)
@@ -94,6 +95,17 @@ namespace MapEditor
                 {
                     var newFileMenu = new MapFileHandler(ref mapInfo);
                 }
+                else if (keyPressed.Key == ConsoleKey.N)
+                {
+                    //Reset/Clear map to all snow
+                    for (int yIndex = 0; yIndex < mapInfo.TileSet.GetLength(1); yIndex++)
+                    {
+                        for (int xIndex = 0; xIndex < mapInfo.TileSet.GetLength(0); xIndex++)
+                        {
+                            mapInfo.TileSet[xIndex, yIndex].TileType = EnumTileTypes.Snow;
+                        }
+                    }
+                }
                 else
                 {
                     HandleTileChangeKeyPressed(keyPressed.Key);
@@ -116,7 +128,7 @@ namespace MapEditor
                     //If the position is out of bounds for the map don't draw anything there
                     if (x < 0 || y < 0 || x >= mapInfo.TileSet.GetLength(0) || y >= mapInfo.TileSet.GetLength(1))
                     {
-                        Console.Write("  "); 
+                        Console.Write("  ");
                         continue;
                     }
 
@@ -171,6 +183,10 @@ namespace MapEditor
             else if (keyPressed == ConsoleKey.D0)
             {
                 mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.CabinWindow;
+            }
+            else if (keyPressed == ConsoleKey.Z)
+            {
+                mapInfo.SpawnPoints.Add(new Spawn(EnumSpawnTypes.Player, CursorXPosition, CursorYPosition));
             }
         }
     }

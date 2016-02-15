@@ -39,9 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\EnumSpawnTypes.cs" />
     <Compile Include="Enums\EnumTileTypes.cs" />
     <Compile Include="MapFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Spawns\Spawn.cs" />
     <Compile Include="Tiles\Tile.cs" />
     <Compile Include="Tiles\TileTypes.cs" />
   </ItemGroup>
