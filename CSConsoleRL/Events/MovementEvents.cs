@@ -31,4 +31,7 @@ namespace CSConsoleRL.Events
             EventParams.Add(targetY);
         }
     }
+
+    //Need events for denied and each reason - e.g. collision, immobilized, etc.
+    //will broadcast movement request event, then wait for any denied response, if none will broadcast move event
 }
