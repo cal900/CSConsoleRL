@@ -68,7 +68,7 @@ namespace CSConsoleRL.Game.Managers
 
         public void BroadcastEvent(GameEvent eventToBroadcast)
         {
-            foreach(GameSystem )
+            //foreach(GameSystem )
         }
 
         public Entity WithId(Guid id)
@@ -77,3 +77,8 @@ namespace CSConsoleRL.Game.Managers
         }
     }
 }
+
+//Systems should have list of Components
+//Components have pointer to Entity, when broadcast event goes to the Entity owned by the Component
+//E.g. for collision broadcast to all entities that have collision body, see if collision
+//This way we can prepare if entity may have something related to collision but not directly collision component in future
