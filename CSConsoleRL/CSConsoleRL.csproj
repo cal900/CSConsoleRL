@@ -51,7 +51,7 @@
     <Compile Include="Enums\EnumDirections.cs" />
     <Compile Include="Enums\EnumKeyboard.cs" />
     <Compile Include="Events\GameEvent.cs" />
-    <Compile Include="Events\MovementEvents.cs" />
+    <Compile Include="Events\MovementInputEvents.cs" />
     <Compile Include="GameSystems\MovementSystem.cs" />
     <Compile Include="Game\Managers\TileManager.cs" />
     <Compile Include="Game\Managers\GameSystemManager.cs" />

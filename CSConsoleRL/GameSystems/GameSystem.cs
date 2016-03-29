@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CSConsoleRL.Game.Managers;
 using CSConsoleRL.Events;
 using CSConsoleRL.Components.Interfaces;
+using CSConsoleRL.Entities;
 
 namespace CSConsoleRL.GameSystems
 {
@@ -14,5 +15,6 @@ namespace CSConsoleRL.GameSystems
         public GameSystemManager SystemManager { get; set; }
         public abstract void AddComponent(IComponent component); //New components are casted when added rather than when called, implement list in inherting Systems
         public abstract void HandleMessage(GameEvent gameEvent);
+        public abstract GameEvent BroadcastMessage(GameEvent evnt, List<Entity> entitiesInvolved);
     }
 }

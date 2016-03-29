@@ -19,19 +19,14 @@ namespace CSConsoleRL.Events
     //    }
     //}
 
-    public class MovementCommandEvent : GameEvent
+    public class MovementInputEvent : GameEvent
     {
-        public readonly string EventName = "MovementCommand";
+        public readonly string EventName = "MovementInput";
         public List<object> EventParams;
 
-        public MovementCommandEvent(int targetX, int targetY)
+        public MovementInputEvent(EnumDirections directionOfInput)
         {
-            EventParams = new List<object>();
-            EventParams.Add(targetX);
-            EventParams.Add(targetY);
+            EventParams.Add(directionOfInput);
         }
     }
-
-    //Need events for denied and each reason - e.g. collision, immobilized, etc.
-    //will broadcast movement request event, then wait for any denied response, if none will broadcast move event
 }

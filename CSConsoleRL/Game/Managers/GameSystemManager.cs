@@ -71,6 +71,14 @@ namespace CSConsoleRL.Game.Managers
             //foreach(GameSystem )
         }
 
+        public void BroadcastEvent(GameEvent evnt, List<Entity> entitiesInvolved)
+        {
+            foreach(KeyValuePair<Type, GameSystem> system in Systems)
+            {
+                system.Value.BroadcastMessage(evnt, entitiesInvolved);
+            }
+        }
+
         public Entity WithId(Guid id)
         {
             return Entities.SingleOrDefault(e => e.Id == id);

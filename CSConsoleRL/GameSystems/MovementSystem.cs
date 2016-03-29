@@ -27,18 +27,18 @@ namespace CSConsoleRL.GameSystems
             collisionComponents.Add((component as MovementComponent));
         }
 
-        public override void HandleMessage(GameEvent gameEvent)
+        public override GameEvent BroadcastMessage(GameEvent evnt, List<Entity> entitiesInvolved)
         {
-
+            if(evnt.EventName == "MovementInput")
+            {
+                HandleMovementInput(evnt, entitiesInvolved);
+            }
         }
 
         //If entity has MovementComponent check if can move to location (check collisions, if frozen etc.), otherwise don't anything
-        public void HandleMovementRequest(Entity entity, EnumDirections direction)
+        public void HandleMovementInput(GameEvent evnt, List<Entity> entitiesInvolved)
         {
-            MovementComponent movementComponent = entity.GetComponent<MovementComponent>();
-            if (movementComponent == null) return;
-
-
+            
         }
     }
 }

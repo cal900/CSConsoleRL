@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CSConsoleRL.Components.Interfaces;
+using CSConsoleRL.Events;
 
 namespace CSConsoleRL.Entities
 {
@@ -68,6 +69,14 @@ namespace CSConsoleRL.Entities
             public override int GetHashCode()
             {
                 return Id.GetHashCode();
+            }
+
+            public GameEvent BroadcastEvent(GameEvent evnt)
+            {
+                foreach(KeyValuePair<Type, IComponent> currentComponent in Components)
+                {
+                    currentComponent.Value.ReceiveComponentEvent(evnt);
+                }
             }
         }
     }

@@ -8,6 +8,7 @@ using CSConsoleRL.Components;
 using CSConsoleRL.Components.Interfaces;
 using CSConsoleRL.Events;
 using CSConsoleRL.Enums;
+using CSConsoleRL.Entities;
 
 namespace CSConsoleRL.GameSystems
 {
@@ -57,12 +58,15 @@ namespace CSConsoleRL.GameSystems
                 direction = EnumDirections.East;
             }
 
-            //check all entities that have UserInputComponent and send movement request to the MovementSystem for each
-            MovementSystem movementSystem = (MovementSystem)SystemManager.Systems[typeof(MovementSystem)];
-            for(int index = 0; index < userControlComponents.Count; index++)
+            var inputEvent = new MovementInputEvent(direction);
+            List<Entity> entitiesWithInput = new List<Entity>();
+
+            foreach(UserInputComponent currentComponent in userControlComponents)
             {
-                movementSystem.HandleMovementRequest(userControlComponents[index].EntityAttachedTo, direction);
+                entitiesWithInput.Add(currentComponent.EntityAttachedTo);
             }
+
+            SystemManager.BroadcastEvent(inputEvent, entitiesWithInput);
         }
     }
 }
