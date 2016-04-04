@@ -14,31 +14,37 @@ namespace CSConsoleRL.GameSystems
 {
     public class MovementSystem : GameSystem
     {
-        private List<MovementComponent> collisionComponents;
+        private List<Entity> collisionEntities;
 
         public MovementSystem(GameSystemManager manager)
         {
             SystemManager = manager;
-            collisionComponents = new List<MovementComponent>();
+            systemEntities = new List<Entity>();
         }
 
         public override void AddComponent(IComponent component)
         {
-            collisionComponents.Add((component as MovementComponent));
+            //collisionComponents.Add((component as MovementComponent));
         }
 
-        public override GameEvent BroadcastMessage(GameEvent evnt, List<Entity> entitiesInvolved)
+        public override GameEvent BroadcastMessage(GameEvent evnt)
         {
             if(evnt.EventName == "MovementInput")
             {
-                HandleMovementInput(evnt, entitiesInvolved);
+                HandleMovementInput(evnt);
             }
         }
 
         //If entity has MovementComponent check if can move to location (check collisions, if frozen etc.), otherwise don't anything
-        public void HandleMovementInput(GameEvent evnt, List<Entity> entitiesInvolved)
+        public void HandleMovementInput(GameEvent evnt)
         {
-            
+            Guid entityId = (Guid)evnt.EventParams[0];
+            Entity entityToMove = collisionEntities.Where(entity => entity.Id.Equals(entityId)).FirstOrDefault();
+
+            if (entityToMove == null) return;   //If system does not contain entity involved do nothing
+
+            //iterate through all entities with collision component, check if collision
+            List<CollisionComponent> collisionComponents = systemEntities.Where()
         }
     }
 }

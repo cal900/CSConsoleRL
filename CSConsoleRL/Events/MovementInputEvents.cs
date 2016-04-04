@@ -19,13 +19,14 @@ namespace CSConsoleRL.Events
     //    }
     //}
 
-    public class MovementInputEvent : GameEvent
+    public class MovementRequestEvent : GameEvent
     {
-        public readonly string EventName = "MovementInput";
+        public readonly string EventName = "MovementRequest";
         public List<object> EventParams;
 
-        public MovementInputEvent(EnumDirections directionOfInput)
+        public MovementRequestEvent(Guid entityId, EnumDirections directionOfInput)
         {
+            EventParams.Add(entityId);
             EventParams.Add(directionOfInput);
         }
     }
