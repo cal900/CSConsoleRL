@@ -44,7 +44,7 @@ namespace CSConsoleRL.GameSystems
             if (entityToMove == null) return;   //If system does not contain entity involved do nothing
 
             //iterate through all entities with collision component, check if collision
-            List<CollisionComponent> collisionComponents = systemEntities.Where()
+            List<CollisionComponent> collisionComponents = collisionEntities.Where(currentEntity => currentEntity.Components.ContainsKey(typeof(CollisionComponent))).ToList();
         }
     }
 }
