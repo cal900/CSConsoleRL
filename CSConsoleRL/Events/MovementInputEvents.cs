@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CSConsoleRL.Enums;
+using CSConsoleRL.Entities;
 
 namespace CSConsoleRL.Events
 {

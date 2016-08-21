@@ -19,7 +19,7 @@ namespace CSConsoleRL.GameSystems
         public MovementSystem(GameSystemManager manager)
         {
             SystemManager = manager;
-            systemEntities = new List<Entity>();
+            collisionEntities = new List<Entity>();
         }
 
         public override void AddComponent(IComponent component)
@@ -41,10 +41,35 @@ namespace CSConsoleRL.GameSystems
             Guid entityId = (Guid)evnt.EventParams[0];
             Entity entityToMove = collisionEntities.Where(entity => entity.Id.Equals(entityId)).FirstOrDefault();
 
+            int oldXPos = entityToMove.GetComponent<MovementComponent>().ComponentXPositionOnMap;
+            int oldYPos = entityToMove.GetComponent<MovementComponent>().ComponentYPositionOnMap;
+            int newXPos = oldXPos, newYPos = oldYPos;
+
+            EnumDirections movementDirection = (EnumDirections)evnt.EventParams[1];
+
+            switch(movementDirection)
+            {
+                case EnumDirections.North:
+                    newYPos--;
+                    break;
+                case EnumDirections.South:
+                    newYPos++;
+                    break;
+                case EnumDirections.East:
+                    newXPos++;
+                    break;
+                case EnumDirections.West:
+                    newXPos--;
+                    break;
+            }
+
             if (entityToMove == null) return;   //If system does not contain entity involved do nothing
 
             //iterate through all entities with collision component, check if collision
-            List<CollisionComponent> collisionComponents = systemEntities.Where()
+            foreach(Entity colEnt in collisionEntities)
+            {
+
+            }
         }
     }
 }
