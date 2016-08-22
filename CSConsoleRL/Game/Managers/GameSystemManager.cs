@@ -34,18 +34,9 @@ namespace CSConsoleRL.Game.Managers
         {
             Entities.Add(entity);
 
-            //If entity contains components governed by a system (graphics, user input etc), add the component to the relevant system
-            if (entity.Components.ContainsKey(typeof(DrawableCharComponent)))
+            foreach(KeyValuePair<Type, GameSystem> system in Systems)
             {
-                Systems[typeof(CharGraphicsSystem)].AddComponent(entity.Components[typeof(DrawableCharComponent)]);
-            }
-            if (entity.Components.ContainsKey(typeof(UserInputComponent)))
-            {
-                Systems[typeof(UserInputSystem)].AddComponent(entity.Components[typeof(UserInputComponent)]);
-            }
-            if (entity.Components.ContainsKey(typeof(MovementComponent)))
-            {
-                Systems[typeof(MovementSystem)].AddComponent(entity.Components[typeof(MovementComponent)]);
+                system.Value.AddEntity(entity);
             }
 
             return entity;

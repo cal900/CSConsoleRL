@@ -13,7 +13,7 @@ namespace CSConsoleRL.Entities
         public ActorEntity() 
             : base()
         {
-            AddComponent(new MovementComponent(this));
+            AddComponent(new PositionComponent(this));
             AddComponent(new DrawableCharComponent(this, '@', ConsoleColor.Gray));
             AddComponent(new UserInputComponent(this));
             AddComponent(new CollisionComponent(this));

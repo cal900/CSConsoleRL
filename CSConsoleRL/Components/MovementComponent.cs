@@ -9,14 +9,14 @@ using CSConsoleRL.Events;
 
 namespace CSConsoleRL.Components
 {
-    public class MovementComponent : IComponent
+    public class PositionComponent : IComponent
     {
         public Entity EntityAttachedTo { get; set; }
         public List<IComponent> SubscribedComponents { get; set; }
         public int ComponentXPositionOnMap { get; set; }
         public int ComponentYPositionOnMap { get; set; }
 
-        public MovementComponent(Entity entity)
+        public PositionComponent(Entity entity)
         {
             EntityAttachedTo = entity;
             SubscribedComponents = new List<IComponent>();

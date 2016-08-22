@@ -14,17 +14,20 @@ namespace CSConsoleRL.GameSystems
 {
     public class MovementSystem : GameSystem
     {
-        private List<Entity> collisionEntities;
+        private List<Entity> movementEntities;
 
         public MovementSystem(GameSystemManager manager)
         {
             SystemManager = manager;
-            systemEntities = new List<Entity>();
+            movementEntities = new List<Entity>();
         }
 
-        public override void AddComponent(IComponent component)
+        public override void AddEntity(Entity entity)
         {
-            //collisionComponents.Add((component as MovementComponent));
+            if(entity.Components.ContainsKey(typeof(PositionComponent)) && entity.Components.ContainsKey(typeof(CollisionComponent)))
+            {
+                movementEntities.Add(entity);
+            }
         }
 
         public override GameEvent BroadcastMessage(GameEvent evnt)
