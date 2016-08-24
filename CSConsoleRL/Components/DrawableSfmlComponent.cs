@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using CSConsoleRL.Components.Interfaces;
 using CSConsoleRL.Entities;
 using CSConsoleRL.Events;
+using SFML.Graphics;
 
 namespace CSConsoleRL.Components
 {
     public class DrawableSfmlComponent : IComponent
     {
         public Entity EntityAttachedTo { get; set; }
-        public int MyProperty { get; set; }
+        public Sprite sprite { get; set; }
 
         public DrawableSfmlComponent(Entity entity, char character, ConsoleColor color)
         {
