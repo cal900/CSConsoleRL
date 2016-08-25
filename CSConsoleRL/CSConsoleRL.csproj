@@ -55,16 +55,19 @@
   <ItemGroup>
     <Compile Include="Components\CollisionComponent.cs" />
     <Compile Include="Components\DrawableSfmlComponent.cs" />
-    <Compile Include="Components\MovementComponent.cs" />
+    <Compile Include="Components\PositionComponent.cs" />
     <Compile Include="Components\UserInputComponent.cs" />
     <Compile Include="Components\Interfaces\IComponent.cs" />
     <Compile Include="Entities\ActorEntity.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Components\DrawableCharComponent.cs" />
+    <Compile Include="Enums\EnumSfmlSprites.cs" />
     <Compile Include="Enums\EnumDirections.cs" />
     <Compile Include="Enums\EnumKeyboard.cs" />
     <Compile Include="Events\GameEvent.cs" />
-    <Compile Include="Events\MovementInputEvents.cs" />
+    <Compile Include="Events\NextFrameEvent.cs" />
+    <Compile Include="Events\ScreenPositionChangeEvent.cs" />
+    <Compile Include="Events\UserInputEvent.cs" />
     <Compile Include="GameSystems\SfmlGraphicsSystem.cs" />
     <Compile Include="GameSystems\MovementSystem.cs" />
     <Compile Include="Game\Managers\TileManager.cs" />

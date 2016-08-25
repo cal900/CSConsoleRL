@@ -8,10 +8,12 @@ using CSConsoleRL.Components;
 using CSConsoleRL.Components.Interfaces;
 using CSConsoleRL.Entities;
 using CSConsoleRL.Events;
+using CSConsoleRL.Enums;
 using GameTiles.Tiles;
 using GameTiles.Enums;
 using SFML.Window;
 using SFML.Graphics;
+using SFML.System;
 
 namespace CSConsoleRL.GameSystems
 {
@@ -25,7 +27,7 @@ namespace CSConsoleRL.GameSystems
         private const int yUiAreaCharHeight = 5;
         private const ConsoleColor foregroundColor = ConsoleColor.DarkGray;
         private const ConsoleColor backgroundColor = ConsoleColor.Black;
-        private Window sfmlWindow;
+        private RenderWindow sfmlWindow;
         private Tile[,] gameTiles;
         private int worldXLength;
         private int worldYLength;
@@ -34,11 +36,12 @@ namespace CSConsoleRL.GameSystems
         private const int windowXSize = 720;
         private const int windowYSize = 480;
 
-        private Dictionary<EnumTileTypes, Texture> tileTextures;
+        private TileTypeDictionary tileDictionary;
+        private SfmlTextureDictionary textureDictionary;
 
         private List<Entity> graphicsEntities;
 
-        public SfmlGraphicsSystem(GameSystemManager manager, Window _sfmlWindow, Tile[,] _gameTiles, int _worldXLength, int _worldYLength)
+        public SfmlGraphicsSystem(GameSystemManager manager, RenderWindow _sfmlWindow, Tile[,] _gameTiles, int _worldXLength, int _worldYLength)
         {
             SystemManager = manager;
 
@@ -46,6 +49,14 @@ namespace CSConsoleRL.GameSystems
             gameTiles = _gameTiles;
             worldXLength = _worldXLength;
             worldYLength = _worldYLength;
+
+            LoadTextures();
+        }
+
+        public override void InitializeSystem()
+        {
+            LoadTextures();
+            AssignSprites();
         }
 
         public override void AddEntity(Entity entity)
@@ -58,7 +69,26 @@ namespace CSConsoleRL.GameSystems
 
         public override void HandleMessage(GameEvent gameEvent)
         {
-            throw new NotImplementedException();
+            switch(gameEvent.EventName)
+            {
+                case "NextFrame":
+                    NextFrame();
+                    break;
+                case "ScreenPositionChange":
+                    ScreenPositionChange((int)gameEvent.EventParams[0], (int)gameEvent.EventParams[1]);
+                    break;
+            }
+        }
+
+        private void NextFrame()
+        {
+            DrawSfmlGraphics();
+        }
+
+        private void ScreenPositionChange(int newX, int newY)
+        {
+            windowXPositionInWorld = newX;
+            windowYPositionInWorld = newY;
         }
 
         public void DrawSfmlGraphics()
@@ -69,35 +99,96 @@ namespace CSConsoleRL.GameSystems
             var startingTileYPosition = windowYPositionInWorld / tilePixelSize;
             var endingTileYPosition = startingTileYPosition + (windowYSize / tilePixelSize);
 
+            sfmlWindow.Clear();
+
             //Draw background tiles
             for(int x = startingTileXPosition; x < endingTileXPosition; x++)
             {
                 for (int y = startingTileYPosition; y < endingTileYPosition; y++)
                 {
-                    gameTiles[x,y].TileType
+                    gameTiles[x, y].TileSprite.Position = new Vector2f(x * tilePixelSize, y * tilePixelSize);
+                    sfmlWindow.Draw(gameTiles[x, y].TileSprite);
                 }
             }
 
+            //draw game sprites
+            foreach(Entity entity in graphicsEntities)
+            {
+                var sfmlComponent = entity.GetComponent<DrawableSfmlComponent>();
+                var positionComponent = entity.GetComponent<PositionComponent>();
 
+                int spriteXPosition = positionComponent.ComponentXPositionOnMap - windowXPositionInWorld;
+                int spriteYPosition = positionComponent.ComponentYPositionOnMap - windowYPositionInWorld;
+
+                sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition, spriteYPosition);
+                sfmlWindow.Draw(sfmlComponent.GameSprite);
+            }
         }
 
         private void LoadTextures()
         {
             LoadTileTextures();
+            LoadSfmlGraphicsComponentTextures();
         }
 
         private void LoadTileTextures()
         {
-            string fileName = @"\Data\Sprites\Regular20x20.png";
-            tileTextures.Add(EnumTileTypes.Grass, new Texture(fileName, new IntRect(0, 0, 20, 20)));
-            tileTextures.Add(EnumTileTypes.Snow, new Texture(fileName, new IntRect(0, 0, 20, 20)));
-            tileTextures.Add(EnumTileTypes.SnowWalked, new Texture(fileName, new IntRect(20, 20, 20, 20)));
-            tileTextures.Add(EnumTileTypes.Road, new Texture(fileName, new IntRect(0, 0, 20, 20)));
-            tileTextures.Add(EnumTileTypes.CabinWall, new Texture(fileName, new IntRect(0, 60, 20, 20)));
-            tileTextures.Add(EnumTileTypes.CabinFloor, new Texture(fileName, new IntRect(0, 40, 20, 20)));
-            tileTextures.Add(EnumTileTypes.Tree, new Texture(fileName, new IntRect(0, 20, 20, 20)));
-            tileTextures.Add(EnumTileTypes.River, new Texture(fileName, new IntRect(0, 100, 20, 20)));
-            tileTextures.Add(EnumTileTypes.CabinWindow, new Texture(fileName, new IntRect(0, 80, 20, 20)));
+            tileDictionary = new TileTypeDictionary();
+        }
+
+        private void LoadSfmlGraphicsComponentTextures()
+        {
+            textureDictionary = new SfmlTextureDictionary();
+        }
+
+        private void AssignSprites()
+        {
+            AssignTileSprites();
+            AssignSfmlGraphicsComponentSprites();
+        }
+
+        private void AssignTileSprites()
+        {
+            //Draw background tiles
+            for(int x = 0; x < gameTiles.GetLength(0); x++)
+            {
+                for (int y = 0; y < gameTiles.GetLength(1); y++)
+                {
+                    gameTiles[x, y].TileSprite = new Sprite(tileDictionary[gameTiles[x, y].TileType].Texture);
+                }
+            }
+        }
+
+        private void AssignSfmlGraphicsComponentSprites()
+        {
+            foreach(Entity entity in graphicsEntities)
+            {
+                var sfmlComponent = entity.GetComponent<DrawableSfmlComponent>();
+                switch (sfmlComponent.SpriteType)
+                {
+                    case EnumSfmlSprites.MainCharacter:
+                        sfmlComponent.GameSprite = new Sprite(textureDictionary[EnumSfmlSprites.MainCharacter]);
+                        break;
+                    case EnumSfmlSprites.HumanEnemy:
+                        sfmlComponent.GameSprite = new Sprite(textureDictionary[EnumSfmlSprites.HumanEnemy]);
+                        break;
+                    case EnumSfmlSprites.Dog:
+                        sfmlComponent.GameSprite = new Sprite(textureDictionary[EnumSfmlSprites.Dog]);
+                        break;
+                }
+            }
+        }
+
+        public class SfmlTextureDictionary : Dictionary<EnumSfmlSprites, Texture>
+        {
+            public SfmlTextureDictionary()
+                : base()
+            {
+                string fileName = @"\Data\Sprites\Regular20x20.png";
+                Add(EnumSfmlSprites.MainCharacter, new Texture(fileName, new IntRect(0, 0, 20, 20)));
+                Add(EnumSfmlSprites.HumanEnemy, new Texture(fileName, new IntRect(0, 0, 20, 20)));
+                Add(EnumSfmlSprites.Dog, new Texture(fileName, new IntRect(0, 0, 20, 20)));
+            }
         }
     }
 }

@@ -13,7 +13,7 @@ namespace GameTiles.Tiles
         public TileData(char _char, Texture _texture, ConsoleColor _color, bool _blocksMovement, bool _blocksVision)
         { Character = _char; Texture = _texture; Color = _color; BlocksMovement = _blocksMovement; BlocksVision = _blocksVision; }
         public readonly char Character;
-        public Texture Texture;
+        public readonly Texture Texture;
         public readonly ConsoleColor Color;
         public readonly bool BlocksMovement;
         public readonly bool BlocksVision;

@@ -9,6 +9,8 @@ using CSConsoleRL.Components.Interfaces;
 using CSConsoleRL.Events;
 using CSConsoleRL.Enums;
 using CSConsoleRL.Entities;
+using SFML.Graphics;
+using SFML.Window;
 
 namespace CSConsoleRL.GameSystems
 {
@@ -19,54 +21,63 @@ namespace CSConsoleRL.GameSystems
         private const ConsoleKey InputLeft = ConsoleKey.LeftArrow;
         private const ConsoleKey InputRight = ConsoleKey.RightArrow;
 
-        private List<UserInputComponent> userControlComponents;
+        private Keyboard.Key lastKeyPressed;
+        private bool lastKeyPressedIsDirty;
 
-        public UserInputSystem(GameSystemManager manager)
+        private List<Entity> userInputEntities;
+
+        public UserInputSystem(GameSystemManager manager, RenderWindow sfmlWindow)
         {
             SystemManager = manager;
-            userControlComponents = new List<UserInputComponent>();
+            userInputEntities = new List<Entity>();
+
+            sfmlWindow.KeyPressed += sfmlWindow_KeyPressed;
         }
 
-        public override void AddComponent(IComponent component)
+        void sfmlWindow_KeyPressed(object sender, KeyEventArgs e)
         {
-            userControlComponents.Add((component as UserInputComponent));
+            lastKeyPressed = e.Code;
+            lastKeyPressedIsDirty = false;
+        }
+
+        public override void AddEntity(Entity entity)
+        {
+            if (entity.Components.ContainsKey(typeof(UserInputComponent)))
+            {
+                userInputEntities.Add(entity);
+            }
         }
 
         public override void HandleMessage(GameEvent gameEvent)
         {
-            throw new NotImplementedException();
+            switch (gameEvent.EventName)
+            {
+                case "NextFrame":
+                    NextFrame();
+                    break;
+            }
         }
 
-        public void HandleKeyPressed(ConsoleKeyInfo keyPressed)
+        private void NextFrame()
         {
-            EnumDirections direction = EnumDirections.North;
+            HandleKeyPressed();
+        }
 
-            if(keyPressed.Key == ConsoleKey.UpArrow)
+        private void HandleKeyPressed()
+        {
+            if (!lastKeyPressedIsDirty)
             {
-                direction = EnumDirections.North;
-            }
-            else if (keyPressed.Key == ConsoleKey.DownArrow)
-            {
-                direction = EnumDirections.South;
-            }
-            else if (keyPressed.Key == ConsoleKey.LeftArrow)
-            {
-                direction = EnumDirections.West;
-            }
-            else if (keyPressed.Key == ConsoleKey.RightArrow)
-            {
-                direction = EnumDirections.East;
-            }
+                foreach(Entity entity in userInputEntities)
+                {
+                    var 
+                }
 
-            var inputEvent = new MovementInputEvent(direction);
-            List<Entity> entitiesWithInput = new List<Entity>();
+                //need broadcast movement event to some sort of movementSystem
+                //will need ID of entity/component trying to move
+                //movementSystem can then handle collision/w.e.
 
-            foreach(UserInputComponent currentComponent in userControlComponents)
-            {
-                entitiesWithInput.Add(currentComponent.EntityAttachedTo);
+                lastKeyPressedIsDirty = true;
             }
-
-            SystemManager.BroadcastEvent(inputEvent, entitiesWithInput);
         }
     }
 }

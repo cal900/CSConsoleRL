@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CSConsoleRL.Enums;
 using CSConsoleRL.Entities;
+using SFML.Window;
 
 namespace CSConsoleRL.Events
 {
@@ -20,15 +21,14 @@ namespace CSConsoleRL.Events
     //    }
     //}
 
-    public class MovementRequestEvent : GameEvent
+    public class UserInputEvent : GameEvent
     {
-        public readonly string EventName = "MovementRequest";
+        public readonly string EventName = "UserInput";
         public List<object> EventParams;
 
-        public MovementRequestEvent(Guid entityId, EnumDirections directionOfInput)
+        public UserInputEvent(Keyboard.Key keyPressed)
         {
-            EventParams.Add(entityId);
-            EventParams.Add(directionOfInput);
+            EventParams.Add(keyPressed);
         }
     }
 }
