@@ -12,14 +12,17 @@ using CSConsoleRL.Entities;
 using SFML.Graphics;
 using SFML.Window;
 
+
+//Note - it is the responsibility of UserInputSystem to know what command keyboard inputs correspond to depending on the Component type.
+//Otherwise will get too complicated
 namespace CSConsoleRL.GameSystems
 {
     public class UserInputSystem : GameSystem
     {
-        private const ConsoleKey InputUp = ConsoleKey.UpArrow;
-        private const ConsoleKey InputDown = ConsoleKey.DownArrow;
-        private const ConsoleKey InputLeft = ConsoleKey.LeftArrow;
-        private const ConsoleKey InputRight = ConsoleKey.RightArrow;
+        private const Keyboard.Key InputUp = Keyboard.Key.Up;
+        private const Keyboard.Key InputDown = Keyboard.Key.Down;
+        private const Keyboard.Key InputLeft = Keyboard.Key.Left;
+        private const Keyboard.Key InputRight = Keyboard.Key.Right;
 
         private Keyboard.Key lastKeyPressed;
         private bool lastKeyPressedIsDirty;
@@ -67,6 +70,7 @@ namespace CSConsoleRL.GameSystems
         {
             if (!lastKeyPressedIsDirty)
             {
+                var inputEvent = new UserInputEvent
                 foreach(Entity entity in userInputEntities)
                 {
                     var 
