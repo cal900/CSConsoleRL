@@ -21,14 +21,15 @@ namespace CSConsoleRL.Events
     //    }
     //}
 
-    public class UserInputEvent : GameEvent
+    public class MovementEvent : GameEvent
     {
-        public readonly string EventName = "UserInput";
+        public readonly string EventName = "Movement";
         public List<object> EventParams;
 
-        public UserInputEvent(Keyboard.Key keyPressed)
+        public MovementEvent(Guid id, EnumDirections movementDirection)
         {
-            EventParams.Add(keyPressed);
+            EventParams.Add(id);
+            EventParams.Add(movementDirection);
         }
     }
 }

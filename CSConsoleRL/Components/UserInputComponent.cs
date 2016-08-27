@@ -13,17 +13,10 @@ namespace CSConsoleRL.Components
     public class UserInputComponent : IComponent
     {
         public Entity EntityAttachedTo { get; set; }
-        public List<IComponent> SubscribedComponents { get; set; }
 
         public UserInputComponent(Entity entity)
         {
             EntityAttachedTo = entity;
-            SubscribedComponents = new List<IComponent>();
-        }
-
-        public void ReceiveComponentEvent(GameEvent componentEvent)
-        {
-
         }
     }
 }

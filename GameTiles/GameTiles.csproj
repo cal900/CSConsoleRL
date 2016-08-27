@@ -33,6 +33,9 @@
     <Reference Include="sfmlnet-graphics-2">
       <HintPath>..\Libraries\SFML.Net-2.2\lib\sfmlnet-graphics-2.dll</HintPath>
     </Reference>
+    <Reference Include="sfmlnet-system-2">
+      <HintPath>..\Libraries\SFML.Net-2.2\lib\sfmlnet-system-2.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

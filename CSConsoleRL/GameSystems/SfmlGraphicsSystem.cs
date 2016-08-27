@@ -80,6 +80,11 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
+        public override GameEvent BroadcastMessage(GameEvent evnt)
+        {
+            throw new NotImplementedException();
+        }
+
         private void NextFrame()
         {
             DrawSfmlGraphics();

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GameTiles.Enums;
 using SFML.Graphics;
+using SFML.System;
 
 namespace GameTiles.Tiles
 {

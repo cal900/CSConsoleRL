@@ -12,7 +12,6 @@ namespace CSConsoleRL.Components
     public class DrawableCharComponent : IComponent
     {
         public Entity EntityAttachedTo { get; set; }
-        public List<IComponent> SubscribedComponents { get; set; }
         public int XPositionOnMap { get; set; }
         public int YPositionOnMap { get; set; }
         public char Character { get; set; }
@@ -21,17 +20,11 @@ namespace CSConsoleRL.Components
         public DrawableCharComponent(Entity entity, char character, ConsoleColor color)
         {
             EntityAttachedTo = entity;
-            SubscribedComponents = new List<IComponent>();
 
             XPositionOnMap = 0;
             YPositionOnMap = 0;
             Character = character;
             CharColor = color;
-        }
-
-        public void ReceiveComponentEvent(GameEvent componentEvent)
-        {
-            throw new NotImplementedException();
         }
     }
 }

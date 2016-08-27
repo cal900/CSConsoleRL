@@ -37,6 +37,11 @@ namespace CSConsoleRL.GameSystems
             sfmlWindow.KeyPressed += sfmlWindow_KeyPressed;
         }
 
+        public override void InitializeSystem()
+        {
+            throw new NotImplementedException();
+        }
+
         void sfmlWindow_KeyPressed(object sender, KeyEventArgs e)
         {
             lastKeyPressed = e.Code;
@@ -61,6 +66,11 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
+        public override GameEvent BroadcastMessage(GameEvent evnt)
+        {
+            throw new NotImplementedException();
+        }
+
         private void NextFrame()
         {
             HandleKeyPressed();
@@ -70,10 +80,31 @@ namespace CSConsoleRL.GameSystems
         {
             if (!lastKeyPressedIsDirty)
             {
-                var inputEvent = new UserInputEvent
-                foreach(Entity entity in userInputEntities)
+                foreach (Entity entity in userInputEntities)
                 {
-                    var 
+                    if (entity.GetType() == typeof(ActorEntity))
+                    {
+                        if (lastKeyPressed == InputUp)
+                        {
+                            var movementEvent = new MovementEvent(entity.Id, EnumDirections.North);
+                            BroadcastMessage(movementEvent);
+                        }
+                        else if (lastKeyPressed == InputDown)
+                        {
+                            var movementEvent = new MovementEvent(entity.Id, EnumDirections.South);
+                            BroadcastMessage(movementEvent);
+                        }
+                        else if (lastKeyPressed == InputLeft)
+                        {
+                            var movementEvent = new MovementEvent(entity.Id, EnumDirections.West);
+                            BroadcastMessage(movementEvent);
+                        }
+                        else if (lastKeyPressed == InputRight)
+                        {
+                            var movementEvent = new MovementEvent(entity.Id, EnumDirections.East);
+                            BroadcastMessage(movementEvent);
+                        }
+                    }
                 }
 
                 //need broadcast movement event to some sort of movementSystem

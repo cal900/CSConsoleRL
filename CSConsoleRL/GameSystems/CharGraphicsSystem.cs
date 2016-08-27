@@ -35,12 +35,22 @@ namespace CSConsoleRL.GameSystems
             drawableComponents = new List<DrawableCharComponent>();
         }
 
-        public override void AddComponent(IComponent component)
+        public override void InitializeSystem()
         {
-            drawableComponents.Add((component as DrawableCharComponent));
+            throw new NotImplementedException();
+        }
+
+        public override void AddEntity(Entities.Entity entity)
+        {
+            throw new NotImplementedException();
         }
 
         public override void HandleMessage(GameEvent gameEvent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override GameEvent BroadcastMessage(GameEvent evnt)
         {
             throw new NotImplementedException();
         }

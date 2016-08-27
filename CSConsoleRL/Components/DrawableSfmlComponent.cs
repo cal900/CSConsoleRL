@@ -20,17 +20,6 @@ namespace CSConsoleRL.Components
         public DrawableSfmlComponent(Entity entity, char character, ConsoleColor color)
         {
             EntityAttachedTo = entity;
-            SubscribedComponents = new List<IComponent>();
-
-            XPositionOnMap = 0;
-            YPositionOnMap = 0;
-            Character = character;
-            CharColor = color;
-        }
-
-        public void ReceiveComponentEvent(GameEvent componentEvent)
-        {
-            throw new NotImplementedException();
         }
     }
 }

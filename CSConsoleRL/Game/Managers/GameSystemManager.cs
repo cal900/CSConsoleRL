@@ -7,6 +7,9 @@ using CSConsoleRL.GameSystems;
 using CSConsoleRL.Entities;
 using CSConsoleRL.Events;
 using CSConsoleRL.Components;
+using SFML.Window;
+using SFML.Graphics;
+using GameTiles.Tiles;
 
 namespace CSConsoleRL.Game.Managers
 {
@@ -16,14 +19,25 @@ namespace CSConsoleRL.Game.Managers
         public event EventHandler DoneWithInput;
         public List<Entity> Entities { get; set; }
         public Dictionary<Type, GameSystem> Systems { get; set; }
+        private RenderWindow sfmlWindow { get; set; }
+        private Tile[,] gameTiles { get; set; }
 
         public GameSystemManager()
         {
             Entities = new List<Entity>();
             Systems = new Dictionary<Type, GameSystem>();
+
+            sfmlWindow = new RenderWindow(new VideoMode(720, 480), "CSConsoleRL");
+
+            Initial
         }
 
-        public GameSystem RegisterSystem(GameSystem system)
+        private void InitializeSystems()
+        {
+            MovementSystem = new MovementSystem()
+        }
+
+        private GameSystem RegisterSystem(GameSystem system)
         {
             Systems.Add(system.GetType(), system);
             system.SystemManager = this;
@@ -57,16 +71,11 @@ namespace CSConsoleRL.Game.Managers
             //if(_gameStateManager != null)_gameStateManager.CurrentState().HandleEvent(evt);
         }
 
-        public void BroadcastEvent(GameEvent eventToBroadcast)
-        {
-            //foreach(GameSystem )
-        }
-
-        public void BroadcastEvent(GameEvent evnt, List<Entity> entitiesInvolved)
+        public void BroadcastEvent(GameEvent evnt)
         {
             foreach(KeyValuePair<Type, GameSystem> system in Systems)
             {
-                system.Value.BroadcastMessage(evnt, entitiesInvolved);
+                system.Value.BroadcastMessage(evnt);
             }
         }
 
@@ -76,8 +85,3 @@ namespace CSConsoleRL.Game.Managers
         }
     }
 }
-
-//Systems should have list of Components
-//Components have pointer to Entity, when broadcast event goes to the Entity owned by the Component
-//E.g. for collision broadcast to all entities that have collision body, see if collision
-//This way we can prepare if entity may have something related to collision but not directly collision component in future

@@ -67,7 +67,7 @@
     <Compile Include="Events\GameEvent.cs" />
     <Compile Include="Events\NextFrameEvent.cs" />
     <Compile Include="Events\ScreenPositionChangeEvent.cs" />
-    <Compile Include="Events\UserInputEvent.cs" />
+    <Compile Include="Events\MovementEvent.cs" />
     <Compile Include="GameSystems\SfmlGraphicsSystem.cs" />
     <Compile Include="GameSystems\MovementSystem.cs" />
     <Compile Include="Game\Managers\TileManager.cs" />
