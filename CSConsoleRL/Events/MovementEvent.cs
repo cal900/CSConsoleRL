@@ -9,25 +9,14 @@ using SFML.Window;
 
 namespace CSConsoleRL.Events
 {
-    //public class MovementRequestEvent : GameEvent
-    //{
-    //    public readonly string EventName = "MovementRequest";
-    //    public List<object> EventParams;
-
-    //    public MovementRequestEvent(EnumDirections direction)
-    //    {
-    //        EventParams = new List<object>();
-    //        EventParams.Add(direction);
-    //    }
-    //}
-
-    public class MovementEvent : GameEvent
+    public class MovementInputEvent : IGameEvent
     {
-        public readonly string EventName = "Movement";
-        public List<object> EventParams;
+        public string EventName { get { return "MovementInput"; } }
+        public List<object> EventParams { get; set; }
 
-        public MovementEvent(Guid id, EnumDirections movementDirection)
+        public MovementInputEvent(Guid id, EnumDirections movementDirection)
         {
+            EventParams = new List<object>();
             EventParams.Add(id);
             EventParams.Add(movementDirection);
         }

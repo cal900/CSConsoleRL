@@ -70,13 +70,5 @@ namespace CSConsoleRL.Entities
             {
                 return Id.GetHashCode();
             }
-
-            public GameEvent BroadcastEvent(GameEvent evnt)
-            {
-                foreach(KeyValuePair<Type, IComponent> currentComponent in Components)
-                {
-                    currentComponent.Value.ReceiveComponentEvent(evnt);
-                }
-            }
         }
     }

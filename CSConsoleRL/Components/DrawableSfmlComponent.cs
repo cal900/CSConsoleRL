@@ -17,9 +17,11 @@ namespace CSConsoleRL.Components
         public Sprite GameSprite { get; set; }
         public EnumSfmlSprites SpriteType { get; set; }
 
-        public DrawableSfmlComponent(Entity entity, char character, ConsoleColor color)
+        public DrawableSfmlComponent(Entity entity, EnumSfmlSprites spriteType)
         {
             EntityAttachedTo = entity;
+
+            SpriteType = spriteType;
         }
     }
 }

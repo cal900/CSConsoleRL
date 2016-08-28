@@ -8,13 +8,14 @@ using CSConsoleRL.Entities;
 
 namespace CSConsoleRL.Events
 {
-    public class ScreenPositionChangeEvent : GameEvent
+    public class ScreenPositionChangeEvent : IGameEvent
     {
-        public readonly string EventName = "ScreenPositionChange";
-        public List<object> EventParams;
+        public string EventName { get { return "ScreenPositionChange"; } }
+        public List<object> EventParams { get; set; }
 
         public ScreenPositionChangeEvent(int newX, int newY)
         {
+            EventParams = new List<object>();
             EventParams.Add(newX);
             EventParams.Add(newY);
         }

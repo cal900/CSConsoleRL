@@ -9,7 +9,9 @@ using CSConsoleRL.Events;
 using CSConsoleRL.Components;
 using SFML.Window;
 using SFML.Graphics;
+using SFML.System;
 using GameTiles.Tiles;
+using GameTiles;
 
 namespace CSConsoleRL.Game.Managers
 {
@@ -20,21 +22,49 @@ namespace CSConsoleRL.Game.Managers
         public List<Entity> Entities { get; set; }
         public Dictionary<Type, GameSystem> Systems { get; set; }
         private RenderWindow sfmlWindow { get; set; }
-        private Tile[,] gameTiles { get; set; }
+        private MapFile gameMap { get; set; }
 
-        public GameSystemManager()
+        private bool exitGame;
+
+        public GameSystemManager(MapFile _gameMap)
         {
+            gameMap = _gameMap;
             Entities = new List<Entity>();
             Systems = new Dictionary<Type, GameSystem>();
 
-            sfmlWindow = new RenderWindow(new VideoMode(720, 480), "CSConsoleRL");
+            sfmlWindow = new RenderWindow(new VideoMode(600, 600), "CSConsoleRL");
 
-            Initial
+            CreateSystems();
+
+            CreateEntities();
+
+            InitializeSystems();
+
+            MainGameLoop();
+        }
+
+        private void CreateEntities()
+        {
+            var mainChar = new ActorEntity();
+            RegisterEntity(mainChar);
+        }
+
+        private void CreateSystems()
+        {
+            var movementSystem = new MovementSystem(this, gameMap.TileSet);
+            RegisterSystem(movementSystem);
+            var sfmlGraphicsSystem = new SfmlGraphicsSystem(this, sfmlWindow, gameMap.TileSet);
+            RegisterSystem(sfmlGraphicsSystem);
+            var UserInputSystem = new UserInputSystem(this, sfmlWindow, ref exitGame);
+            RegisterSystem(UserInputSystem);
         }
 
         private void InitializeSystems()
         {
-            MovementSystem = new MovementSystem()
+            foreach (KeyValuePair<Type, GameSystem> system in Systems)
+            {
+                system.Value.InitializeSystem();
+            }
         }
 
         private GameSystem RegisterSystem(GameSystem system)
@@ -71,17 +101,31 @@ namespace CSConsoleRL.Game.Managers
             //if(_gameStateManager != null)_gameStateManager.CurrentState().HandleEvent(evt);
         }
 
-        public void BroadcastEvent(GameEvent evnt)
+        public void BroadcastEvent(IGameEvent evnt)
         {
             foreach(KeyValuePair<Type, GameSystem> system in Systems)
             {
-                system.Value.BroadcastMessage(evnt);
+                system.Value.HandleMessage(evnt);
             }
         }
 
         public Entity WithId(Guid id)
         {
             return Entities.SingleOrDefault(e => e.Id == id);
+        }
+
+        private void MainGameLoop()
+        {
+            //Clock clock = new Clock();
+            sfmlWindow.SetFramerateLimit(60);
+            
+            var nextFrameEvent = new NextFrameEvent();
+
+            while(!exitGame)
+            {
+                //var timeElapsed = clock.ElapsedTime;
+                BroadcastEvent(nextFrameEvent);
+            }
         }
     }
 }

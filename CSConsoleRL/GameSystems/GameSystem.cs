@@ -15,7 +15,7 @@ namespace CSConsoleRL.GameSystems
         public GameSystemManager SystemManager { get; set; }
         public abstract void InitializeSystem();
         public abstract void AddEntity(Entity entity);
-        public abstract void HandleMessage(GameEvent gameEvent);
-        public abstract GameEvent BroadcastMessage(GameEvent evnt);
+        public abstract void HandleMessage(IGameEvent gameEvent);
+        public abstract void BroadcastMessage(IGameEvent evnt);
     }
 }

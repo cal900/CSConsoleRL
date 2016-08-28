@@ -14,7 +14,7 @@ namespace CSConsoleRL.Entities
             : base()
         {
             AddComponent(new PositionComponent(this));
-            AddComponent(new DrawableCharComponent(this, '@', ConsoleColor.Gray));
+            AddComponent(new DrawableSfmlComponent(this, Enums.EnumSfmlSprites.MainCharacter));
             AddComponent(new UserInputComponent(this));
             AddComponent(new CollisionComponent(this));
         }

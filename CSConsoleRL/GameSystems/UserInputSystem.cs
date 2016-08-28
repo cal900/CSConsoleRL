@@ -29,23 +29,27 @@ namespace CSConsoleRL.GameSystems
 
         private List<Entity> userInputEntities;
 
-        public UserInputSystem(GameSystemManager manager, RenderWindow sfmlWindow)
+        private bool exitGame;
+
+        public UserInputSystem(GameSystemManager manager, RenderWindow sfmlWindow, ref bool _exitGame)
         {
             SystemManager = manager;
             userInputEntities = new List<Entity>();
 
             sfmlWindow.KeyPressed += sfmlWindow_KeyPressed;
+
+            exitGame = _exitGame;
         }
 
         public override void InitializeSystem()
         {
-            throw new NotImplementedException();
+
         }
 
         void sfmlWindow_KeyPressed(object sender, KeyEventArgs e)
         {
-            lastKeyPressed = e.Code;
-            lastKeyPressedIsDirty = false;
+            //lastKeyPressed = e.Code;
+            //lastKeyPressedIsDirty = false;
         }
 
         public override void AddEntity(Entity entity)
@@ -56,7 +60,7 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
-        public override void HandleMessage(GameEvent gameEvent)
+        public override void HandleMessage(IGameEvent gameEvent)
         {
             switch (gameEvent.EventName)
             {
@@ -66,9 +70,9 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
-        public override GameEvent BroadcastMessage(GameEvent evnt)
+        public override void BroadcastMessage(IGameEvent evnt)
         {
-            throw new NotImplementedException();
+            SystemManager.BroadcastEvent(evnt);
         }
 
         private void NextFrame()
@@ -78,40 +82,73 @@ namespace CSConsoleRL.GameSystems
 
         private void HandleKeyPressed()
         {
-            if (!lastKeyPressedIsDirty)
+            //if (!lastKeyPressedIsDirty)
+            //{
+            //    foreach (Entity entity in userInputEntities)
+            //    {
+            //        if (entity.GetType() == typeof(ActorEntity))
+            //        {
+            //            if (lastKeyPressed == InputUp)
+            //            {
+            //                var movementEvent = new MovementEvent(entity.Id, EnumDirections.North);
+            //                BroadcastMessage(movementEvent);
+            //            }
+            //            else if (lastKeyPressed == InputDown)
+            //            {
+            //                var movementEvent = new MovementEvent(entity.Id, EnumDirections.South);
+            //                BroadcastMessage(movementEvent);
+            //            }
+            //            else if (lastKeyPressed == InputLeft)
+            //            {
+            //                var movementEvent = new MovementEvent(entity.Id, EnumDirections.West);
+            //                BroadcastMessage(movementEvent);
+            //            }
+            //            else if (lastKeyPressed == InputRight)
+            //            {
+            //                var movementEvent = new MovementEvent(entity.Id, EnumDirections.East);
+            //                BroadcastMessage(movementEvent);
+            //            }
+            //            else if(lastKeyPressed == Keyboard.Key.Escape)
+            //            {
+            //                exitGame = true;
+            //            }
+            //        }
+            //    }
+
+            //    //need broadcast movement event to some sort of movementSystem
+            //    //will need ID of entity/component trying to move
+            //    //movementSystem can then handle collision/w.e.
+
+            //    lastKeyPressedIsDirty = true;
+            foreach (Entity entity in userInputEntities)
             {
-                foreach (Entity entity in userInputEntities)
+                if (entity.GetType() == typeof(ActorEntity))
                 {
-                    if (entity.GetType() == typeof(ActorEntity))
+                    if (Keyboard.IsKeyPressed(InputUp))
                     {
-                        if (lastKeyPressed == InputUp)
-                        {
-                            var movementEvent = new MovementEvent(entity.Id, EnumDirections.North);
-                            BroadcastMessage(movementEvent);
-                        }
-                        else if (lastKeyPressed == InputDown)
-                        {
-                            var movementEvent = new MovementEvent(entity.Id, EnumDirections.South);
-                            BroadcastMessage(movementEvent);
-                        }
-                        else if (lastKeyPressed == InputLeft)
-                        {
-                            var movementEvent = new MovementEvent(entity.Id, EnumDirections.West);
-                            BroadcastMessage(movementEvent);
-                        }
-                        else if (lastKeyPressed == InputRight)
-                        {
-                            var movementEvent = new MovementEvent(entity.Id, EnumDirections.East);
-                            BroadcastMessage(movementEvent);
-                        }
+                        var movementEvent = new MovementInputEvent(entity.Id, EnumDirections.North);
+                        BroadcastMessage(movementEvent);
+                    }
+                    else if (Keyboard.IsKeyPressed(InputDown))
+                    {
+                        var movementEvent = new MovementInputEvent(entity.Id, EnumDirections.South);
+                        BroadcastMessage(movementEvent);
+                    }
+                    else if (Keyboard.IsKeyPressed(InputLeft))
+                    {
+                        var movementEvent = new MovementInputEvent(entity.Id, EnumDirections.West);
+                        BroadcastMessage(movementEvent);
+                    }
+                    else if (Keyboard.IsKeyPressed(InputRight))
+                    {
+                        var movementEvent = new MovementInputEvent(entity.Id, EnumDirections.East);
+                        BroadcastMessage(movementEvent);
+                    }
+                    else if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+                    {
+                        exitGame = true;
                     }
                 }
-
-                //need broadcast movement event to some sort of movementSystem
-                //will need ID of entity/component trying to move
-                //movementSystem can then handle collision/w.e.
-
-                lastKeyPressedIsDirty = true;
             }
         }
     }

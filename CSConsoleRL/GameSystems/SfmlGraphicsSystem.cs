@@ -33,24 +33,24 @@ namespace CSConsoleRL.GameSystems
         private int worldYLength;
         private int windowXPositionInWorld = 0;
         private int windowYPositionInWorld = 0;
-        private const int windowXSize = 720;
-        private const int windowYSize = 480;
+        private const int windowXSize = 600;
+        private const int windowYSize = 600;
 
         private TileTypeDictionary tileDictionary;
         private SfmlTextureDictionary textureDictionary;
 
         private List<Entity> graphicsEntities;
 
-        public SfmlGraphicsSystem(GameSystemManager manager, RenderWindow _sfmlWindow, Tile[,] _gameTiles, int _worldXLength, int _worldYLength)
+        public SfmlGraphicsSystem(GameSystemManager manager, RenderWindow _sfmlWindow, Tile[,] _gameTiles)
         {
             SystemManager = manager;
 
             sfmlWindow = _sfmlWindow;   //don't create window here as we need the events to be in user input system
             gameTiles = _gameTiles;
-            worldXLength = _worldXLength;
-            worldYLength = _worldYLength;
+            worldXLength = gameTiles.GetLength(0);
+            worldYLength = gameTiles.GetLength(1);
 
-            LoadTextures();
+            graphicsEntities = new List<Entity>();
         }
 
         public override void InitializeSystem()
@@ -67,7 +67,7 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
-        public override void HandleMessage(GameEvent gameEvent)
+        public override void HandleMessage(IGameEvent gameEvent)
         {
             switch(gameEvent.EventName)
             {
@@ -80,7 +80,7 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
-        public override GameEvent BroadcastMessage(GameEvent evnt)
+        public override void BroadcastMessage(IGameEvent evnt)
         {
             throw new NotImplementedException();
         }
@@ -104,7 +104,7 @@ namespace CSConsoleRL.GameSystems
             var startingTileYPosition = windowYPositionInWorld / tilePixelSize;
             var endingTileYPosition = startingTileYPosition + (windowYSize / tilePixelSize);
 
-            sfmlWindow.Clear();
+            sfmlWindow.Clear(Color.Black);
 
             //Draw background tiles
             for(int x = startingTileXPosition; x < endingTileXPosition; x++)
@@ -122,12 +122,14 @@ namespace CSConsoleRL.GameSystems
                 var sfmlComponent = entity.GetComponent<DrawableSfmlComponent>();
                 var positionComponent = entity.GetComponent<PositionComponent>();
 
-                int spriteXPosition = positionComponent.ComponentXPositionOnMap - windowXPositionInWorld;
-                int spriteYPosition = positionComponent.ComponentYPositionOnMap - windowYPositionInWorld;
+                int spriteXPosition = (positionComponent.ComponentXPositionOnMap - windowXPositionInWorld) * tilePixelSize;
+                int spriteYPosition = (positionComponent.ComponentYPositionOnMap - windowYPositionInWorld) * tilePixelSize;
 
                 sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition, spriteYPosition);
                 sfmlWindow.Draw(sfmlComponent.GameSprite);
             }
+
+            sfmlWindow.Display();
         }
 
         private void LoadTextures()
@@ -189,8 +191,8 @@ namespace CSConsoleRL.GameSystems
             public SfmlTextureDictionary()
                 : base()
             {
-                string fileName = @"\Data\Sprites\Regular20x20.png";
-                Add(EnumSfmlSprites.MainCharacter, new Texture(fileName, new IntRect(0, 0, 20, 20)));
+                string fileName = @"G:\Programming\GitRepos\CSConsoleRL\CSConsoleRL\bin\x64\Debug\Data\Sprites\Regular20x20.png";
+                Add(EnumSfmlSprites.MainCharacter, new Texture(fileName, new IntRect(0, 140, 20, 20)));
                 Add(EnumSfmlSprites.HumanEnemy, new Texture(fileName, new IntRect(0, 0, 20, 20)));
                 Add(EnumSfmlSprites.Dog, new Texture(fileName, new IntRect(0, 0, 20, 20)));
             }

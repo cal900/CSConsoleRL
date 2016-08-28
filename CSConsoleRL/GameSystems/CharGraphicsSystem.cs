@@ -45,12 +45,12 @@ namespace CSConsoleRL.GameSystems
             throw new NotImplementedException();
         }
 
-        public override void HandleMessage(GameEvent gameEvent)
+        public override void HandleMessage(IGameEvent gameEvent)
         {
             throw new NotImplementedException();
         }
 
-        public override GameEvent BroadcastMessage(GameEvent evnt)
+        public override void BroadcastMessage(IGameEvent evnt)
         {
             throw new NotImplementedException();
         }

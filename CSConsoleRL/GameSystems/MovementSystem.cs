@@ -29,7 +29,7 @@ namespace CSConsoleRL.GameSystems
 
         public override void InitializeSystem()
         {
-            throw new NotImplementedException();
+            
         }
 
         public override void AddEntity(Entity entity)
@@ -40,7 +40,7 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
-        public override void HandleMessage(GameEvent gameEvent)
+        public override void HandleMessage(IGameEvent gameEvent)
         {
             switch (gameEvent.EventName)
             {
@@ -50,15 +50,15 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
-        public override GameEvent BroadcastMessage(GameEvent evnt)
+        public override void BroadcastMessage(IGameEvent evnt)
         {
             throw new NotImplementedException();
         }
 
         //If entity has MovementComponent check if can move to location (check collisions, if frozen etc.), otherwise don't anything
-        public void HandleMovementInput(GameEvent evnt)
+        public void HandleMovementInput(IGameEvent evnt)
         {
-            var movementEvent = (MovementEvent)evnt;
+            var movementEvent = (MovementInputEvent)evnt;
 
             Guid entityId = (Guid)evnt.EventParams[0];
             Entity entityToMove = movementEntities.Where(entity => entity.Id.Equals(entityId)).FirstOrDefault();
@@ -95,8 +95,9 @@ namespace CSConsoleRL.GameSystems
             //check collision with other entities
             foreach (var colEnt in collisionEntities)
             {
-                if (colEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap == desiredXPos
-                    || colEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap == desiredYPos)
+                if (colEnt.Id != entityId
+                    && (colEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap == desiredXPos
+                    || colEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap == desiredYPos))
                 {
                     return;
                 }

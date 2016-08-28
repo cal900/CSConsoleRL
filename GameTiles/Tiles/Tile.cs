@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 using GameTiles.Enums;
 using SFML.Graphics;
 using SFML.System;
+using System.Xml.Serialization;
 
 namespace GameTiles.Tiles
 {
-    [Serializable()]
+    [Serializable]
     public struct Tile
     {
         public EnumTileTypes TileType { get; set; }
-        public Sprite TileSprite { get; set; }
+        [NonSerialized]
+        public Sprite TileSprite;
     }
 }
