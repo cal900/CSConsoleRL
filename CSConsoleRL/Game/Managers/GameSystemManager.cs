@@ -55,7 +55,7 @@ namespace CSConsoleRL.Game.Managers
             RegisterSystem(movementSystem);
             var sfmlGraphicsSystem = new SfmlGraphicsSystem(this, sfmlWindow, gameMap.TileSet);
             RegisterSystem(sfmlGraphicsSystem);
-            var UserInputSystem = new UserInputSystem(this, sfmlWindow, ref exitGame);
+            var UserInputSystem = new UserInputSystem(this, sfmlWindow);
             RegisterSystem(UserInputSystem);
         }
 
@@ -103,6 +103,11 @@ namespace CSConsoleRL.Game.Managers
 
         public void BroadcastEvent(IGameEvent evnt)
         {
+            if(evnt.EventName == "ExitGame")
+            {
+                exitGame = true;
+            }
+
             foreach(KeyValuePair<Type, GameSystem> system in Systems)
             {
                 system.Value.HandleMessage(evnt);
@@ -117,7 +122,7 @@ namespace CSConsoleRL.Game.Managers
         private void MainGameLoop()
         {
             //Clock clock = new Clock();
-            sfmlWindow.SetFramerateLimit(60);
+            sfmlWindow.SetFramerateLimit(10);
             
             var nextFrameEvent = new NextFrameEvent();
 

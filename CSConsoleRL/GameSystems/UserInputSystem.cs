@@ -29,16 +29,12 @@ namespace CSConsoleRL.GameSystems
 
         private List<Entity> userInputEntities;
 
-        private bool exitGame;
-
-        public UserInputSystem(GameSystemManager manager, RenderWindow sfmlWindow, ref bool _exitGame)
+        public UserInputSystem(GameSystemManager manager, RenderWindow sfmlWindow)
         {
             SystemManager = manager;
             userInputEntities = new List<Entity>();
 
             sfmlWindow.KeyPressed += sfmlWindow_KeyPressed;
-
-            exitGame = _exitGame;
         }
 
         public override void InitializeSystem()
@@ -146,7 +142,8 @@ namespace CSConsoleRL.GameSystems
                     }
                     else if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
                     {
-                        exitGame = true;
+                        var exitEvent = new ExitGameEvent();
+                        BroadcastMessage(exitEvent);
                     }
                 }
             }
