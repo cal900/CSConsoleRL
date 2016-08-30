@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\LosComponent.cs" />
     <Compile Include="Components\CollisionComponent.cs" />
     <Compile Include="Components\DrawableSfmlComponent.cs" />
     <Compile Include="Components\PositionComponent.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Events\NextFrameEvent.cs" />
     <Compile Include="Events\ScreenPositionChangeEvent.cs" />
     <Compile Include="Events\MovementEvent.cs" />
+    <Compile Include="GameSystems\LosSystem.cs" />
     <Compile Include="GameSystems\SfmlGraphicsSystem.cs" />
     <Compile Include="GameSystems\MovementSystem.cs" />
     <Compile Include="Game\Managers\TileManager.cs" />

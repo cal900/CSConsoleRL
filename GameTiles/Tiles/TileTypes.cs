@@ -17,6 +17,7 @@ namespace GameTiles.Tiles
         public readonly ConsoleColor Color;
         public readonly bool BlocksMovement;
         public readonly bool BlocksVision;
+        public bool IsInLos = false;
     }
 
     //Overriding Dictionary - automatically populated dictionary of tiletypes matched to the relevant struct
