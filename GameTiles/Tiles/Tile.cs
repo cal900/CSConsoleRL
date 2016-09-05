@@ -14,6 +14,7 @@ namespace GameTiles.Tiles
     public struct Tile
     {
         public EnumTileTypes TileType { get; set; }
+        public bool IsInLos { get; set; }
         [NonSerialized]
         public Sprite TileSprite;
     }

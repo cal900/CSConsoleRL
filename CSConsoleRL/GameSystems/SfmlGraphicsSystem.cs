@@ -112,7 +112,18 @@ namespace CSConsoleRL.GameSystems
                 for (int y = startingTileYPosition; y < endingTileYPosition; y++)
                 {
                     gameTiles[x, y].TileSprite.Position = new Vector2f(x * tilePixelSize, y * tilePixelSize);
-                    sfmlWindow.Draw(gameTiles[x, y].TileSprite);
+
+                    //Check if tile is in LOS
+                    if (gameTiles[x, y].IsInLos)
+                    {
+                        gameTiles[x, y].TileSprite.Color = new Color(255, 255, 255);
+                        sfmlWindow.Draw(gameTiles[x, y].TileSprite);
+                    }
+                    else
+                    {
+                        gameTiles[x, y].TileSprite.Color = new Color(100, 100, 100);
+                        sfmlWindow.Draw(gameTiles[x, y].TileSprite);
+                    }
                 }
             }
 

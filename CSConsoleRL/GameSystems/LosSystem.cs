@@ -17,14 +17,13 @@ namespace CSConsoleRL.GameSystems
     {
         private List<Entity> losEntities;
         private Tile[,] gameTiles;
-        private Entity losSource;
+        public Entity LosSourceEntity { get; set; }
 
-        public LosSystem(GameSystemManager manager, Tile[,] _gameTiles, Entity _losSource)
+        public LosSystem(GameSystemManager manager, Tile[,] _gameTiles)
         {
             SystemManager = manager;
             losEntities = new List<Entity>();
             gameTiles = _gameTiles;
-            losSource = _losSource;
         }
 
         public override void InitializeSystem()
@@ -55,9 +54,47 @@ namespace CSConsoleRL.GameSystems
             throw new NotImplementedException();
         }
 
-        public void CalculateLos()
+          //           Shared
+          //           edge by
+          //Shared     1 & 2      Shared
+          //edge by\      |      /edge by
+          //1 & 8   \     |     / 2 & 3
+          //         \1111|2222/
+          //         8\111|222/3
+          //         88\11|22/33
+          //         888\1|2/333
+          //Shared   8888\|/3333  Shared
+          //edge by-------@-------edge by
+          //7 & 8    7777/|\4444  3 & 4
+          //         777/6|5\444
+          //         77/66|55\44
+          //         7/666|555\4
+          //         /6666|5555\
+          //Shared  /     |     \ Shared
+          //edge by/      |      \edge by
+          //6 & 7      Shared     4 & 5
+          //           edge by 
+          //           5 & 6
+
+        private void CalculateLos()
         {
-            
+            if (LosSourceEntity != null)
+            {
+
+            }
+        }
+
+        private void ScanQuadrant(int startingY, int startingX)
+        {
+            int rowXStart = startingX;
+            for(int y = startingY; y > 0; y--)
+            {
+                for(int x = rowXStart; x <= startingX; x++)
+                {
+
+                }
+                rowXStart--;
+            }
         }
     }
 }

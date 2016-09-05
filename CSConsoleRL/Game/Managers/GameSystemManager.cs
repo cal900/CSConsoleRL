@@ -47,12 +47,15 @@ namespace CSConsoleRL.Game.Managers
         {
             var mainChar = new ActorEntity();
             RegisterEntity(mainChar);
+            ((LosSystem)Systems[typeof(LosSystem)]).LosSourceEntity = mainChar;
         }
 
         private void CreateSystems()
         {
             var movementSystem = new MovementSystem(this, gameMap.TileSet);
             RegisterSystem(movementSystem);
+            var losSystem = new LosSystem(this, gameMap.TileSet);
+            RegisterSystem(losSystem);
             var sfmlGraphicsSystem = new SfmlGraphicsSystem(this, sfmlWindow, gameMap.TileSet);
             RegisterSystem(sfmlGraphicsSystem);
             var UserInputSystem = new UserInputSystem(this, sfmlWindow);

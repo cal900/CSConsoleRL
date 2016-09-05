@@ -27,6 +27,15 @@ namespace CSConsoleRL
 
             var newFileMenu = new MapFileHandler(ref mapInfo);
 
+            //Set LOS default
+            for (int y = 0; y < mapInfo.TileSet.GetLength(1); y++)
+            {
+                for (int x = 0; x < mapInfo.TileSet.GetLength(0); x++)
+                {
+                    mapInfo.TileSet[x, y].IsInLos = true;
+                }
+            }
+
             var gameSystemManager = new GameSystemManager(mapInfo);
         }
     }
