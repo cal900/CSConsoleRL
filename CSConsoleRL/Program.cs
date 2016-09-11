@@ -32,7 +32,7 @@ namespace CSConsoleRL
             {
                 for (int x = 0; x < mapInfo.TileSet.GetLength(0); x++)
                 {
-                    mapInfo.TileSet[x, y].IsInLos = true;
+                    mapInfo.TileSet[x, y].IsInLos = false;
                 }
             }
 
