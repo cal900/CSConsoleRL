@@ -145,6 +145,13 @@ namespace CSConsoleRL.GameSystems
                         var exitEvent = new ExitGameEvent();
                         BroadcastMessage(exitEvent);
                     }
+                    else
+                    {
+                        return;
+                    }
+
+                    var nextTurnEvent = new NextTurnEvent();
+                    BroadcastMessage(nextTurnEvent);
                 }
             }
         }

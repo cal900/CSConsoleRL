@@ -87,6 +87,7 @@
     <Compile Include="Enums\EnumKeyboard.cs" />
     <Compile Include="Events\IGameEvent.cs" />
     <Compile Include="Events\ExitGameEvent.cs" />
+    <Compile Include="Events\NextTurnEvent.cs" />
     <Compile Include="Events\NextFrameEvent.cs" />
     <Compile Include="Events\ScreenPositionChangeEvent.cs" />
     <Compile Include="Events\MovementEvent.cs" />
