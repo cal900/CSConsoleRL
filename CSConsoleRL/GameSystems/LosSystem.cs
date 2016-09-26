@@ -166,6 +166,7 @@ namespace CSConsoleRL.GameSystems
                         {
                             if (secondScanX <= absoluteX + Convert.ToInt32((y - absoluteY) / startSlope) && secondScanX < 30)
                             {
+                                gameTiles[secondScanX, y].IsInLos = true;
                                 secondScanX++;
                             }
                             else
