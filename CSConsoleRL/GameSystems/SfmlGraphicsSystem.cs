@@ -35,6 +35,8 @@ namespace CSConsoleRL.GameSystems
         private int windowYPositionInWorld = 0;
         private const int windowXSize = 600;
         private const int windowYSize = 600;
+        private bool showConsole;
+        private const int consoleHeight = 3;    //Number of rows for the console (3 = row for current command, and 2 command history rows)
 
         private TileTypeDictionary tileDictionary;
         private SfmlTextureDictionary textureDictionary;
@@ -45,7 +47,7 @@ namespace CSConsoleRL.GameSystems
         {
             SystemManager = manager;
 
-            sfmlWindow = _sfmlWindow;   //don't create window here as we need the events to be in user input system
+            sfmlWindow = _sfmlWindow;   //Don't create window here as we need the events to be in user input system
             gameTiles = _gameTiles;
             worldXLength = gameTiles.GetLength(0);
             worldYLength = gameTiles.GetLength(1);
@@ -88,6 +90,7 @@ namespace CSConsoleRL.GameSystems
         private void NextFrame()
         {
             DrawSfmlGraphics();
+            if (showConsole) DrawConsole();
         }
 
         private void ScreenPositionChange(int newX, int newY)
@@ -96,7 +99,7 @@ namespace CSConsoleRL.GameSystems
             windowYPositionInWorld = newY;
         }
 
-        public void DrawSfmlGraphics()
+        private void DrawSfmlGraphics()
         {
             //Get all background tiles in view of current window position
             var startingTileXPosition = windowXPositionInWorld / tilePixelSize;
@@ -127,7 +130,7 @@ namespace CSConsoleRL.GameSystems
                 }
             }
 
-            //draw game sprites
+            //Draw game sprites
             foreach(Entity entity in graphicsEntities)
             {
                 var sfmlComponent = entity.GetComponent<DrawableSfmlComponent>();
@@ -141,6 +144,11 @@ namespace CSConsoleRL.GameSystems
             }
 
             sfmlWindow.Display();
+        }
+
+        private void DrawConsole()
+        {
+
         }
 
         private void LoadTextures()

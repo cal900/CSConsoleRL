@@ -24,7 +24,7 @@ namespace GameTiles.Tiles
     {
         public TileTypeDictionary() : base()
         {
-            string fileName = @"G:\Programming\GitRepos\CSConsoleRL\CSConsoleRL\bin\x64\Debug\Data\Sprites\Regular20x20.png";
+            string fileName = @"G:\Programming\CSConsoleRL\CSConsoleRL\CSConsoleRL\bin\x64\Debug\Data\Sprites\Regular20x20.png";
             Add(EnumTileTypes.Snow, new TileData('~', new Texture(fileName, new IntRect(0, 0, 20, 20)), ConsoleColor.Gray, false, false));
             Add(EnumTileTypes.SnowWalked, new TileData('8', new Texture(fileName, new IntRect(20, 20, 20, 20)), ConsoleColor.Gray, false, false));
             Add(EnumTileTypes.Road, new TileData('-', new Texture(fileName, new IntRect(0, 0, 20, 20)), ConsoleColor.DarkGray, false, false));

@@ -84,7 +84,7 @@ namespace Utilities
 
         public void SaveMapFileBrowser(ref MapFile mapFileToSave)
         {
-            string[] filesInDirectory = Directory.GetFiles(Directory.GetCurrentDirectory() + @"\Data\Maps", "*.csr");
+            string[] filesInDirectory = Directory.GetFiles(@"G:\Programming\CSConsoleRL\CSConsoleRL\Data\Maps", "*.csr");
 
             string input = "";
             int tempInt = 0;
@@ -106,7 +106,7 @@ namespace Utilities
                 }
                 else if(string.Compare(input, "exit", true) != 0)
                 {
-                    SaveMap(@"Data\Maps\" + input, ref mapFileToSave);
+                    SaveMap(@"G:\Programming\CSConsoleRL\CSConsoleRL\Data\Maps\" + input, ref mapFileToSave);
                     Console.Clear();
                     return;
                 }
@@ -115,7 +115,7 @@ namespace Utilities
 
         public void LoadMapFileBrowser(ref MapFile mapFileToLoadTo)
         {
-            string[] filesInDirectory = Directory.GetFiles(Directory.GetCurrentDirectory() + @"\Data\Maps", "*.csr");
+            string[] filesInDirectory = Directory.GetFiles(@"G:\Programming\CSConsoleRL\CSConsoleRL\Data\Maps", "*.csr");
 
             string input = "";
             int tempInt = 0;
@@ -136,7 +136,7 @@ namespace Utilities
                 }
                 else if (string.Compare(input, "exit", true) != 0)
                 {
-                    LoadMap(@"Data\Maps\" + input, ref mapFileToLoadTo);
+                    LoadMap(@"G:\Programming\CSConsoleRL\CSConsoleRL\Data\Maps\" + input, ref mapFileToLoadTo);
                     return;
                 }
             }

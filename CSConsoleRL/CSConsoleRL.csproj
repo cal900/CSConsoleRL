@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -87,10 +88,13 @@
     <Compile Include="Enums\EnumKeyboard.cs" />
     <Compile Include="Events\IGameEvent.cs" />
     <Compile Include="Events\ExitGameEvent.cs" />
+    <Compile Include="Events\KeyPressedEvent.cs" />
+    <Compile Include="Events\ToggleConsoleEvent.cs" />
     <Compile Include="Events\NextTurnEvent.cs" />
     <Compile Include="Events\NextFrameEvent.cs" />
     <Compile Include="Events\ScreenPositionChangeEvent.cs" />
     <Compile Include="Events\MovementEvent.cs" />
+    <Compile Include="GameSystems\ConsoleSystem.cs" />
     <Compile Include="GameSystems\LosSystem.cs" />
     <Compile Include="GameSystems\SfmlGraphicsSystem.cs" />
     <Compile Include="GameSystems\MovementSystem.cs" />
@@ -114,6 +118,20 @@
       <Project>{da14176e-3fec-43a8-ab9a-b4bd81e2327c}</Project>
       <Name>Utilities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="csfml-audio-2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="csfml-graphics-2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="csfml-system-2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="csfml-window-2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
