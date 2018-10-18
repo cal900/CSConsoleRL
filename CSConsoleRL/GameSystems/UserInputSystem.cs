@@ -84,11 +84,6 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
-        public override void BroadcastMessage(IGameEvent evnt)
-        {
-            SystemManager.BroadcastEvent(evnt);
-        }
-
         private void NextFrame()
         {
             HandleKeyPressed();

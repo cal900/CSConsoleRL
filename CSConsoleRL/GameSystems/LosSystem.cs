@@ -55,11 +55,6 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
-        public override void BroadcastMessage(IGameEvent evnt)
-        {
-            throw new NotImplementedException();
-        }
-
         //           Shared
         //           edge by
         //Shared     1 & 2      Shared

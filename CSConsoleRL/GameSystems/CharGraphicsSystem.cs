@@ -50,11 +50,6 @@ namespace CSConsoleRL.GameSystems
             throw new NotImplementedException();
         }
 
-        public override void BroadcastMessage(IGameEvent evnt)
-        {
-            throw new NotImplementedException();
-        }
-
         public void DrawCharGraphics(int XCurrentPositionOnMap, int YCurrentPositionOnMap)
         {
             Console.Clear();

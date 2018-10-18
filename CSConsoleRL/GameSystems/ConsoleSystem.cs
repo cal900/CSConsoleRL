@@ -9,6 +9,7 @@ using CSConsoleRL.Components.Interfaces;
 using CSConsoleRL.Events;
 using CSConsoleRL.Entities;
 using CSConsoleRL.Enums;
+using SFML.Window;
 
 namespace CSConsoleRL.GameSystems
 {
@@ -40,12 +41,30 @@ namespace CSConsoleRL.GameSystems
                 case "ToggleConsole":
                     consoleOn = !consoleOn;
                     break;
+                case "KeyPressed":
+                    HandleKeyPressed((Keyboard.Key)((KeyPressedEvent)gameEvent).EventParams[0]);
+                    break;
             }
         }
 
-        public override void BroadcastMessage(IGameEvent evnt)
+        private Dictionary<string, IGameEvent> GetGameEvents()
         {
-            throw new NotImplementedException();
+            var gameEvents = new Dictionary<string, IGameEvent>();
+
         }
+
+        private void HandleKeyPressed(Keyboard.Key key)
+        {
+            if(key == Keyboard.Key.Return)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+
+        private void 
     }
 }

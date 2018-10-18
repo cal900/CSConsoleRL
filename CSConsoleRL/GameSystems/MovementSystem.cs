@@ -50,11 +50,6 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
-        public override void BroadcastMessage(IGameEvent evnt)
-        {
-            throw new NotImplementedException();
-        }
-
         //If entity has MovementComponent check if can move to location (check collisions, if frozen etc.), otherwise don't anything
         public void HandleMovementInput(IGameEvent evnt)
         {

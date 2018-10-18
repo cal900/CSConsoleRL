@@ -10,5 +10,6 @@ namespace CSConsoleRL.Events
     {
         string EventName { get; }
         List<object> EventParams { get; set; }
+        static IGameEvent CreateEvent();
     }
 }
