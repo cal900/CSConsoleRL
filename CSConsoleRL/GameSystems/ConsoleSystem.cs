@@ -47,12 +47,6 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
-        private Dictionary<string, IGameEvent> GetGameEvents()
-        {
-            var gameEvents = new Dictionary<string, IGameEvent>();
-
-        }
-
         private void HandleKeyPressed(Keyboard.Key key)
         {
             if(key == Keyboard.Key.Return)
@@ -65,6 +59,21 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
-        private void 
+        private void CreateNewEvent(string commandText)
+        {
+            if (string.IsNullOrWhiteSpace(commandText)) return;
+
+            string[] cmdParams = commandText.Split(' ');
+
+            switch(cmdParams[0])
+            {
+                case "q":   //Quit Console
+                    BroadcastMessage(new ToggleConsoleEvent());
+                    break;
+                case "togglefow":
+                    BroadcastMessage(new ToggleFowEvent());
+                    break;
+            }
+        }
     }
 }
