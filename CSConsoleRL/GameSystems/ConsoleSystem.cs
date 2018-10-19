@@ -26,7 +26,7 @@ namespace CSConsoleRL.GameSystems
 
         public override void InitializeSystem()
         {
-
+            BroadcastMessage(new ConsoleReferenceEvent(commandList));
         }
 
         public override void AddEntity(Entity entity)
@@ -38,6 +38,9 @@ namespace CSConsoleRL.GameSystems
         {
             switch (gameEvent.EventName)
             {
+                case "NextFrame":
+                    NextFrame();
+                    break;
                 case "ToggleConsole":
                     consoleOn = !consoleOn;
                     break;
@@ -45,6 +48,11 @@ namespace CSConsoleRL.GameSystems
                     HandleKeyPressed((Keyboard.Key)((KeyPressedEvent)gameEvent).EventParams[0]);
                     break;
             }
+        }
+
+        private void NextFrame()
+        {
+            
         }
 
         private void HandleKeyPressed(Keyboard.Key key)

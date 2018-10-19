@@ -89,6 +89,7 @@
     <Compile Include="Events\IGameEvent.cs" />
     <Compile Include="Events\ExitGameEvent.cs" />
     <Compile Include="Events\KeyPressedEvent.cs" />
+    <Compile Include="Events\ConsoleReferenceEvent.cs" />
     <Compile Include="Events\ToggleFowEvent.cs" />
     <Compile Include="Events\ToggleConsoleEvent.cs" />
     <Compile Include="Events\NextTurnEvent.cs" />

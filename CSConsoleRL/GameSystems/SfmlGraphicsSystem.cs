@@ -28,6 +28,7 @@ namespace CSConsoleRL.GameSystems
         private const ConsoleColor foregroundColor = ConsoleColor.DarkGray;
         private const ConsoleColor backgroundColor = ConsoleColor.Black;
         private RenderWindow sfmlWindow;
+        private List<string> consoleCommands;
         private Tile[,] gameTiles;
         private int worldXLength;
         private int worldYLength;
@@ -78,6 +79,9 @@ namespace CSConsoleRL.GameSystems
                     break;
                 case "ScreenPositionChange":
                     ScreenPositionChange((int)gameEvent.EventParams[0], (int)gameEvent.EventParams[1]);
+                    break;
+                case "ConsoleReference":
+                    consoleCommands = (List<string>)gameEvent.EventParams[0];
                     break;
             }
         }
