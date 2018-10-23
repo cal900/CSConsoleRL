@@ -36,7 +36,8 @@ namespace CSConsoleRL.GameSystems
         private const int windowXSize = 600;
         private const int windowYSize = 600;
         private bool showConsole;
-        private const int consoleHeight = 3;    //Number of rows for the console (3 = row for current command, and 2 command history rows)
+        private int consoleDisplaySize;
+        private List<string> console;
 
         private TileTypeDictionary tileDictionary;
         private SfmlTextureDictionary textureDictionary;
@@ -79,13 +80,20 @@ namespace CSConsoleRL.GameSystems
                 case "ScreenPositionChange":
                     ScreenPositionChange((int)gameEvent.EventParams[0], (int)gameEvent.EventParams[1]);
                     break;
+                case "SendConsoleData":
+                    console = (List<string>)gameEvent.EventParams[0];
+                    break;
             }
         }
 
         private void NextFrame()
         {
             DrawSfmlGraphics();
-            if (showConsole) DrawConsole();
+            if (showConsole)
+            {
+                BroadcastMessage(new RequestConsoleDataEvent(consoleDisplaySize));
+                DrawConsole();
+            }
         }
 
         private void ScreenPositionChange(int newX, int newY)

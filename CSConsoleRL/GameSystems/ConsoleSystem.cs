@@ -15,13 +15,37 @@ namespace CSConsoleRL.GameSystems
 {
     public class ConsoleSystem : GameSystem
     {
+        private class gameConsole
+        {
+            public List<string> Commands { get; private set; }
+            public string ActiveCommand
+            {
+                get
+                {
+                    return Commands[Commands.Count - 1];
+                }
+                set
+                {
+                    Commands[Commands.Count - 1] = value;
+                }
+            }
+
+            //Initialize with a string so ActiveCommand doesn't get messed up by Count of 0
+            public gameConsole() { Commands = new List<string>() { "" }; }
+
+            public void AddCommand()
+            {
+                Commands.Add("");
+            }
+        }
+
         private bool consoleOn;
-        private List<string> commandList;
+        private gameConsole console;
 
         public ConsoleSystem(GameSystemManager manager)
         {
             SystemManager = manager;
-            commandList = new List<string>();
+            console = new gameConsole();
         }
 
         public override void InitializeSystem()
@@ -44,6 +68,9 @@ namespace CSConsoleRL.GameSystems
                 case "KeyPressed":
                     HandleKeyPressed((Keyboard.Key)((KeyPressedEvent)gameEvent).EventParams[0]);
                     break;
+                case "RequestConsoleData":
+                    BroadcastMessage(new SendConsoleDataEvent(console.Commands));
+                    break;
             }
         }
 
@@ -51,11 +78,12 @@ namespace CSConsoleRL.GameSystems
         {
             if(key == Keyboard.Key.Return)
             {
-
+                CreateNewEvent(console.ActiveCommand);
+                console.AddCommand();
             }
             else
             {
-
+                console.ActiveCommand += key.ToString();
             }
         }
 
