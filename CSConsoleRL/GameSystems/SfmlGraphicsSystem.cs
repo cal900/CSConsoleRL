@@ -36,7 +36,7 @@ namespace CSConsoleRL.GameSystems
         private const int windowXSize = 600;
         private const int windowYSize = 600;
         private bool showConsole;
-        private int consoleDisplaySize;
+        private const int consoleDisplayLines = 5;
         private List<string> console;
 
         private TileTypeDictionary tileDictionary;
@@ -83,6 +83,9 @@ namespace CSConsoleRL.GameSystems
                 case "SendConsoleData":
                     console = (List<string>)gameEvent.EventParams[0];
                     break;
+                case "ToggleConsole":
+                    showConsole = !showConsole;
+                    break;
             }
         }
 
@@ -91,9 +94,11 @@ namespace CSConsoleRL.GameSystems
             DrawSfmlGraphics();
             if (showConsole)
             {
-                BroadcastMessage(new RequestConsoleDataEvent(consoleDisplaySize));
+                BroadcastMessage(new RequestConsoleDataEvent(consoleDisplayLines));
                 DrawConsole();
             }
+
+            sfmlWindow.Display();
         }
 
         private void ScreenPositionChange(int newX, int newY)
@@ -145,14 +150,17 @@ namespace CSConsoleRL.GameSystems
                 sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition, spriteYPosition);
                 sfmlWindow.Draw(sfmlComponent.GameSprite);
             }
-
-            sfmlWindow.Display();
         }
 
         private void DrawConsole()
         {
-
+            //Console is black rect with white text
+            var rect = new RectangleShape(new Vector2f(windowXSize, tilePixelSize * consoleDisplayLines));
+            rect.Position = new Vector2f(0, windowYSize - tilePixelSize * consoleDisplayLines);
+            rect.FillColor = new Color(0, 0, 0, 150);
+            sfmlWindow.Draw(rect);
         }
+
 
         private void LoadTextures()
         {

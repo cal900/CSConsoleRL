@@ -99,33 +99,27 @@ namespace CSConsoleRL.GameSystems
                     {
                         if (Keyboard.IsKeyPressed(InputUp))
                         {
-                            var movementEvent = new MovementInputEvent(entity.Id, EnumDirections.North);
-                            BroadcastMessage(movementEvent);
+                            BroadcastMessage(new MovementInputEvent(entity.Id, EnumDirections.North));
                         }
                         else if (Keyboard.IsKeyPressed(InputDown))
                         {
-                            var movementEvent = new MovementInputEvent(entity.Id, EnumDirections.South);
-                            BroadcastMessage(movementEvent);
+                            BroadcastMessage(new MovementInputEvent(entity.Id, EnumDirections.South));
                         }
                         else if (Keyboard.IsKeyPressed(InputLeft))
                         {
-                            var movementEvent = new MovementInputEvent(entity.Id, EnumDirections.West);
-                            BroadcastMessage(movementEvent);
+                            BroadcastMessage(new MovementInputEvent(entity.Id, EnumDirections.West));
                         }
                         else if (Keyboard.IsKeyPressed(InputRight))
                         {
-                            var movementEvent = new MovementInputEvent(entity.Id, EnumDirections.East);
-                            BroadcastMessage(movementEvent);
+                            BroadcastMessage(new MovementInputEvent(entity.Id, EnumDirections.East));
                         }
                         else if (Keyboard.IsKeyPressed(InputToggleConsole))
                         {
-                            var toggleConsoleEvent = new ToggleConsoleEvent();
-                            BroadcastMessage(toggleConsoleEvent);
+                            BroadcastMessage(new ToggleConsoleEvent());
                         }
                         else if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
                         {
-                            var exitEvent = new ExitGameEvent();
-                            BroadcastMessage(exitEvent);
+                            BroadcastMessage(new ExitGameEvent());
                         }
                         else
                         {
@@ -139,7 +133,7 @@ namespace CSConsoleRL.GameSystems
             }
             else
             {
-                lastKeyPressed.ToString();
+                BroadcastMessage(new ToggleConsoleEvent());
             }
         }
     }
