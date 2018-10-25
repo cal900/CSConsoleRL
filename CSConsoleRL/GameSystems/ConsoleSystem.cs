@@ -50,7 +50,7 @@ namespace CSConsoleRL.GameSystems
 
         public override void InitializeSystem()
         {
-            BroadcastMessage(new ConsoleReferenceEvent(commandList));
+            BroadcastMessage(new ConsoleReferenceEvent(console.Commands));
         }
 
         public override void AddEntity(Entity entity)

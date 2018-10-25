@@ -81,16 +81,14 @@ namespace CSConsoleRL.GameSystems
                 case "ScreenPositionChange":
                     ScreenPositionChange((int)gameEvent.EventParams[0], (int)gameEvent.EventParams[1]);
                     break;
-<<<<<<< HEAD
                 case "SendConsoleData":
                     console = (List<string>)gameEvent.EventParams[0];
                     break;
                 case "ToggleConsole":
                     showConsole = !showConsole;
-=======
+                    break;
                 case "ConsoleReference":
                     consoleCommands = (List<string>)gameEvent.EventParams[0];
->>>>>>> 3f6f166c823ea80846e4645da6dfd522991d2d03
                     break;
             }
         }
@@ -166,7 +164,6 @@ namespace CSConsoleRL.GameSystems
             rect.FillColor = new Color(0, 0, 0, 150);
             sfmlWindow.Draw(rect);
         }
-
 
         private void LoadTextures()
         {
