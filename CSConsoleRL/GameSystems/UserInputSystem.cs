@@ -45,6 +45,8 @@ namespace CSConsoleRL.GameSystems
             sfmlWindow = _sfmlWindow;
             sfmlWindow.KeyPressed += SfmlWindow_KeyPressed;
             sfmlWindow.KeyReleased += SfmlWindow_KeyReleased;
+
+            _inputs = new Queue<Keyboard.Key>();
         }
 
         private void SfmlWindow_KeyPressed(object sender, KeyEventArgs e)
