@@ -21,27 +21,26 @@ namespace CSConsoleRL.GameSystems
     {
         private RenderWindow sfmlWindow;
 
-        private const Keyboard.Key InputUp = Keyboard.Key.W;
-        private const Keyboard.Key InputDown = Keyboard.Key.S;
-        private const Keyboard.Key InputLeft = Keyboard.Key.A;
-        private const Keyboard.Key InputRight = Keyboard.Key.D;
+        private const Keyboard.Key _inputUp = Keyboard.Key.W;
+        private const Keyboard.Key _inputDown = Keyboard.Key.S;
+        private const Keyboard.Key _inputLeft = Keyboard.Key.A;
+        private const Keyboard.Key _inputRight = Keyboard.Key.D;
+        private const Keyboard.Key _inputMenuUp = Keyboard.Key.Up;
+        private const Keyboard.Key _inputMenuDown = Keyboard.Key.Down;
+        private const Keyboard.Key _inputToggleConsole = Keyboard.Key.Tilde;
 
-        private const Keyboard.Key InputMenuUp = Keyboard.Key.Up;
-        private const Keyboard.Key InputMenuDown = Keyboard.Key.Down;
+        private Keyboard.Key _lastKeyPressed;
+        private bool _lastKeyPressedIsDirty; //Used for situations such as console open where don't want to take multiple from a key being held down
 
-        private const Keyboard.Key InputToggleConsole = Keyboard.Key.Tilde;
+        private bool _consoleOn;
 
-        private Keyboard.Key lastKeyPressed;
-        private bool lastKeyPressedIsDirty; //Used for situations such as console open where don't want to take multiple from a key being held down
-
-        private bool consoleOn;
-
-        private List<Entity> userInputEntities;
+        private List<Entity> _userInputEntities;
+        private Queue<Keyboard.Key> _inputs;
 
         public UserInputSystem(GameSystemManager _manager, RenderWindow _sfmlWindow)
         {
             SystemManager = _manager;
-            userInputEntities = new List<Entity>();
+            _userInputEntities = new List<Entity>();
 
             sfmlWindow = _sfmlWindow;
             sfmlWindow.KeyPressed += SfmlWindow_KeyPressed;
@@ -50,14 +49,15 @@ namespace CSConsoleRL.GameSystems
 
         private void SfmlWindow_KeyPressed(object sender, KeyEventArgs e)
         {
-            lastKeyPressed = e.Code;
+            _lastKeyPressed = e.Code;
+            _inputs.Enqueue(e.Code);
         }
 
         private void SfmlWindow_KeyReleased(object sender, KeyEventArgs e)
         {
-            if (e.Code == lastKeyPressed)
+            if (e.Code == _lastKeyPressed)
             {
-                lastKeyPressed = Keyboard.Key.Unknown;
+                _lastKeyPressed = Keyboard.Key.Unknown;
             }
         }
 
@@ -70,7 +70,7 @@ namespace CSConsoleRL.GameSystems
         {
             if (entity.Components.ContainsKey(typeof(UserInputComponent)))
             {
-                userInputEntities.Add(entity);
+                _userInputEntities.Add(entity);
             }
         }
 
@@ -86,54 +86,48 @@ namespace CSConsoleRL.GameSystems
 
         private void NextFrame()
         {
-            HandleKeyPressed();
+            HandleInputs();
         }
 
-        private void HandleKeyPressed()
+        private void HandleInputs()
         {
-            if (!consoleOn)
+            while(_inputs.Count > 0)
             {
-                foreach (Entity entity in userInputEntities)
-                {
-                    if (entity.GetType() == typeof(ActorEntity))
-                    {
-                        if (Keyboard.IsKeyPressed(InputUp))
-                        {
-                            BroadcastMessage(new MovementInputEvent(entity.Id, EnumDirections.North));
-                        }
-                        else if (Keyboard.IsKeyPressed(InputDown))
-                        {
-                            BroadcastMessage(new MovementInputEvent(entity.Id, EnumDirections.South));
-                        }
-                        else if (Keyboard.IsKeyPressed(InputLeft))
-                        {
-                            BroadcastMessage(new MovementInputEvent(entity.Id, EnumDirections.West));
-                        }
-                        else if (Keyboard.IsKeyPressed(InputRight))
-                        {
-                            BroadcastMessage(new MovementInputEvent(entity.Id, EnumDirections.East));
-                        }
-                        else if (Keyboard.IsKeyPressed(InputToggleConsole))
-                        {
-                            BroadcastMessage(new ToggleConsoleEvent());
-                        }
-                        else if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
-                        {
-                            BroadcastMessage(new ExitGameEvent());
-                        }
-                        else
-                        {
-                            return;
-                        }
-
-                        var nextTurnEvent = new NextTurnEvent();
-                        BroadcastMessage(nextTurnEvent);
-                    }
-                }
+                HandleInput(_inputs.Dequeue());
+                BroadcastMessage(new NextTurnEvent());
             }
-            else
+        }
+
+        private void HandleInput(Keyboard.Key input)
+        {
+            switch(input)
             {
-                BroadcastMessage(new ToggleConsoleEvent());
+                case (_inputUp):
+                    BroadCastMovementInputToAllEntities(EnumDirections.North);
+                    break;
+                case (_inputDown):
+                    BroadCastMovementInputToAllEntities(EnumDirections.South);
+                    break;
+                case (_inputLeft):
+                    BroadCastMovementInputToAllEntities(EnumDirections.West);
+                    break;
+                case (_inputRight):
+                    BroadCastMovementInputToAllEntities(EnumDirections.East);
+                    break;
+                case (_inputToggleConsole):
+                    BroadcastMessage(new ToggleConsoleEvent());
+                    break;
+                case (Keyboard.Key.Escape):
+                    BroadcastMessage(new ExitGameEvent());
+                    break;
+            }
+        }
+
+        private void BroadCastMovementInputToAllEntities(EnumDirections dir)
+        {
+            foreach (Entity entity in _userInputEntities.Where(ent => ent.GetType() == typeof(ActorEntity)))
+            {
+                BroadcastMessage(new MovementInputEvent(entity.Id, dir));
             }
         }
     }
