@@ -20,6 +20,7 @@ namespace CSConsoleRL.GameSystems
         private Tile[,] gameTiles;
         public Entity LosSourceEntity { get; set; }
         private TileTypeDictionary tileDictionary;
+        private bool _fowEnabled;
 
         public LosSystem(GameSystemManager manager, Tile[,] _gameTiles)
         {
@@ -27,6 +28,7 @@ namespace CSConsoleRL.GameSystems
             losEntities = new List<Entity>();
             gameTiles = _gameTiles;
             tileDictionary = new TileTypeDictionary();
+            _fowEnabled = false;
         }
 
         public override void InitializeSystem()
@@ -51,6 +53,9 @@ namespace CSConsoleRL.GameSystems
                     break;
                 case "NextTurn":
                     CalculateLos();
+                    break;
+                case "ToggleFow":
+                    _fowEnabled = !_fowEnabled;
                     break;
             }
         }
@@ -88,11 +93,11 @@ namespace CSConsoleRL.GameSystems
             {
                 for (int x = 0; x < gameTiles.GetLength(0); x++)
                 {
-                    gameTiles[x, y].IsInLos = false;
+                    gameTiles[x, y].IsInLos = !_fowEnabled;
                 }
             }
 
-            if (LosSourceEntity != null)
+            if (_fowEnabled && LosSourceEntity != null)
             {
                 //Quad 1 & 2
                 //ScanQuadrant(LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, 1, double.MaxValue, false);

@@ -53,8 +53,7 @@ namespace CSConsoleRL.Game.Managers
         private void CreateSystems()
         {
             RegisterSystem(new MovementSystem(this, gameMap.TileSet));
-            //var losSystem = new LosSystem(this, gameMap.TileSet);
-            //RegisterSystem(losSystem);
+            RegisterSystem(new LosSystem(this, gameMap.TileSet));
             RegisterSystem(new SfmlGraphicsSystem(this, sfmlWindow, gameMap.TileSet));
             RegisterSystem(new UserInputSystem(this, sfmlWindow));
             RegisterSystem(new ConsoleSystem(this));
