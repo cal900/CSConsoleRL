@@ -16,6 +16,7 @@ namespace CSConsoleRL.Events
 
         public KeyPressedEvent(Keyboard.Key keyPressed)
         {
+            EventParams = new List<object>();
             EventParams.Add(keyPressed);
         }
     }

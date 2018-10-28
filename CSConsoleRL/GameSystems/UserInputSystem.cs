@@ -83,6 +83,9 @@ namespace CSConsoleRL.GameSystems
                 case "NextFrame":
                     NextFrame();
                     break;
+                case "ToggleConsole":
+                    _consoleOn = !_consoleOn;
+                    break;
             }
         }
 
@@ -102,26 +105,33 @@ namespace CSConsoleRL.GameSystems
 
         private void HandleInput(Keyboard.Key input)
         {
-            switch(input)
+            if (!_consoleOn)
             {
-                case (_inputUp):
-                    BroadCastMovementInputToAllEntities(EnumDirections.North);
-                    break;
-                case (_inputDown):
-                    BroadCastMovementInputToAllEntities(EnumDirections.South);
-                    break;
-                case (_inputLeft):
-                    BroadCastMovementInputToAllEntities(EnumDirections.West);
-                    break;
-                case (_inputRight):
-                    BroadCastMovementInputToAllEntities(EnumDirections.East);
-                    break;
-                case (_inputToggleConsole):
-                    BroadcastMessage(new ToggleConsoleEvent());
-                    break;
-                case (Keyboard.Key.Escape):
-                    BroadcastMessage(new ExitGameEvent());
-                    break;
+                switch (input)
+                {
+                    case (_inputUp):
+                        BroadCastMovementInputToAllEntities(EnumDirections.North);
+                        break;
+                    case (_inputDown):
+                        BroadCastMovementInputToAllEntities(EnumDirections.South);
+                        break;
+                    case (_inputLeft):
+                        BroadCastMovementInputToAllEntities(EnumDirections.West);
+                        break;
+                    case (_inputRight):
+                        BroadCastMovementInputToAllEntities(EnumDirections.East);
+                        break;
+                    case (_inputToggleConsole):
+                        BroadcastMessage(new ToggleConsoleEvent());
+                        break;
+                    case (Keyboard.Key.Escape):
+                        BroadcastMessage(new ExitGameEvent());
+                        break;
+                }
+            }
+            else
+            {
+                BroadcastMessage(new KeyPressedEvent(input));
             }
         }
 

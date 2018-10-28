@@ -37,6 +37,12 @@ namespace CSConsoleRL.GameSystems
             {
                 Commands.Add("");
             }
+
+            public void WriteText(string text)
+            {
+                AddCommand();
+                ActiveCommand = string.Format(">{0}", text);
+            }
         }
 
         private bool consoleOn;
@@ -69,7 +75,7 @@ namespace CSConsoleRL.GameSystems
                     consoleOn = !consoleOn;
                     break;
                 case "KeyPressed":
-                    HandleKeyPressed((Keyboard.Key)((KeyPressedEvent)gameEvent).EventParams[0]);
+                    if(consoleOn) HandleKeyPressed((Keyboard.Key)((KeyPressedEvent)gameEvent).EventParams[0]);
                     break;
                 case "RequestConsoleData":
                     BroadcastMessage(new SendConsoleDataEvent(console.Commands));
@@ -89,9 +95,21 @@ namespace CSConsoleRL.GameSystems
                 CreateNewEvent(console.ActiveCommand);
                 console.AddCommand();
             }
+            else if(key == Keyboard.Key.Tilde)
+            {
+                BroadcastMessage(new ToggleConsoleEvent());
+            }
+            else if(key == Keyboard.Key.Escape)
+            {
+                BroadcastMessage(new ToggleConsoleEvent());
+            }
+            else if(key == Keyboard.Key.BackSpace)
+            {
+                if(console.ActiveCommand.Length > 0) console.ActiveCommand = console.ActiveCommand.Remove(console.ActiveCommand.Length - 1);
+            }
             else
             {
-                console.ActiveCommand += key.ToString();
+                console.ActiveCommand += key.ToString().ToLower();
             }
         }
 
@@ -101,13 +119,18 @@ namespace CSConsoleRL.GameSystems
 
             string[] cmdParams = commandText.Split(' ');
 
-            switch(cmdParams[0])
+            switch(cmdParams[0].ToLower())
             {
                 case "q":   //Quit Console
                     BroadcastMessage(new ToggleConsoleEvent());
+                    console.WriteText("Exiting console");
                     break;
                 case "togglefow":
                     BroadcastMessage(new ToggleFowEvent());
+                    console.WriteText(string.Format("Toggling Fog of War (FOW)"));
+                    break;
+                default:
+                    console.WriteText(string.Format("Unrecognized command: {0}", cmdParams[0]));
                     break;
             }
         }

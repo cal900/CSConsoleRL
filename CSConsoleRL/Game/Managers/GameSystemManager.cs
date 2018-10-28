@@ -52,14 +52,12 @@ namespace CSConsoleRL.Game.Managers
 
         private void CreateSystems()
         {
-            var movementSystem = new MovementSystem(this, gameMap.TileSet);
-            RegisterSystem(movementSystem);
+            RegisterSystem(new MovementSystem(this, gameMap.TileSet));
             //var losSystem = new LosSystem(this, gameMap.TileSet);
             //RegisterSystem(losSystem);
-            var sfmlGraphicsSystem = new SfmlGraphicsSystem(this, sfmlWindow, gameMap.TileSet);
-            RegisterSystem(sfmlGraphicsSystem);
-            var UserInputSystem = new UserInputSystem(this, sfmlWindow);
-            RegisterSystem(UserInputSystem);
+            RegisterSystem(new SfmlGraphicsSystem(this, sfmlWindow, gameMap.TileSet));
+            RegisterSystem(new UserInputSystem(this, sfmlWindow));
+            RegisterSystem(new ConsoleSystem(this));
         }
 
         private void InitializeSystems()
