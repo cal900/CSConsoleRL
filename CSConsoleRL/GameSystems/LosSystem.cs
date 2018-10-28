@@ -16,18 +16,18 @@ namespace CSConsoleRL.GameSystems
 {
     public class LosSystem : GameSystem
     {
-        private List<Entity> losEntities;
-        private Tile[,] gameTiles;
-        public Entity LosSourceEntity { get; set; }
-        private TileTypeDictionary tileDictionary;
+        private List<Entity> _losEntities;
+        private Tile[,] _gameTiles;
+        public Entity _losSourceEntity { get; set; }
+        private TileTypeDictionary _tileDictionary;
         private bool _fowEnabled;
 
-        public LosSystem(GameSystemManager manager, Tile[,] _gameTiles)
+        public LosSystem(GameSystemManager manager, Tile[,] gameTiles)
         {
             SystemManager = manager;
-            losEntities = new List<Entity>();
-            gameTiles = _gameTiles;
-            tileDictionary = new TileTypeDictionary();
+            _losEntities = new List<Entity>();
+            _gameTiles = gameTiles;
+            _tileDictionary = new TileTypeDictionary();
             _fowEnabled = false;
         }
 
@@ -40,7 +40,7 @@ namespace CSConsoleRL.GameSystems
         {
             if (entity.Components.ContainsKey(typeof(PositionComponent)) && entity.Components.ContainsKey(typeof(LosComponent)))
             {
-                losEntities.Add(entity);
+                _losEntities.Add(entity);
             }
         }
 
@@ -89,24 +89,24 @@ namespace CSConsoleRL.GameSystems
         {
             //Set all LOS to false
             //this sets entire map to false (maybe a waste? 
-            for (int y = 0; y < gameTiles.GetLength(1); y++)
+            for (int y = 0; y < _gameTiles.GetLength(1); y++)
             {
-                for (int x = 0; x < gameTiles.GetLength(0); x++)
+                for (int x = 0; x < _gameTiles.GetLength(0); x++)
                 {
-                    gameTiles[x, y].IsInLos = !_fowEnabled;
+                    _gameTiles[x, y].IsInLos = !_fowEnabled;
                 }
             }
 
-            if (_fowEnabled && LosSourceEntity != null)
+            if (_fowEnabled && _losSourceEntity != null)
             {
                 //Quad 1 & 2
                 //ScanQuadrant(LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, 1, double.MaxValue, false);
                 //Quad 5
                 //ScanQuadrant(LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, double.MaxValue, -1, true);
                 //Quad 6
-                ScanQuadrant(LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, 1, double.MaxValue, true);
-                ScanQuadrant(LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, double.MaxValue, -1, true);
-                ScanQuadrant(LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, -1, double.MinValue, false);
+                ScanQuadrant(_losSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, _losSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, 1, double.MaxValue, true);
+                ScanQuadrant(_losSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, _losSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, double.MaxValue, -1, true);
+                ScanQuadrant(_losSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, _losSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, -1, double.MinValue, false);
             }
         }
 
@@ -130,9 +130,9 @@ namespace CSConsoleRL.GameSystems
                     if (Math.Abs(xEndDouble) > 0.5d) rowXEndOffset = Convert.ToInt32(Math.Ceiling(xEndDouble));
                     for (int x = absoluteX + rowXStartOffset; (x <= absoluteX + rowXEndOffset && x < 30 && x >= 0); x++)
                     {
-                        gameTiles[x, y].IsInLos = true;
+                        _gameTiles[x, y].IsInLos = true;
 
-                        if (tileDictionary[gameTiles[x, y].TileType].BlocksVision)
+                        if (_tileDictionary[_gameTiles[x, y].TileType].BlocksVision)
                         {
                             //Split the remaining LOS calculation in this quadrant into two, if there are further vision blocking tiles will be caught in the recursive call
                             //First need calculate end slope of the first scan (start slope is same)
@@ -144,11 +144,11 @@ namespace CSConsoleRL.GameSystems
                             //Find where LOS blocker ends and start scan from there
                             int secondScanX = x;
 
-                            while (tileDictionary[gameTiles[secondScanX, y].TileType].BlocksVision)
+                            while (_tileDictionary[_gameTiles[secondScanX, y].TileType].BlocksVision)
                             {
                                 if (secondScanX <= absoluteX + Convert.ToInt32((y - absoluteY) / startSlope) && secondScanX < 30)
                                 {
-                                    gameTiles[secondScanX, y].IsInLos = true;
+                                    _gameTiles[secondScanX, y].IsInLos = true;
                                     secondScanX++;
                                 }
                                 else
@@ -181,9 +181,9 @@ namespace CSConsoleRL.GameSystems
                     if (Math.Abs(xEndDouble) > 0.5d) rowXEndOffset = Convert.ToInt32(Math.Ceiling(xEndDouble));
                     for (int x = absoluteX + rowXStartOffset; (x <= absoluteX + rowXEndOffset && x < 30 && x >= 0); x++)
                     {
-                        gameTiles[x, y].IsInLos = true;
+                        _gameTiles[x, y].IsInLos = true;
 
-                        if (tileDictionary[gameTiles[x, y].TileType].BlocksVision)
+                        if (_tileDictionary[_gameTiles[x, y].TileType].BlocksVision)
                         {
                             //Split the remaining LOS calculation in this quadrant into two, if there are further vision blocking tiles will be caught in the recursive call
                             //First need calculate end slope of the first scan (start slope is same)
@@ -194,11 +194,11 @@ namespace CSConsoleRL.GameSystems
                             //Find where LOS blocker ends and start scan from there
                             int secondScanX = x;
 
-                            while (tileDictionary[gameTiles[secondScanX, y].TileType].BlocksVision)
+                            while (_tileDictionary[_gameTiles[secondScanX, y].TileType].BlocksVision)
                             {
                                 if (secondScanX <= absoluteX + Convert.ToInt32((y - absoluteY) / startSlope) && secondScanX < 30)
                                 {
-                                    gameTiles[secondScanX, y].IsInLos = true;
+                                    _gameTiles[secondScanX, y].IsInLos = true;
                                     secondScanX++;
                                 }
                                 else
