@@ -147,6 +147,10 @@ namespace CSConsoleRL.GameSystems
             {
                 console.GoDownHistory();
             }
+            else if(key == Keyboard.Key.Space)
+            {
+                console.ActiveCommand += " ";
+            }
             else
             {
                 console.ActiveCommand += key.ToString().ToLower();

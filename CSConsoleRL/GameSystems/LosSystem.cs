@@ -18,9 +18,9 @@ namespace CSConsoleRL.GameSystems
     {
         private List<Entity> _losEntities;
         private Tile[,] _gameTiles;
-        public Entity _losSourceEntity { get; set; }
         private TileTypeDictionary _tileDictionary;
         private bool _fowEnabled;
+        public Entity LosSourceEntity { get; set; }
 
         public LosSystem(GameSystemManager manager, Tile[,] gameTiles)
         {
@@ -97,16 +97,28 @@ namespace CSConsoleRL.GameSystems
                 }
             }
 
-            if (_fowEnabled && _losSourceEntity != null)
+            if (_fowEnabled && LosSourceEntity != null)
             {
+                ScanQuad(LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap);
                 //Quad 1 & 2
                 //ScanQuadrant(LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, 1, double.MaxValue, false);
                 //Quad 5
                 //ScanQuadrant(LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, double.MaxValue, -1, true);
                 //Quad 6
-                ScanQuadrant(_losSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, _losSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, 1, double.MaxValue, true);
-                ScanQuadrant(_losSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, _losSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, double.MaxValue, -1, true);
-                ScanQuadrant(_losSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, _losSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, -1, double.MinValue, false);
+                //ScanQuadrant(_losSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, _losSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, 1, double.MaxValue, true);
+                //ScanQuadrant(_losSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, _losSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, double.MaxValue, -1, true);
+                //ScanQuadrant(_losSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, _losSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, -1, double.MinValue, false);
+            }
+        }
+
+        private void ScanQuad(int startX, int startY)
+        {
+            for (int relY = 0; relY < 10; relY++)
+            {
+                for (int relX = 0; relX <= relY; relX++)
+                {
+                    _gameTiles[startX + relX, startY + relY].IsInLos = true;
+                }
             }
         }
 

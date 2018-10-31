@@ -47,7 +47,7 @@ namespace CSConsoleRL.Game.Managers
         {
             var mainChar = new ActorEntity();
             RegisterEntity(mainChar);
-            //((LosSystem)Systems[typeof(LosSystem)]).LosSourceEntity = mainChar;
+            ((LosSystem)Systems[typeof(LosSystem)]).LosSourceEntity = mainChar;
         }
 
         private void CreateSystems()
@@ -78,7 +78,7 @@ namespace CSConsoleRL.Game.Managers
         {
             Entities.Add(entity);
 
-            foreach(KeyValuePair<Type, GameSystem> system in Systems)
+            foreach (KeyValuePair<Type, GameSystem> system in Systems)
             {
                 system.Value.AddEntity(entity);
             }
@@ -103,12 +103,12 @@ namespace CSConsoleRL.Game.Managers
 
         public void BroadcastEvent(IGameEvent evnt)
         {
-            if(evnt.EventName == "ExitGame")
+            if (evnt.EventName == "ExitGame")
             {
                 exitGame = true;
             }
 
-            foreach(KeyValuePair<Type, GameSystem> system in Systems)
+            foreach (KeyValuePair<Type, GameSystem> system in Systems)
             {
                 system.Value.HandleMessage(evnt);
             }
@@ -124,10 +124,10 @@ namespace CSConsoleRL.Game.Managers
             //Clock clock = new Clock();
             sfmlWindow.SetFramerateLimit(30);
             sfmlWindow.SetVerticalSyncEnabled(false);
-            
+
             var nextFrameEvent = new NextFrameEvent();
 
-            while(sfmlWindow.IsOpen && !exitGame)
+            while (sfmlWindow.IsOpen && !exitGame)
             {
                 //var timeElapsed = clock.ElapsedTime;
                 sfmlWindow.DispatchEvents();

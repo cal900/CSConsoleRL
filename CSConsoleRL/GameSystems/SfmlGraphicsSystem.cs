@@ -173,7 +173,7 @@ namespace CSConsoleRL.GameSystems
             {
                 var lineStartYCoord = (consoleDisplayLines - i - 1) * yPlayableAreaCharHeight;
                 var lineText = new Text(console[console.Count - 1 - i], _gameFont, 16);
-                lineText.Color = Color.White;
+                lineText.Color = textColor;
                 lineText.Position = new Vector2f(0, lineStartYCoord);
                 sfmlWindow.Draw(lineText);
             }
