@@ -96,7 +96,7 @@ namespace CSConsoleRL.GameSystems
 
         private void HandleInputs()
         {
-            while(_inputs.Count > 0)
+            while (_inputs.Count > 0)
             {
                 HandleInput(_inputs.Dequeue());
                 BroadcastMessage(new NextTurnEvent());

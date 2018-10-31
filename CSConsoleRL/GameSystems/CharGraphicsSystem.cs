@@ -55,7 +55,7 @@ namespace CSConsoleRL.GameSystems
             Console.Clear();
 
             //Iterates through the array and draws character to console screen
-            for (int index = 0; index < drawableComponents.Count; index++ )
+            for (int index = 0; index < drawableComponents.Count; index++)
             {
                 Console.SetCursorPosition(drawableComponents[index].XPositionOnMap - XCurrentPositionOnMap, drawableComponents[index].YPositionOnMap - YCurrentPositionOnMap);
                 Console.ForegroundColor = drawableComponents[index].CharColor;

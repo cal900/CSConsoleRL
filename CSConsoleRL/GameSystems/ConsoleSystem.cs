@@ -17,6 +17,7 @@ namespace CSConsoleRL.GameSystems
     {
         private class gameConsole
         {
+            private int activeCommandIndex = -1;
             public List<string> Commands { get; private set; }
             public string ActiveCommand
             {
@@ -31,17 +32,48 @@ namespace CSConsoleRL.GameSystems
             }
 
             //Initialize with a string so ActiveCommand doesn't get messed up by Count of 0
-            public gameConsole() { Commands = new List<string>() { "" }; }
+            public gameConsole() { Commands = new List<string>() { ">" }; }
 
-            public void AddCommand()
+            public void NewLine()
             {
                 Commands.Add("");
             }
 
+            public void AddCommand()
+            {
+                Commands.Add(">");
+                activeCommandIndex = -1;
+            }
+
             public void WriteText(string text)
             {
-                AddCommand();
-                ActiveCommand = string.Format(">{0}", text);
+                NewLine();
+                ActiveCommand = string.Format("{0}", text);
+            }
+
+            //Not useful yet as currently what game writes to console is considered a "command"
+            public void GoUpHistory()
+            {
+                if(activeCommandIndex < 0)
+                {
+                    ActiveCommand = Commands[Commands.Count - 2];
+                }
+                else if(activeCommandIndex > 0) //If active command is index 0, nowhere to go, only go up if higher than 0
+                {
+                    ActiveCommand = Commands[--activeCommandIndex];
+                }
+            }
+
+            public void GoDownHistory()
+            {
+                if (activeCommandIndex < 0 || activeCommandIndex == Commands.Count - 1) //Active command is just what's being typed in, delete text
+                {
+                    ActiveCommand = ">";
+                }
+                else if (activeCommandIndex >= 0)
+                {
+                    ActiveCommand = Commands[++activeCommandIndex];
+                }
             }
         }
 
@@ -75,7 +107,7 @@ namespace CSConsoleRL.GameSystems
                     consoleOn = !consoleOn;
                     break;
                 case "KeyPressed":
-                    if(consoleOn) HandleKeyPressed((Keyboard.Key)((KeyPressedEvent)gameEvent).EventParams[0]);
+                    if (consoleOn) HandleKeyPressed((Keyboard.Key)((KeyPressedEvent)gameEvent).EventParams[0]);
                     break;
                 case "RequestConsoleData":
                     BroadcastMessage(new SendConsoleDataEvent(console.Commands));
@@ -85,27 +117,35 @@ namespace CSConsoleRL.GameSystems
 
         private void NextFrame()
         {
-            
+
         }
 
         private void HandleKeyPressed(Keyboard.Key key)
         {
-            if(key == Keyboard.Key.Return)
+            if (key == Keyboard.Key.Return)
             {
-                CreateNewEvent(console.ActiveCommand);
+                if (console.ActiveCommand.Length > 1) CreateNewEvent(console.ActiveCommand.Substring(1)); //Start at index 1 to get rid of '>' char
                 console.AddCommand();
             }
-            else if(key == Keyboard.Key.Tilde)
+            else if (key == Keyboard.Key.Tilde)
             {
                 BroadcastMessage(new ToggleConsoleEvent());
             }
-            else if(key == Keyboard.Key.Escape)
+            else if (key == Keyboard.Key.Escape)
             {
                 BroadcastMessage(new ToggleConsoleEvent());
             }
-            else if(key == Keyboard.Key.BackSpace)
+            else if (key == Keyboard.Key.BackSpace)
             {
-                if(console.ActiveCommand.Length > 0) console.ActiveCommand = console.ActiveCommand.Remove(console.ActiveCommand.Length - 1);
+                if (console.ActiveCommand.Length > 1) console.ActiveCommand = console.ActiveCommand.Remove(console.ActiveCommand.Length - 1);
+            }
+            else if (key == Keyboard.Key.Up)
+            {
+                console.GoUpHistory();
+            }
+            else if (key == Keyboard.Key.Down)
+            {
+                console.GoDownHistory();
             }
             else
             {
@@ -119,11 +159,15 @@ namespace CSConsoleRL.GameSystems
 
             string[] cmdParams = commandText.Split(' ');
 
-            switch(cmdParams[0].ToLower())
+            switch (cmdParams[0].ToLower())
             {
                 case "q":   //Quit Console
                     BroadcastMessage(new ToggleConsoleEvent());
                     console.WriteText("Exiting console");
+                    break;
+                case "e":   //Exit game
+                    BroadcastMessage(new ExitGameEvent());
+                    console.WriteText("Exiting game");
                     break;
                 case "togglefow":
                     BroadcastMessage(new ToggleFowEvent());

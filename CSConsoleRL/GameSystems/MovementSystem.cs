@@ -29,7 +29,7 @@ namespace CSConsoleRL.GameSystems
 
         public override void InitializeSystem()
         {
-            
+
         }
 
         public override void AddEntity(Entity entity)

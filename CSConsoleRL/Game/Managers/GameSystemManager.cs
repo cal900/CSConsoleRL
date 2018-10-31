@@ -127,7 +127,7 @@ namespace CSConsoleRL.Game.Managers
             
             var nextFrameEvent = new NextFrameEvent();
 
-            while(sfmlWindow.IsOpen)
+            while(sfmlWindow.IsOpen && !exitGame)
             {
                 //var timeElapsed = clock.ElapsedTime;
                 sfmlWindow.DispatchEvents();

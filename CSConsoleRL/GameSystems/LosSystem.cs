@@ -139,7 +139,7 @@ namespace CSConsoleRL.GameSystems
                             //X - 1 because we want location just to the left of blocker for the first scan
                             double recStartSlope = Convert.ToDouble(x - absoluteX - 1) == 0 ? double.MaxValue : Convert.ToDouble(y - absoluteY) / Convert.ToDouble(x - absoluteX - 1);
                             //if (recStartSlope > 0 && endSlope >= recStartSlope) 
-                                ScanQuadrant(absoluteY, absoluteX, (y - absoluteY), recStartSlope, endSlope, true);
+                            ScanQuadrant(absoluteY, absoluteX, (y - absoluteY), recStartSlope, endSlope, true);
 
                             //Find where LOS blocker ends and start scan from there
                             int secondScanX = x;
@@ -158,7 +158,7 @@ namespace CSConsoleRL.GameSystems
                             }
                             double recEndSlope = Convert.ToDouble(y - absoluteY) / Convert.ToDouble(secondScanX - absoluteX);
                             //if (recEndSlope > 0 && recEndSlope >= startSlope) 
-                                ScanQuadrant(absoluteY, absoluteX, (y - absoluteY), startSlope, recEndSlope, true);
+                            ScanQuadrant(absoluteY, absoluteX, (y - absoluteY), startSlope, recEndSlope, true);
 
                             return;
                         }

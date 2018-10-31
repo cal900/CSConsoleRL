@@ -67,7 +67,7 @@ namespace CSConsoleRL.GameSystems
 
         public override void AddEntity(Entity entity)
         {
-            if(entity.Components.ContainsKey(typeof(PositionComponent)) && entity.Components.ContainsKey(typeof(DrawableSfmlComponent)))
+            if (entity.Components.ContainsKey(typeof(PositionComponent)) && entity.Components.ContainsKey(typeof(DrawableSfmlComponent)))
             {
                 graphicsEntities.Add(entity);
             }
@@ -75,7 +75,7 @@ namespace CSConsoleRL.GameSystems
 
         public override void HandleMessage(IGameEvent gameEvent)
         {
-            switch(gameEvent.EventName)
+            switch (gameEvent.EventName)
             {
                 case "NextFrame":
                     NextFrame();
@@ -124,7 +124,7 @@ namespace CSConsoleRL.GameSystems
             sfmlWindow.Clear(Color.Black);
 
             //Draw background tiles
-            for(int x = startingTileXPosition; x < endingTileXPosition; x++)
+            for (int x = startingTileXPosition; x < endingTileXPosition; x++)
             {
                 for (int y = startingTileYPosition; y < endingTileYPosition; y++)
                 {
@@ -145,7 +145,7 @@ namespace CSConsoleRL.GameSystems
             }
 
             //Draw game sprites
-            foreach(Entity entity in graphicsEntities)
+            foreach (Entity entity in graphicsEntities)
             {
                 var sfmlComponent = entity.GetComponent<DrawableSfmlComponent>();
                 var positionComponent = entity.GetComponent<PositionComponent>();
@@ -204,7 +204,7 @@ namespace CSConsoleRL.GameSystems
         private void AssignTileSprites()
         {
             //Draw background tiles
-            for(int x = 0; x < gameTiles.GetLength(0); x++)
+            for (int x = 0; x < gameTiles.GetLength(0); x++)
             {
                 for (int y = 0; y < gameTiles.GetLength(1); y++)
                 {
@@ -215,7 +215,7 @@ namespace CSConsoleRL.GameSystems
 
         private void AssignSfmlGraphicsComponentSprites()
         {
-            foreach(Entity entity in graphicsEntities)
+            foreach (Entity entity in graphicsEntities)
             {
                 var sfmlComponent = entity.GetComponent<DrawableSfmlComponent>();
                 switch (sfmlComponent.SpriteType)
