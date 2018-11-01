@@ -115,7 +115,9 @@ namespace Utilities
 
         public void LoadMapFileBrowser(ref MapFile mapFileToLoadTo)
         {
-            string[] filesInDirectory = Directory.GetFiles(@"G:\Programming\CSConsoleRL\CSConsoleRL\Data\Maps", "*.csr");
+            var mapDir = @"G:\Programming\CSConsoleRL\CSConsoleRL\Data\Maps\";
+            if (!File.Exists(mapDir)) mapDir = @"D:\Programming\CSConsoleRL\Data\Maps\";
+            string[] filesInDirectory = Directory.GetFiles(mapDir, "*.csr");
 
             string input = "";
             int tempInt = 0;
@@ -136,7 +138,7 @@ namespace Utilities
                 }
                 else if (string.Compare(input, "exit", true) != 0)
                 {
-                    LoadMap(@"G:\Programming\CSConsoleRL\CSConsoleRL\Data\Maps\" + input, ref mapFileToLoadTo);
+                    LoadMap(mapDir + input, ref mapFileToLoadTo);
                     return;
                 }
             }

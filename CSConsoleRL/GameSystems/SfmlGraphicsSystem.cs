@@ -14,6 +14,7 @@ using GameTiles.Enums;
 using SFML.Window;
 using SFML.Graphics;
 using SFML.System;
+using System.IO;
 
 namespace CSConsoleRL.GameSystems
 {
@@ -56,7 +57,9 @@ namespace CSConsoleRL.GameSystems
             worldYLength = gameTiles.GetLength(1);
 
             graphicsEntities = new List<Entity>();
-            _gameFont = new Font(@"G:\Programming\CSConsoleRL\Oct172018Try\CSConsoleRL\CSConsoleRL\bin\Debug\Data\Fonts\arial.ttf");
+            var fontPath = @"G:\Programming\CSConsoleRL\Oct172018Try\CSConsoleRL\CSConsoleRL\bin\Debug\Data\Fonts\arial.ttf";
+            if (!File.Exists(fontPath)) fontPath = @"D:\Programming\CSConsoleRL\Data\Fonts\arial.ttf";
+            _gameFont = new Font(fontPath);
         }
 
         public override void InitializeSystem()
@@ -239,6 +242,7 @@ namespace CSConsoleRL.GameSystems
                 : base()
             {
                 string fileName = @"G:\Programming\GitRepos\CSConsoleRL\CSConsoleRL\bin\x64\Debug\Data\Sprites\Regular20x20.png";
+                if (!File.Exists(fileName)) fileName = @"D:\Programming\CSConsoleRL\Data\Sprites\Regular20x20.png";
                 Add(EnumSfmlSprites.MainCharacter, new Texture(fileName, new IntRect(0, 140, 20, 20)));
                 Add(EnumSfmlSprites.HumanEnemy, new Texture(fileName, new IntRect(0, 0, 20, 20)));
                 Add(EnumSfmlSprites.Dog, new Texture(fileName, new IntRect(0, 0, 20, 20)));
