@@ -99,133 +99,31 @@ namespace CSConsoleRL.GameSystems
 
             if (_fowEnabled && LosSourceEntity != null)
             {
-                ScanQuad(LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap);
-                //Quad 1 & 2
-                //ScanQuadrant(LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, 1, double.MaxValue, false);
-                //Quad 5
-                //ScanQuadrant(LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, double.MaxValue, -1, true);
-                //Quad 6
-                //ScanQuadrant(_losSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, _losSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, 1, double.MaxValue, true);
-                //ScanQuadrant(_losSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, _losSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, double.MaxValue, -1, true);
-                //ScanQuadrant(_losSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap, _losSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, 0, -1, double.MinValue, false);
+                ScanLos(5, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap);
             }
         }
 
-        private void ScanQuad(int startX, int startY)
+        private void ScanLos(int sightRange, int startX, int startY)
         {
-            for (int relY = 0; relY < 10; relY++)
-            {
-                for (int relX = 0; relX <= relY; relX++)
-                {
-                    _gameTiles[startX + relX, startY + relY].IsInLos = true;
-                }
-            }
+            //Figure out square range need to calculate
+            //Top left first
+
         }
 
-        //will need seperate case for each scenario as needs to branch outward, otherwise doesn't work on edges (e.g. for bottom left sector, gets killed on edge as stops when x < 0)
-        private void ScanQuadrant(int absoluteY, int absoluteX, int yOffset, double startSlope, double endSlope, bool yPositive)
+        private void RayTrace(int startX, int startY, int endX, int endY)
         {
-            //Y-Positive oriented scan
-            if (yPositive)
-            {
-                for (int y = absoluteY + yOffset; y < 30; y++)
-                {
-                    //something going on causing a scan that starts at place, marks it as in LOS so we see it, then the next is false so stops (causing random visible squares) - slopes?
+            //Make sure we aren't outside the map bounds
+            if (startX < 0) startX = 0;
+            else if (startX >= _gameTiles.GetLength(0)) startX = _gameTiles.GetLength(0) - 1;
+            if (endX < 0) endX = 0;
+            else if (endX >= _gameTiles.GetLength(0)) endX = _gameTiles.GetLength(0) - 1;
+            if (startY < 0) startY = 0;
+            else if (startY >= _gameTiles.GetLength(0)) startY = _gameTiles.GetLength(0) - 1;
+            if (endY < 0) endY = 0;
+            else if (endY >= _gameTiles.GetLength(0)) endY = _gameTiles.GetLength(0) - 1;
 
-                    //Find out starting and ending X values for this row
-                    //Converting to int immediately was causing some unexpected tiles to be hidden, rounding down for startX and rounding up for endX gives more intuitive LOS
-                    int rowXStartOffset = 0;
-                    double xStartDouble = (y - absoluteY) / endSlope;
-                    if (Math.Abs(xStartDouble) > 0.5d) rowXStartOffset = Convert.ToInt32(Math.Floor(xStartDouble));
-                    int rowXEndOffset = 0;
-                    double xEndDouble = (y - absoluteY) / startSlope;
-                    if (Math.Abs(xEndDouble) > 0.5d) rowXEndOffset = Convert.ToInt32(Math.Ceiling(xEndDouble));
-                    for (int x = absoluteX + rowXStartOffset; (x <= absoluteX + rowXEndOffset && x < 30 && x >= 0); x++)
-                    {
-                        _gameTiles[x, y].IsInLos = true;
+            decimal slope = (endY - startY) / (endX - startX);
 
-                        if (_tileDictionary[_gameTiles[x, y].TileType].BlocksVision)
-                        {
-                            //Split the remaining LOS calculation in this quadrant into two, if there are further vision blocking tiles will be caught in the recursive call
-                            //First need calculate end slope of the first scan (start slope is same)
-                            //X - 1 because we want location just to the left of blocker for the first scan
-                            double recStartSlope = Convert.ToDouble(x - absoluteX - 1) == 0 ? double.MaxValue : Convert.ToDouble(y - absoluteY) / Convert.ToDouble(x - absoluteX - 1);
-                            //if (recStartSlope > 0 && endSlope >= recStartSlope) 
-                            ScanQuadrant(absoluteY, absoluteX, (y - absoluteY), recStartSlope, endSlope, true);
-
-                            //Find where LOS blocker ends and start scan from there
-                            int secondScanX = x;
-
-                            while (_tileDictionary[_gameTiles[secondScanX, y].TileType].BlocksVision)
-                            {
-                                if (secondScanX <= absoluteX + Convert.ToInt32((y - absoluteY) / startSlope) && secondScanX < 30)
-                                {
-                                    _gameTiles[secondScanX, y].IsInLos = true;
-                                    secondScanX++;
-                                }
-                                else
-                                {
-                                    return;
-                                }
-                            }
-                            double recEndSlope = Convert.ToDouble(y - absoluteY) / Convert.ToDouble(secondScanX - absoluteX);
-                            //if (recEndSlope > 0 && recEndSlope >= startSlope) 
-                            ScanQuadrant(absoluteY, absoluteX, (y - absoluteY), startSlope, recEndSlope, true);
-
-                            return;
-                        }
-                    }
-                }
-            }
-            //Y-Negative oriented scan
-            else
-            {
-                for (int y = absoluteY + yOffset; y >= 0; y--)
-                {
-                    //something going on causing a scan that starts at place, marks it as in LOS so we see it, then the next is false so stops (causing random visible squares) - slopes?
-
-                    //Find out starting and ending X values for this row
-                    int rowXStartOffset = 0;
-                    double xStartDouble = (y - absoluteY) / endSlope;
-                    if (Math.Abs(xStartDouble) > 0.5d) rowXStartOffset = Convert.ToInt32(Math.Floor(xStartDouble));
-                    int rowXEndOffset = 0;
-                    double xEndDouble = (y - absoluteY) / startSlope;
-                    if (Math.Abs(xEndDouble) > 0.5d) rowXEndOffset = Convert.ToInt32(Math.Ceiling(xEndDouble));
-                    for (int x = absoluteX + rowXStartOffset; (x <= absoluteX + rowXEndOffset && x < 30 && x >= 0); x++)
-                    {
-                        _gameTiles[x, y].IsInLos = true;
-
-                        if (_tileDictionary[_gameTiles[x, y].TileType].BlocksVision)
-                        {
-                            //Split the remaining LOS calculation in this quadrant into two, if there are further vision blocking tiles will be caught in the recursive call
-                            //First need calculate end slope of the first scan (start slope is same)
-                            //X - 1 because we want location just to the left of blocker for the first scan
-                            double recStartSlope = Convert.ToDouble(x - absoluteX - 1) == 0 ? double.MinValue : Convert.ToDouble(y - absoluteY) / Convert.ToDouble(x - absoluteX - 1);
-                            if (recStartSlope < 0 && endSlope <= recStartSlope) ScanQuadrant(absoluteY, absoluteX, (y - absoluteY), recStartSlope, endSlope, false);
-
-                            //Find where LOS blocker ends and start scan from there
-                            int secondScanX = x;
-
-                            while (_tileDictionary[_gameTiles[secondScanX, y].TileType].BlocksVision)
-                            {
-                                if (secondScanX <= absoluteX + Convert.ToInt32((y - absoluteY) / startSlope) && secondScanX < 30)
-                                {
-                                    _gameTiles[secondScanX, y].IsInLos = true;
-                                    secondScanX++;
-                                }
-                                else
-                                {
-                                    return;
-                                }
-                            }
-                            double recEndSlope = Convert.ToDouble(y - absoluteY) / Convert.ToDouble(secondScanX - absoluteX);
-                            if (recEndSlope < 0 && recEndSlope <= startSlope) ScanQuadrant(absoluteY, absoluteX, (y - absoluteY), startSlope, recEndSlope, false);
-
-                            return;
-                        }
-                    }
-                }
-            }
         }
     }
 }
