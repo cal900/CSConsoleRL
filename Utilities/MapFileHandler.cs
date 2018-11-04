@@ -116,7 +116,7 @@ namespace Utilities
         public void LoadMapFileBrowser(ref MapFile mapFileToLoadTo)
         {
             var mapDir = @"G:\Programming\CSConsoleRL\CSConsoleRL\Data\Maps\";
-            if (!File.Exists(mapDir)) mapDir = @"D:\Programming\CSConsoleRL\Data\Maps\";
+            if (!Directory.Exists(mapDir)) mapDir = @"D:\Programming\CSConsoleRL\Data\Maps\";
             string[] filesInDirectory = Directory.GetFiles(mapDir, "*.csr");
 
             string input = "";

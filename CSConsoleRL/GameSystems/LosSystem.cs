@@ -33,7 +33,8 @@ namespace CSConsoleRL.GameSystems
 
         public override void InitializeSystem()
         {
-
+            //Need to set the initial state of all squares
+            SetAllTiles();
         }
 
         public override void AddEntity(Entity entity)
@@ -60,35 +61,8 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
-        //           Shared
-        //           edge by
-        //Shared     1 & 2      Shared
-        //edge by\      |      /edge by
-        //1 & 8   \     |     / 2 & 3
-        //         \1111|2222/
-        //         8\111|222/3
-        //         88\11|22/33
-        //         888\1|2/333
-        //Shared   8888\|/3333  Shared
-        //edge by-------@-------edge by
-        //7 & 8    7777/|\4444  3 & 4
-        //         777/6|5\444
-        //         77/66|55\44
-        //         7/666|555\4
-        //         /6666|5555\
-        //Shared  /     |     \ Shared
-        //edge by/      |      \edge by
-        //6 & 7      Shared     4 & 5
-        //           edge by 
-        //           5 & 6
-
-        //Have starting and end slope, then just need if y is negative or positive and can figure out quadrant from that
-        //If sSlope is 1 or |sSlope| > 1 Y oriented scan
-
-        private void CalculateLos()
+        private void SetAllTiles()
         {
-            //Set all LOS to false
-            //this sets entire map to false (maybe a waste? 
             for (int y = 0; y < _gameTiles.GetLength(1); y++)
             {
                 for (int x = 0; x < _gameTiles.GetLength(0); x++)
@@ -96,21 +70,55 @@ namespace CSConsoleRL.GameSystems
                     _gameTiles[x, y].IsInLos = !_fowEnabled;
                 }
             }
+        }
+
+        private void CalculateLos()
+        {
+            SetAllTiles();
 
             if (_fowEnabled && LosSourceEntity != null)
             {
-                ScanLos(5, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap);
+                ScanLos(10, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap);
             }
         }
 
         private void ScanLos(int sightRange, int startX, int startY)
         {
             //Figure out square range need to calculate
-            //Top left first
+            //First do top horizontal line
+            int topLosY = startY - sightRange;
+            if (topLosY < 0) topLosY = 0;
+            for (int x = (startX - sightRange); x <= (startX + sightRange); x++)
+            {
+                RayTrace(sightRange, startX, startY, x, topLosY);
+            }
 
+            //Bottom horizontal line
+            int botLosY = startY + sightRange;
+            if (botLosY >= _gameTiles.GetLength(1)) botLosY = _gameTiles.GetLength(1) - 1;
+            for (int x = (startX - sightRange); x <= (startX + sightRange); x++)
+            {
+                RayTrace(sightRange, startX, startY, x, botLosY);
+            }
+
+            //Left vertical line
+            int leftLosX = startX - sightRange;
+            if (leftLosX < 0) leftLosX = 0;
+            for (int y = (startY - sightRange); y <= (startY + sightRange); y++)
+            {
+                RayTrace(sightRange, startX, startY, leftLosX, y);
+            }
+
+            //Right vertical line
+            int rightLosX = startX + sightRange;
+            if (rightLosX < 0) rightLosX = 0;
+            for (int y = (startY - sightRange); y <= (startY + sightRange); y++)
+            {
+                RayTrace(sightRange, startX, startY, rightLosX, y);
+            }
         }
 
-        private void RayTrace(int startX, int startY, int endX, int endY)
+        private void RayTrace(int sightRange, int startX, int startY, int endX, int endY)
         {
             //Make sure we aren't outside the map bounds
             if (startX < 0) startX = 0;
@@ -122,8 +130,28 @@ namespace CSConsoleRL.GameSystems
             if (endY < 0) endY = 0;
             else if (endY >= _gameTiles.GetLength(0)) endY = _gameTiles.GetLength(0) - 1;
 
-            decimal slope = (endY - startY) / (endX - startX);
+            decimal increX = (decimal)(endX - startX) / sightRange;
+            decimal increY = (decimal)(endY - startY) / sightRange;
 
+            decimal relX = 0;
+            decimal relY = 0;
+
+            for(int i = 0; i < sightRange; i++)
+            {
+                relX = i * increX;
+                relY = i * increY;
+
+                int absX = Decimal.ToInt32(Decimal.Round(relX)) + startX;
+                int absY = Decimal.ToInt32(Decimal.Round(relY)) + startY;
+
+                _gameTiles[absX, absY].IsInLos = true;
+
+                //If present tile blocks sight, stop the ray trace (unless tile is where the user is e.g. a door)
+                if(i > 0 && _tileDictionary[_gameTiles[absX, absY].TileType].BlocksVision)
+                {
+                    return;
+                }
+            }
         }
     }
 }
