@@ -15,16 +15,16 @@ namespace CSConsoleRL.GameSystems
 {
     public class MovementSystem : GameSystem
     {
-        private List<Entity> movementEntities;
-        private Tile[,] gameTiles;
-        private TileTypeDictionary tileDictionary;
+        private List<Entity> _movementEntities;
+        private Tile[,] _gameTiles;
+        private TileTypeDictionary _tileDictionary;
 
         public MovementSystem(GameSystemManager manager, Tile[,] _gameTiles)
         {
             SystemManager = manager;
-            movementEntities = new List<Entity>();
-            gameTiles = _gameTiles;
-            tileDictionary = new TileTypeDictionary();
+            _movementEntities = new List<Entity>();
+            this._gameTiles = _gameTiles;
+            _tileDictionary = new TileTypeDictionary();
         }
 
         public override void InitializeSystem()
@@ -36,7 +36,7 @@ namespace CSConsoleRL.GameSystems
         {
             if (entity.Components.ContainsKey(typeof(PositionComponent)) && entity.Components.ContainsKey(typeof(CollisionComponent)))
             {
-                movementEntities.Add(entity);
+                _movementEntities.Add(entity);
             }
         }
 
@@ -56,7 +56,7 @@ namespace CSConsoleRL.GameSystems
             var movementEvent = (MovementInputEvent)evnt;
 
             Guid entityId = (Guid)evnt.EventParams[0];
-            Entity entityToMove = movementEntities.Where(entity => entity.Id.Equals(entityId)).FirstOrDefault();
+            Entity entityToMove = _movementEntities.Where(entity => entity.Id.Equals(entityId)).FirstOrDefault();
 
             if (entityToMove == null) return;   //If system does not contain entity involved do nothing
 
@@ -82,10 +82,10 @@ namespace CSConsoleRL.GameSystems
             }
 
             //If movement would carry entity out of map just return
-            if (desiredYPos < 0 || desiredXPos < 0 || desiredYPos > gameTiles.GetLength(1) || desiredXPos > gameTiles.GetLength(0)) return;
+            if (desiredYPos < 0 || desiredXPos < 0 || desiredYPos > _gameTiles.GetLength(1) || desiredXPos > _gameTiles.GetLength(0)) return;
 
             //iterate through all entities with collision component, check if collision
-            List<Entity> collisionEntities = movementEntities.Where(ent => ent.Components.ContainsKey(typeof(CollisionComponent))).ToList();
+            List<Entity> collisionEntities = _movementEntities.Where(ent => ent.Components.ContainsKey(typeof(CollisionComponent))).ToList();
 
             //check collision with other entities
             foreach (var colEnt in collisionEntities)
@@ -99,7 +99,7 @@ namespace CSConsoleRL.GameSystems
             }
 
             //check collision with impassible tiles
-            if (tileDictionary[gameTiles[desiredXPos, desiredYPos].TileType].BlocksMovement) return;
+            if (_tileDictionary[_gameTiles[desiredXPos, desiredYPos].TileType].BlocksMovement) return;
 
             //passed all checks, move component
             entityToMove.GetComponent<PositionComponent>().ComponentXPositionOnMap = desiredXPos;

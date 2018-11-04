@@ -173,12 +173,30 @@ namespace CSConsoleRL.GameSystems
                     BroadcastMessage(new ExitGameEvent());
                     console.WriteText("Exiting game");
                     break;
-                case "togglefow":
+                case "t":
+                    var toggleArg = cmdParams.Length > 1 ? cmdParams[1] : "[null]";
+                    Toggle(toggleArg);
+                    break;
+                default:
+                    console.WriteText(string.Format("Unrecognized command: {0}", cmdParams[0]));
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Command 't' is a generic toggle command, where the first input is the value to be toggled
+        /// </summary>
+        /// <param name="cmdParams"></param>
+        private void Toggle(string toggleArg)
+        {
+            switch(toggleArg)
+            {
+                case "fow":
                     BroadcastMessage(new ToggleFowEvent());
                     console.WriteText(string.Format("Toggling Fog of War (FOW)"));
                     break;
                 default:
-                    console.WriteText(string.Format("Unrecognized command: {0}", cmdParams[0]));
+                    console.WriteText(string.Format("Unrecognized input to toggle: {0}", toggleArg));
                     break;
             }
         }

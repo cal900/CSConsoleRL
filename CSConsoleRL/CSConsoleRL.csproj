@@ -74,12 +74,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\AiComponent.cs" />
     <Compile Include="Components\LosComponent.cs" />
     <Compile Include="Components\CollisionComponent.cs" />
     <Compile Include="Components\DrawableSfmlComponent.cs" />
     <Compile Include="Components\PositionComponent.cs" />
     <Compile Include="Components\UserInputComponent.cs" />
     <Compile Include="Components\Interfaces\IComponent.cs" />
+    <Compile Include="Entities\SeekerEntity.cs" />
     <Compile Include="Entities\ActorEntity.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Components\DrawableCharComponent.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="GameSystems\LosSystem.cs" />
     <Compile Include="GameSystems\SfmlGraphicsSystem.cs" />
     <Compile Include="GameSystems\MovementSystem.cs" />
+    <Compile Include="GameSystems\AiSystem.cs" />
     <Compile Include="Game\Managers\TileManager.cs" />
     <Compile Include="Game\Managers\GameSystemManager.cs" />
     <Compile Include="GameSystems\CharGraphicsSystem.cs" />

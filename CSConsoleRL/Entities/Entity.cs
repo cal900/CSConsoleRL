@@ -9,66 +9,80 @@ using CSConsoleRL.Events;
 namespace CSConsoleRL.Entities
 {
     public class Entity
+    {
+        public Guid Id { get; set; }
+        public Dictionary<Type, IComponent> Components { get; set; }
+
+        public Entity()
         {
-            public Guid Id { get; set; }
-            public Dictionary<Type, IComponent> Components { get; set; }
+            Id = Guid.NewGuid();
+            Components = new Dictionary<Type, IComponent>();
+        }
 
-            public Entity()
+        public bool HasComponent<T>()
+        {
+            IComponent temp;
+            if (Components.TryGetValue(typeof(T), out temp));
+            if(temp != null)
             {
-                Id = Guid.NewGuid();
-                Components = new Dictionary<Type, IComponent>();
+                return true;
             }
-
-            public T GetComponent<T>()
+            else
             {
-                IComponent temp;
-                Components.TryGetValue(typeof(T), out temp);
-                return (T)temp;
-            }
-
-            public void RemoveComponent<T>()
-            {
-                Components.Remove(typeof(T));
-            }
-
-            public void RemoveComponent(IComponent component)
-            {
-                var type = component.GetType();
-                Components.Remove(type);
-            }
-
-            public Entity AddComponent(IComponent component)
-            {
-                if (!Components.ContainsKey(component.GetType()))
-                {
-                    Components.Add(component.GetType(), component);
-                    component.EntityAttachedTo = this;
-                }
-
-                return this;
-            }
-
-            public List<T> GetComponentsImplementing<T>() where T : class
-            {
-                return Components.Select(comp => comp.Value).OfType<T>().ToList();
-            }
-
-            protected bool Equals(Entity other)
-            {
-                return Id.Equals(other.Id);
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(null, obj)) return false;
-                if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != this.GetType()) return false;
-                return Equals((Entity)obj);
-            }
-
-            public override int GetHashCode()
-            {
-                return Id.GetHashCode();
+                return false;
             }
         }
+
+        public T GetComponent<T>()
+        {
+            IComponent temp;
+            Components.TryGetValue(typeof(T), out temp);
+            return (T)temp;
+        }
+
+        public void RemoveComponent<T>()
+        {
+            Components.Remove(typeof(T));
+        }
+
+        public void RemoveComponent(IComponent component)
+        {
+            var type = component.GetType();
+            Components.Remove(type);
+        }
+
+        public Entity AddComponent(IComponent component)
+        {
+            if (!Components.ContainsKey(component.GetType()))
+            {
+                Components.Add(component.GetType(), component);
+                component.EntityAttachedTo = this;
+            }
+
+            return this;
+        }
+
+        public List<T> GetComponentsImplementing<T>() where T : class
+        {
+            return Components.Select(comp => comp.Value).OfType<T>().ToList();
+        }
+
+        protected bool Equals(Entity other)
+        {
+            return Id.Equals(other.Id);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Entity)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
+}
