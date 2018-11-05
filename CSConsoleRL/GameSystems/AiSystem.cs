@@ -58,7 +58,10 @@ namespace CSConsoleRL.GameSystems
             }
         }
 
-        
+        private void SetImmediatePositionGoal(Entity ent)
+        {
+
+        }
 
         private void GetAiResponse(Entity ent)
         {
