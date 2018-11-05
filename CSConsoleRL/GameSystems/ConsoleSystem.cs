@@ -151,6 +151,10 @@ namespace CSConsoleRL.GameSystems
             {
                 console.ActiveCommand += " ";
             }
+            else if ((int)key >= 26 && (int)key <= 35)
+            {
+                console.ActiveCommand += key.ToString().Substring(3);
+            }
             else
             {
                 console.ActiveCommand += key.ToString().ToLower();
@@ -177,6 +181,9 @@ namespace CSConsoleRL.GameSystems
                     var toggleArg = cmdParams.Length > 1 ? cmdParams[1] : "[null]";
                     Toggle(toggleArg);
                     break;
+                case "ce":
+                    CreateEntity(cmdParams);
+                    break;
                 default:
                     console.WriteText(string.Format("Unrecognized command: {0}", cmdParams[0]));
                     break;
@@ -197,6 +204,28 @@ namespace CSConsoleRL.GameSystems
                     break;
                 default:
                     console.WriteText(string.Format("Unrecognized input to toggle: {0}", toggleArg));
+                    break;
+            }
+        }
+
+        private void CreateEntity(string[] args)
+        {
+            if(args.Length < 4)
+            {
+                console.WriteText(string.Format("CreateEntity requires 4 inputs"));
+                return;
+            }
+
+            switch(args[1])
+            {
+                case "marker":
+                    var markerEnt = new XMarkerEntity();
+                    markerEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = int.Parse(args[2]);
+                    markerEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = int.Parse(args[3]);
+                    SystemManager.RegisterEntity(markerEnt);
+                    break;
+                default:
+                    console.WriteText(string.Format("Specified entity {0} is unrecognized", args[1]));
                     break;
             }
         }

@@ -41,11 +41,12 @@ namespace CSConsoleRL.GameSystems
         private const int consoleDisplayLines = 5;
         private List<string> console;
 
-        private TileTypeDictionary tileDictionary;
-        private SfmlTextureDictionary textureDictionary;
+        private TileTypeDictionary _tileDictionary;
+        private SfmlTextureDictionary _textureDictionary;
+
         private Font _gameFont;
 
-        private List<Entity> graphicsEntities;
+        private List<Entity> _graphicsEntities;
 
         public SfmlGraphicsSystem(GameSystemManager manager, RenderWindow _sfmlWindow, Tile[,] _gameTiles)
         {
@@ -56,7 +57,7 @@ namespace CSConsoleRL.GameSystems
             worldXLength = gameTiles.GetLength(0);
             worldYLength = gameTiles.GetLength(1);
 
-            graphicsEntities = new List<Entity>();
+            _graphicsEntities = new List<Entity>();
             var fontPath = @"G:\Programming\CSConsoleRL\Oct172018Try\CSConsoleRL\CSConsoleRL\bin\Debug\Data\Fonts\arial.ttf";
             if (!File.Exists(fontPath)) fontPath = @"D:\Programming\CSConsoleRL\Data\Fonts\arial.ttf";
             _gameFont = new Font(fontPath);
@@ -72,7 +73,7 @@ namespace CSConsoleRL.GameSystems
         {
             if (entity.Components.ContainsKey(typeof(PositionComponent)) && entity.Components.ContainsKey(typeof(DrawableSfmlComponent)))
             {
-                graphicsEntities.Add(entity);
+                _graphicsEntities.Add(entity);
             }
         }
 
@@ -148,7 +149,7 @@ namespace CSConsoleRL.GameSystems
             }
 
             //Draw game sprites
-            foreach (Entity entity in graphicsEntities)
+            foreach (Entity entity in _graphicsEntities)
             {
                 var sfmlComponent = entity.GetComponent<DrawableSfmlComponent>();
                 var positionComponent = entity.GetComponent<PositionComponent>();
@@ -159,6 +160,11 @@ namespace CSConsoleRL.GameSystems
                 sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition, spriteYPosition);
                 sfmlWindow.Draw(sfmlComponent.GameSprite);
             }
+        }
+
+        private void DrawTileEffects()
+        {
+
         }
 
         private void DrawConsole()
@@ -190,12 +196,12 @@ namespace CSConsoleRL.GameSystems
 
         private void LoadTileTextures()
         {
-            tileDictionary = new TileTypeDictionary();
+            _tileDictionary = new TileTypeDictionary();
         }
 
         private void LoadSfmlGraphicsComponentTextures()
         {
-            textureDictionary = new SfmlTextureDictionary();
+            _textureDictionary = new SfmlTextureDictionary();
         }
 
         private void AssignSprites()
@@ -211,26 +217,29 @@ namespace CSConsoleRL.GameSystems
             {
                 for (int y = 0; y < gameTiles.GetLength(1); y++)
                 {
-                    gameTiles[x, y].TileSprite = new Sprite(tileDictionary[gameTiles[x, y].TileType].Texture);
+                    gameTiles[x, y].TileSprite = new Sprite(_tileDictionary[gameTiles[x, y].TileType].Texture);
                 }
             }
         }
 
         private void AssignSfmlGraphicsComponentSprites()
         {
-            foreach (Entity entity in graphicsEntities)
+            foreach (Entity entity in _graphicsEntities)
             {
                 var sfmlComponent = entity.GetComponent<DrawableSfmlComponent>();
                 switch (sfmlComponent.SpriteType)
                 {
                     case EnumSfmlSprites.MainCharacter:
-                        sfmlComponent.GameSprite = new Sprite(textureDictionary[EnumSfmlSprites.MainCharacter]);
+                        sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.MainCharacter]);
                         break;
                     case EnumSfmlSprites.HumanEnemy:
-                        sfmlComponent.GameSprite = new Sprite(textureDictionary[EnumSfmlSprites.HumanEnemy]);
+                        sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.HumanEnemy]);
                         break;
                     case EnumSfmlSprites.Dog:
-                        sfmlComponent.GameSprite = new Sprite(textureDictionary[EnumSfmlSprites.Dog]);
+                        sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.Dog]);
+                        break;
+                    case EnumSfmlSprites.RedX:
+                        sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.RedX]);
                         break;
                 }
             }
@@ -241,11 +250,12 @@ namespace CSConsoleRL.GameSystems
             public SfmlTextureDictionary()
                 : base()
             {
-                string fileName = @"G:\Programming\GitRepos\CSConsoleRL\CSConsoleRL\bin\x64\Debug\Data\Sprites\Regular20x20.png";
-                if (!File.Exists(fileName)) fileName = @"D:\Programming\CSConsoleRL\Data\Sprites\Regular20x20.png";
+                string fileName = @"G:\Programming\GitRepos\CSConsoleRL\CSConsoleRL\bin\x64\Debug\Data\Sprites\Tiles20x20.png";
+                if (!File.Exists(fileName)) fileName = @"D:\Programming\CSConsoleRL\Data\Sprites\Tiles20x20.png";
                 Add(EnumSfmlSprites.MainCharacter, new Texture(fileName, new IntRect(0, 140, 20, 20)));
                 Add(EnumSfmlSprites.HumanEnemy, new Texture(fileName, new IntRect(0, 0, 20, 20)));
                 Add(EnumSfmlSprites.Dog, new Texture(fileName, new IntRect(0, 0, 20, 20)));
+                Add(EnumSfmlSprites.RedX, new Texture(fileName, new IntRect(0, 160, 20, 20)));
             }
         }
     }

@@ -81,6 +81,7 @@
     <Compile Include="Components\PositionComponent.cs" />
     <Compile Include="Components\UserInputComponent.cs" />
     <Compile Include="Components\Interfaces\IComponent.cs" />
+    <Compile Include="Entities\XMarkerEntity.cs" />
     <Compile Include="Entities\SeekerEntity.cs" />
     <Compile Include="Entities\ActorEntity.cs" />
     <Compile Include="Entities\Entity.cs" />

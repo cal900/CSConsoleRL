@@ -11,5 +11,6 @@ namespace CSConsoleRL.Enums
         MainCharacter,
         Dog,
         HumanEnemy,
+        RedX,
     }
 }
