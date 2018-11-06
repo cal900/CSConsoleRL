@@ -15,14 +15,13 @@ namespace CSConsoleRL.GameSystems
 {
     public class MovementSystem : GameSystem
     {
-        private List<Entity> _movementEntities;
         private Tile[,] _gameTiles;
         private TileTypeDictionary _tileDictionary;
 
         public MovementSystem(GameSystemManager manager, Tile[,] _gameTiles)
         {
             SystemManager = manager;
-            _movementEntities = new List<Entity>();
+            _systemEntities = new List<Entity>();
             this._gameTiles = _gameTiles;
             _tileDictionary = new TileTypeDictionary();
         }
@@ -36,7 +35,7 @@ namespace CSConsoleRL.GameSystems
         {
             if (entity.Components.ContainsKey(typeof(PositionComponent)) && entity.Components.ContainsKey(typeof(CollisionComponent)))
             {
-                _movementEntities.Add(entity);
+                _systemEntities.Add(entity);
             }
         }
 
@@ -56,7 +55,7 @@ namespace CSConsoleRL.GameSystems
             var movementEvent = (MovementInputEvent)evnt;
 
             Guid entityId = (Guid)evnt.EventParams[0];
-            Entity entityToMove = _movementEntities.Where(entity => entity.Id.Equals(entityId)).FirstOrDefault();
+            Entity entityToMove = _systemEntities.Where(entity => entity.Id.Equals(entityId)).FirstOrDefault();
 
             if (entityToMove == null) return;   //If system does not contain entity involved do nothing
 
@@ -85,7 +84,7 @@ namespace CSConsoleRL.GameSystems
             if (desiredYPos < 0 || desiredXPos < 0 || desiredYPos > _gameTiles.GetLength(1) || desiredXPos > _gameTiles.GetLength(0)) return;
 
             //iterate through all entities with collision component, check if collision
-            List<Entity> collisionEntities = _movementEntities.Where(ent => ent.Components.ContainsKey(typeof(CollisionComponent))).ToList();
+            List<Entity> collisionEntities = _systemEntities.Where(ent => ent.Components.ContainsKey(typeof(CollisionComponent))).ToList();
 
             //check collision with other entities
             foreach (var colEnt in collisionEntities)

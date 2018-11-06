@@ -12,6 +12,7 @@ namespace CSConsoleRL.GameSystems
 {
     public abstract class GameSystem
     {
+        protected List<Entity> _systemEntities;
         public GameSystemManager SystemManager { get; set; }
         public abstract void InitializeSystem();
         public abstract void AddEntity(Entity entity);

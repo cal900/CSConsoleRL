@@ -33,14 +33,12 @@ namespace CSConsoleRL.GameSystems
         private bool _lastKeyPressedIsDirty; //Used for situations such as console open where don't want to take multiple from a key being held down
 
         private bool _consoleOn;
-
-        private List<Entity> _userInputEntities;
         private Queue<Keyboard.Key> _inputs;
 
         public UserInputSystem(GameSystemManager _manager, RenderWindow _sfmlWindow)
         {
             SystemManager = _manager;
-            _userInputEntities = new List<Entity>();
+            _systemEntities = new List<Entity>();
 
             sfmlWindow = _sfmlWindow;
             sfmlWindow.KeyPressed += SfmlWindow_KeyPressed;
@@ -72,7 +70,7 @@ namespace CSConsoleRL.GameSystems
         {
             if (entity.Components.ContainsKey(typeof(UserInputComponent)))
             {
-                _userInputEntities.Add(entity);
+                _systemEntities.Add(entity);
             }
         }
 
@@ -137,7 +135,7 @@ namespace CSConsoleRL.GameSystems
 
         private void BroadCastMovementInputToAllEntities(EnumDirections dir)
         {
-            foreach (Entity entity in _userInputEntities.Where(ent => ent.GetType() == typeof(ActorEntity)))
+            foreach (Entity entity in _systemEntities.Where(ent => ent.GetType() == typeof(ActorEntity)))
             {
                 BroadcastMessage(new MovementInputEvent(entity.Id, dir));
             }

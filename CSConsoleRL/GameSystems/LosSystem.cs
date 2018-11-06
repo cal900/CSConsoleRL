@@ -16,16 +16,15 @@ namespace CSConsoleRL.GameSystems
 {
     public class LosSystem : GameSystem
     {
-        private List<Entity> _losEntities;
         private Tile[,] _gameTiles;
         private TileTypeDictionary _tileDictionary;
         private bool _fowEnabled;
-        public Entity LosSourceEntity { get; set; }
+        public Entity SystemEntities { get; set; }
 
         public LosSystem(GameSystemManager manager, Tile[,] gameTiles)
         {
             SystemManager = manager;
-            _losEntities = new List<Entity>();
+            _systemEntities = new List<Entity>();
             _gameTiles = gameTiles;
             _tileDictionary = new TileTypeDictionary();
             _fowEnabled = false;
@@ -41,7 +40,7 @@ namespace CSConsoleRL.GameSystems
         {
             if (entity.Components.ContainsKey(typeof(PositionComponent)) && entity.Components.ContainsKey(typeof(LosComponent)))
             {
-                _losEntities.Add(entity);
+                _systemEntities.Add(entity);
             }
         }
 
@@ -76,9 +75,9 @@ namespace CSConsoleRL.GameSystems
         {
             SetAllTiles();
 
-            if (_fowEnabled && LosSourceEntity != null)
+            if (_fowEnabled && SystemEntities != null)
             {
-                ScanLos(10, LosSourceEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, LosSourceEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap);
+                ScanLos(10, SystemEntities.GetComponent<PositionComponent>().ComponentXPositionOnMap, SystemEntities.GetComponent<PositionComponent>().ComponentYPositionOnMap);
             }
         }
 

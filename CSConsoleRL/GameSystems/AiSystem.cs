@@ -17,13 +17,12 @@ namespace CSConsoleRL.GameSystems
 {
     public class AiSystem : GameSystem
     {
-        private List<Entity> _aiEntities;
         private Tile[,] _gameTiles;
 
         public AiSystem(GameSystemManager _manager, Tile[,] _gameTiles)
         {
             SystemManager = _manager;
-            _aiEntities = new List<Entity>();
+            _systemEntities = new List<Entity>();
             this._gameTiles = _gameTiles;
         }
 
@@ -36,7 +35,7 @@ namespace CSConsoleRL.GameSystems
         {
             if (entity.Components.ContainsKey(typeof(AiComponent)))
             {
-                _aiEntities.Add(entity);
+                _systemEntities.Add(entity);
             }
         }
 
@@ -52,7 +51,7 @@ namespace CSConsoleRL.GameSystems
 
         private void NextTurn()
         {
-            foreach (var entity in _aiEntities)
+            foreach (var entity in _systemEntities)
             {
                 GetAiResponse(entity);
             }

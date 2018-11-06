@@ -22,8 +22,7 @@ namespace CSConsoleRL.Entities
         public bool HasComponent<T>()
         {
             IComponent temp;
-            if (Components.TryGetValue(typeof(T), out temp));
-            if(temp != null)
+            if (Components.TryGetValue(typeof(T), out temp) && temp != null)
             {
                 return true;
             }

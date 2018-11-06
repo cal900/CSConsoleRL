@@ -47,7 +47,7 @@ namespace CSConsoleRL.Game.Managers
         {
             var mainChar = new ActorEntity();
             RegisterEntity(mainChar);
-            ((LosSystem)Systems[typeof(LosSystem)]).LosSourceEntity = mainChar;
+            ((LosSystem)Systems[typeof(LosSystem)]).SystemEntities = mainChar;
         }
 
         private void CreateSystems()

@@ -223,6 +223,7 @@ namespace CSConsoleRL.GameSystems
                     markerEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = int.Parse(args[2]);
                     markerEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = int.Parse(args[3]);
                     SystemManager.RegisterEntity(markerEnt);
+                    console.WriteText(string.Format("Creating entity {0} at co-ordinates (x->{1}, y->{2})", args[1], args[2], args[3]));
                     break;
                 default:
                     console.WriteText(string.Format("Specified entity {0} is unrecognized", args[1]));
