@@ -18,6 +18,7 @@ namespace CSConsoleRL.GameSystems
     public class AiSystem : GameSystem
     {
         private Tile[,] _gameTiles;
+        private ActorEntity _actorEntity;
 
         public AiSystem(GameSystemManager _manager, Tile[,] _gameTiles)
         {
@@ -33,6 +34,10 @@ namespace CSConsoleRL.GameSystems
 
         public override void AddEntity(Entity entity)
         {
+            if(entity.GetType() == typeof(ActorEntity))
+            {
+                _actorEntity = (ActorEntity)entity;
+            }
             if (entity.Components.ContainsKey(typeof(AiComponent)))
             {
                 _systemEntities.Add(entity);
@@ -72,7 +77,31 @@ namespace CSConsoleRL.GameSystems
 
         private void GetSeekerResponse(Entity ent)
         {
-            
+            var seekerAi = ent.GetComponent<SeekerAiComponent>();
+            var position = ent.GetComponent<PositionComponent>();
+            int horMovement = 0, verMovement = 0;
+
+            //Set Seeker's goal location
+            seekerAi.DesiredX = _actorEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap + 2;
+            seekerAi.DesiredY = _actorEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap;
+
+            //Move to desired location
+            if (position.ComponentXPositionOnMap < seekerAi.DesiredX)
+            {
+                horMovement++;
+            }
+            else if (position.ComponentXPositionOnMap > seekerAi.DesiredX)
+            {
+                horMovement--;
+            }
+            if (position.ComponentYPositionOnMap < seekerAi.DesiredY)
+            {
+                verMovement++;
+            }
+            else if (position.ComponentYPositionOnMap > seekerAi.DesiredY)
+            {
+                verMovement--;
+            }
         }
     }
 }
