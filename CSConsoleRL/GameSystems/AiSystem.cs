@@ -34,7 +34,7 @@ namespace CSConsoleRL.GameSystems
 
         public override void AddEntity(Entity entity)
         {
-            if(entity.GetType() == typeof(ActorEntity))
+            if (entity.GetType() == typeof(ActorEntity))
             {
                 _actorEntity = (ActorEntity)entity;
             }
@@ -69,7 +69,7 @@ namespace CSConsoleRL.GameSystems
 
         private void GetAiResponse(Entity ent)
         {
-            if(ent.HasComponent<AiComponent>())
+            if (ent.HasComponent<AiComponent>())
             {
                 GetSeekerResponse(ent);
             }
@@ -102,6 +102,8 @@ namespace CSConsoleRL.GameSystems
             {
                 verMovement--;
             }
+
+
         }
     }
 }
