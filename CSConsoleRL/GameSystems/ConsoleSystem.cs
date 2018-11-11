@@ -225,6 +225,13 @@ namespace CSConsoleRL.GameSystems
                     SystemManager.RegisterEntity(markerEnt);
                     console.WriteText(string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", args[1], args[2], args[3]));
                     break;
+                case "seeker":
+                    var seekerEnt = new SeekerEntity();
+                    seekerEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = int.Parse(args[2]);
+                    seekerEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = int.Parse(args[3]);
+                    SystemManager.RegisterEntity(seekerEnt);
+                    console.WriteText(string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", args[1], args[2], args[3]));
+                    break;
                 default:
                     console.WriteText(string.Format("Specified entity {0} is unrecognized", args[1]));
                     break;

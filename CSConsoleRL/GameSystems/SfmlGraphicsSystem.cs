@@ -236,10 +236,10 @@ namespace CSConsoleRL.GameSystems
             public SfmlTextureDictionary()
                 : base()
             {
-                string fileName = @"G:\Programming\GitRepos\CSConsoleRL\CSConsoleRL\bin\x64\Debug\Data\Sprites\Tiles20x20.png";
+                string fileName = @"G:\Programming\CSConsoleRL\Oct172018Try\CSConsoleRL\Data\Sprites\Tiles20x20.png";
                 if (!File.Exists(fileName)) fileName = @"D:\Programming\CSConsoleRL\Data\Sprites\Tiles20x20.png";
                 Add(EnumSfmlSprites.MainCharacter, new Texture(fileName, new IntRect(0, 140, 20, 20)));
-                Add(EnumSfmlSprites.HumanEnemy, new Texture(fileName, new IntRect(0, 0, 20, 20)));
+                Add(EnumSfmlSprites.HumanEnemy, new Texture(fileName, new IntRect(20, 140, 20, 20)));
                 Add(EnumSfmlSprites.Dog, new Texture(fileName, new IntRect(0, 0, 20, 20)));
                 Add(EnumSfmlSprites.RedX, new Texture(fileName, new IntRect(0, 160, 20, 20)));
             }

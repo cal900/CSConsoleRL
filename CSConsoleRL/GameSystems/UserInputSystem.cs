@@ -96,29 +96,36 @@ namespace CSConsoleRL.GameSystems
         {
             while (_inputs.Count > 0)
             {
-                HandleInput(_inputs.Dequeue());
-                BroadcastMessage(new NextTurnEvent());
+                if (HandleInput(_inputs.Dequeue()))
+                {
+                    BroadcastMessage(new NextTurnEvent());
+                }
             }
         }
 
-        private void HandleInput(Keyboard.Key input)
+        /// <summary>
+        /// Returns bool indicating if input corresponds to a turn (e.g. movement)
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private bool HandleInput(Keyboard.Key input)
         {
             if (!_consoleOn)
             {
                 switch (input)
                 {
                     case (_inputUp):
-                        BroadCastMovementInputToAllEntities(EnumDirections.North);
-                        break;
+                        BroadCastMovementInputToAllEntities(0, -1);
+                        return true;
                     case (_inputDown):
-                        BroadCastMovementInputToAllEntities(EnumDirections.South);
-                        break;
+                        BroadCastMovementInputToAllEntities(0, 1);
+                        return true;
                     case (_inputLeft):
-                        BroadCastMovementInputToAllEntities(EnumDirections.West);
-                        break;
+                        BroadCastMovementInputToAllEntities(-1, 0);
+                        return true;
                     case (_inputRight):
-                        BroadCastMovementInputToAllEntities(EnumDirections.East);
-                        break;
+                        BroadCastMovementInputToAllEntities(1, 0);
+                        return true;
                     case (_inputToggleConsole):
                         BroadcastMessage(new ToggleConsoleEvent());
                         break;
@@ -131,13 +138,15 @@ namespace CSConsoleRL.GameSystems
             {
                 BroadcastMessage(new KeyPressedEvent(input));
             }
+
+            return false;
         }
 
-        private void BroadCastMovementInputToAllEntities(EnumDirections dir)
+        private void BroadCastMovementInputToAllEntities(int changeX, int changeY)
         {
             foreach (Entity entity in _systemEntities.Where(ent => ent.GetType() == typeof(ActorEntity)))
             {
-                BroadcastMessage(new MovementInputEvent(entity.Id, dir));
+                BroadcastMessage(new MovementInputEvent(entity.Id, changeX, changeY));
             }
         }
     }

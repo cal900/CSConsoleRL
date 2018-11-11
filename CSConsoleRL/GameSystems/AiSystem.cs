@@ -38,7 +38,8 @@ namespace CSConsoleRL.GameSystems
             {
                 _actorEntity = (ActorEntity)entity;
             }
-            if (entity.Components.ContainsKey(typeof(AiComponent)))
+            if (entity.Components.ContainsKey(typeof(AiComponent))
+                || entity.Components.ContainsKey(typeof(SeekerAiComponent)))
             {
                 _systemEntities.Add(entity);
             }
@@ -69,10 +70,8 @@ namespace CSConsoleRL.GameSystems
 
         private void GetAiResponse(Entity ent)
         {
-            if (ent.HasComponent<AiComponent>())
-            {
-                GetSeekerResponse(ent);
-            }
+
+            GetSeekerResponse(ent);
         }
 
         private void GetSeekerResponse(Entity ent)
@@ -103,7 +102,7 @@ namespace CSConsoleRL.GameSystems
                 verMovement--;
             }
 
-
+            BroadcastMessage(new MovementInputEvent(ent.Id, horMovement, verMovement));
         }
     }
 }

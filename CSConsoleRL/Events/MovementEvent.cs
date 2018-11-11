@@ -14,11 +14,12 @@ namespace CSConsoleRL.Events
         public string EventName { get { return "MovementInput"; } }
         public List<object> EventParams { get; set; }
 
-        public MovementInputEvent(Guid id, EnumDirections movementDirection)
+        public MovementInputEvent(Guid id, int movementX, int movementY)
         {
             EventParams = new List<object>();
             EventParams.Add(id);
-            EventParams.Add(movementDirection);
+            EventParams.Add(movementX);
+            EventParams.Add(movementY);
         }
     }
 }

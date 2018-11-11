@@ -59,26 +59,8 @@ namespace CSConsoleRL.GameSystems
 
             if (entityToMove == null) return;   //If system does not contain entity involved do nothing
 
-            int desiredXPos = entityToMove.GetComponent<PositionComponent>().ComponentXPositionOnMap;
-            int desiredYPos = entityToMove.GetComponent<PositionComponent>().ComponentYPositionOnMap;
-
-            var movementDirection = (EnumDirections)movementEvent.EventParams[1];
-
-            switch (movementDirection)
-            {
-                case EnumDirections.North:
-                    desiredYPos--;
-                    break;
-                case EnumDirections.South:
-                    desiredYPos++;
-                    break;
-                case EnumDirections.West:
-                    desiredXPos--;
-                    break;
-                case EnumDirections.East:
-                    desiredXPos++;
-                    break;
-            }
+            int desiredXPos = entityToMove.GetComponent<PositionComponent>().ComponentXPositionOnMap + (int)movementEvent.EventParams[1];
+            int desiredYPos = entityToMove.GetComponent<PositionComponent>().ComponentYPositionOnMap + (int)movementEvent.EventParams[2];
 
             //If movement would carry entity out of map just return
             if (desiredYPos < 0 || desiredXPos < 0 || desiredYPos > _gameTiles.GetLength(1) || desiredXPos > _gameTiles.GetLength(0)) return;
@@ -91,7 +73,7 @@ namespace CSConsoleRL.GameSystems
             {
                 if (colEnt.Id != entityId
                     && (colEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap == desiredXPos
-                    || colEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap == desiredYPos))
+                    && colEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap == desiredYPos))
                 {
                     return;
                 }

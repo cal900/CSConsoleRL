@@ -14,10 +14,10 @@ namespace CSConsoleRL.Entities
             : base()
         {
             AddComponent(new PositionComponent(this));
-            AddComponent(new DrawableSfmlComponent(this, Enums.EnumSfmlSprites.MainCharacter));
+            AddComponent(new DrawableSfmlComponent(this, Enums.EnumSfmlSprites.HumanEnemy));
             AddComponent(new UserInputComponent(this));
             AddComponent(new CollisionComponent(this));
-            AddComponent(new AiComponent(this));
+            AddComponent(new SeekerAiComponent(this));
         }
     }
 }

@@ -57,6 +57,7 @@ namespace CSConsoleRL.Game.Managers
             RegisterSystem(new SfmlGraphicsSystem(this, sfmlWindow, gameMap.TileSet));
             RegisterSystem(new UserInputSystem(this, sfmlWindow));
             RegisterSystem(new ConsoleSystem(this));
+            RegisterSystem(new AiSystem(this, gameMap.TileSet));
         }
 
         private void InitializeSystems()
