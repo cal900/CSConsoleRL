@@ -111,6 +111,7 @@
     <Compile Include="Game\Managers\GameSystemManager.cs" />
     <Compile Include="GameSystems\CharGraphicsSystem.cs" />
     <Compile Include="GameSystems\UserInputSystem.cs" />
+    <Compile Include="Helpers\PathfindingHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameSystems\GameSystem.cs" />
