@@ -30,13 +30,26 @@ namespace CSConsoleRL.Helpers
         private class PathfindingList
         {
             private List<PathfindingNode> _list;
-            public PathfindingNode LowestCostNode;
+            public PathfindingNode LowestCostNode { get; private set; }
+            public Vector2i TargetCoords;
             public int? LowestCostValue
             {
                 get
                 {
                     return LowestCostNode?.Cost;
                 }
+            }
+            public int Count
+            {
+                get
+                {
+                    return _list == null ? 0 : _list.Count;
+                }
+            }
+
+            public PathfindingList()
+            {
+                _list = new List<PathfindingNode>();
             }
 
             private void CalculateLowestCostNode()
@@ -54,24 +67,27 @@ namespace CSConsoleRL.Helpers
                 }
             }
 
-            public void Add(PathfindingNode node)
+            public PathfindingNode Add(PathfindingNode node)
             {
+                node.Cost += (Math.Abs(node.Coord.X - TargetCoords.X)) ^ 2 + (Math.Abs(node.Coord.Y - TargetCoords.Y)) ^ 2;
                 _list.Add(node);
 
-                if(node.Cost < LowestCostNode.Cost)
+                if (node.Cost < LowestCostNode.Cost)
                 {
                     LowestCostNode = node;
                 }
+
+                return node;
             }
 
             public PathfindingNode Remove(PathfindingNode node)
             {
-                if(_list.Contains(node))
+                if (_list.Contains(node))
                 {
                     _list.Remove(node);
                 }
 
-                if(LowestCostNode == node)
+                if (LowestCostNode == node)
                 {
                     CalculateLowestCostNode();
                 }
@@ -79,16 +95,15 @@ namespace CSConsoleRL.Helpers
                 return node;
             }
 
-            public PathfindingNode RemoveLowestCostNode()
+            public List<Vector2i> GetOpenPath()
             {
-                if(LowestCostNode == null)
+                var openPath = new List<Vector2i>();
+                foreach (var node in _list)
                 {
-                    return null;
+                    openPath.Add(node.Coord);
                 }
-                else
-                {
-                    return Remove(LowestCostNode);
-                }
+
+                return openPath;
             }
         }
 
@@ -101,7 +116,7 @@ namespace CSConsoleRL.Helpers
         {
             get
             {
-                if(_instance == null)
+                if (_instance == null)
                 {
                     _instance = new PathfindingHelper();
                 }
@@ -111,14 +126,14 @@ namespace CSConsoleRL.Helpers
 
         public List<Vector2i> Path(Tile[,] gameTiles, Vector2i start, Vector2i end)
         {
-            var openPath = new List<PathfindingNode>();
+            var openPath = new PathfindingList();
             var closedPath = new List<PathfindingNode>();
 
             //Initialize openPath with start tile
-            openPath.Add(new PathfindingNode(start.X, start.Y));
+            var currentNode = openPath.Add(new PathfindingNode(start.X, start.Y));
 
             //Main loop, finishes when end is found
-            while(openPath.Count > 0)
+            while (openPath.Count > 0)
             {
 
             }
