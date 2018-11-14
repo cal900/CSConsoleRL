@@ -47,8 +47,9 @@ namespace CSConsoleRL.Helpers
                 }
             }
 
-            public PathfindingList()
+            public PathfindingList(Vector2i target)
             {
+                TargetCoords = target;
                 _list = new List<PathfindingNode>();
             }
 
@@ -95,7 +96,7 @@ namespace CSConsoleRL.Helpers
                 return node;
             }
 
-            public List<Vector2i> GetOpenPath()
+            public List<Vector2i> GetVectorList()
             {
                 var openPath = new List<Vector2i>();
                 foreach (var node in _list)
@@ -126,19 +127,37 @@ namespace CSConsoleRL.Helpers
 
         public List<Vector2i> Path(Tile[,] gameTiles, Vector2i start, Vector2i end)
         {
-            var openPath = new PathfindingList();
-            var closedPath = new List<PathfindingNode>();
+            var openPath = new PathfindingList(end);
+            var closedPath = new List<Vector2i>();
 
             //Initialize openPath with start tile
-            var currentNode = openPath.Add(new PathfindingNode(start.X, start.Y));
+            openPath.Add(new PathfindingNode(start.X, start.Y));
 
             //Main loop, finishes when end is found
             while (openPath.Count > 0)
             {
+                var currentNode = openPath.LowestCostNode;
 
+                //Look at all adjacent tiles
+                for (int y = currentNode.Coord.Y - 1; y <= currentNode.Coord.Y + 1; y++)
+                {
+                    for (int x = currentNode.Coord.X - 1; x <= currentNode.Coord.X + 1; x++)
+                    {
+                        if (!(x == currentNode.Coord.X && y == currentNode.Coord.Y))
+                        {
+                            if (!_tileDict[gameTiles[x, y].TileType].BlocksMovement
+                                && !closedPath.Contains(new Vector2i(x, y)))
+                            {
+                                openPath.Add(new PathfindingNode(x, y));
+                            }
+                        }
+                    }
+                }
+
+                openPath.Remove(currentNode);
             }
 
-            return openPath;
+            return openPath.GetVectorList();
         }
     }
 }
