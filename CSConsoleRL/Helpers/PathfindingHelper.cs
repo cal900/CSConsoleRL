@@ -155,6 +155,7 @@ namespace CSConsoleRL.Helpers
                 }
 
                 openPath.Remove(currentNode);
+                closedPath.Add(currentNode.Coord);
             }
 
             return openPath.GetVectorList();
