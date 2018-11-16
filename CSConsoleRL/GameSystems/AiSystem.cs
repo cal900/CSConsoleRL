@@ -11,7 +11,9 @@ using CSConsoleRL.Enums;
 using CSConsoleRL.Entities;
 using SFML.Graphics;
 using SFML.Window;
+using SFML.System;
 using GameTiles.Tiles;
+using CSConsoleRL.Helpers;
 
 namespace CSConsoleRL.GameSystems
 {
@@ -83,6 +85,10 @@ namespace CSConsoleRL.GameSystems
             //Set Seeker's goal location
             seekerAi.DesiredX = _actorEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap + 2;
             seekerAi.DesiredY = _actorEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap;
+
+            //Call to A* Pathfinding to get path
+            var path = PathfindingHelper.Instance.Path(_gameTiles, new Vector2i(position.ComponentXPositionOnMap, position.ComponentYPositionOnMap),
+                new Vector2i(seekerAi.DesiredX, seekerAi.DesiredY));
 
             //Move to desired location
             if (position.ComponentXPositionOnMap < seekerAi.DesiredX)
