@@ -35,6 +35,18 @@ namespace CSConsoleRL.Helpers
                     Parent = parent;
                 }
             }
+
+            public void UpdateParent(PathfindingNode newParent)
+            {
+                Parent = newParent;
+                G = Parent.G + 1;
+
+                //Need to update all children as G cost decrease cascades down
+                foreach (var child in Children)
+                {
+                    child.UpdateParent(this);
+                }
+            }
         }
 
         private class PathfindingList
@@ -61,6 +73,19 @@ namespace CSConsoleRL.Helpers
             {
                 TargetCoords = target;
                 _list = new List<PathfindingNode>();
+            }
+
+            public PathfindingNode GetNodeByCoords(Vector2i coords)
+            {
+                foreach (var listItem in _list)
+                {
+                    if(listItem.Coord.X == coords.X && listItem.Coord.Y == coords.Y)
+                    {
+                        return listItem;
+                    }
+                }
+
+                return null;
             }
 
             private void CalculateLowestCostNode()
@@ -120,6 +145,19 @@ namespace CSConsoleRL.Helpers
             public bool Contains(PathfindingNode node)
             {
                 return _list.Contains(node);
+            }
+
+            public bool ContainsCoords(Vector2i coords)
+            {
+                foreach (var listItem in _list)
+                {
+                    if(listItem.Coord.X == coords.X && listItem.Coord.Y == coords.Y)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
             }
 
             public List<Vector2i> GetVectorList()
@@ -203,8 +241,10 @@ namespace CSConsoleRL.Helpers
                 {
                     for (int x = startX; x <= endX; x++)
                     {
+                        //This check excludes the current node co-ordinates
                         if (!(x == currentNode.Coord.X && y == currentNode.Coord.Y))
                         {
+                            //Reached goal co-ordinates
                             if(currentNode.Coord.X == end.X && currentNode.Coord.Y == end.Y)
                             {
                                 return BuildPathFromNodeChain(currentNode);
@@ -212,7 +252,21 @@ namespace CSConsoleRL.Helpers
                             else if (!_tileDict[gameTiles[x, y].TileType].BlocksMovement
                                 && !ListContainsCoords(closedPath, x, y))
                             {
-                                openPath.Add(new PathfindingNode(x, y, currentNode));
+                                var existingNode = openPath.GetNodeByCoords(new Vector2i(x, y));
+                                if (existingNode == null)
+                                {
+                                    openPath.Add(new PathfindingNode(x, y, currentNode));
+                                }
+                                else
+                                {
+                                    //If openPath already contains node, and if this path has smaller cost update the node
+                                    int h = Math.Abs(x - end.X) > Math.Abs(y - end.Y) ? Math.Abs(x - end.X) : Math.Abs(y - end.Y);
+                                    int f = (currentNode.G + 1) + h;
+                                    if(f < existingNode.F)
+                                    {
+                                        existingNode.UpdateParent(currentNode);
+                                    }
+                                }
                             }
                         }
                     }
