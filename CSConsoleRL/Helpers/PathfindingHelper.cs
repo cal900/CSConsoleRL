@@ -109,6 +109,11 @@ namespace CSConsoleRL.Helpers
                 int verDist = Math.Abs(node.Coord.Y - TargetCoords.Y);
                 node.H = horDist > verDist ? horDist : verDist;
 
+                if(ContainsCoords(new Vector2i(node.Coord.X, node.Coord.Y)))
+                {
+                    throw new Exception(string.Format("List already contains a node at co-ordinate {0}, {1}", node.Coord.X, node.Coord.Y));
+                }
+
                 _list.Add(node);
 
                 if(LowestCostNode == null)
@@ -260,7 +265,7 @@ namespace CSConsoleRL.Helpers
                                 else
                                 {
                                     //If openPath already contains node, and if this path has smaller cost update the node
-                                    int h = Math.Abs(x - end.X) > Math.Abs(y - end.Y) ? Math.Abs(x - end.X) : Math.Abs(y - end.Y);
+                                    int h = Math.Abs(x - end.X) < Math.Abs(y - end.Y) ? Math.Abs(x - end.X) : Math.Abs(y - end.Y);
                                     int f = (currentNode.G + 1) + h;
                                     if(f < existingNode.F)
                                     {
