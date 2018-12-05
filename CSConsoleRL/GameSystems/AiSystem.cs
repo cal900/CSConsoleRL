@@ -82,13 +82,14 @@ namespace CSConsoleRL.GameSystems
             var position = ent.GetComponent<PositionComponent>();
             int horMovement = 0, verMovement = 0;
 
-            //Set Seeker's goal location
-            seekerAi.DesiredX = _actorEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap + 2;
-            seekerAi.DesiredY = _actorEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap;
-
             //Call to A* Pathfinding to get path
             var path = PathfindingHelper.Instance.Path(_gameTiles, new Vector2i(position.ComponentXPositionOnMap, position.ComponentYPositionOnMap),
-                new Vector2i(seekerAi.DesiredX, seekerAi.DesiredY));
+                new Vector2i(_actorEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap + 2, _actorEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap));
+
+            if(path != null)
+            {
+                seekerAi.Path = path;
+            }
 
             //Move to desired location
             if (position.ComponentXPositionOnMap < seekerAi.DesiredX)

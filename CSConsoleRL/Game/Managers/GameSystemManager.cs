@@ -87,14 +87,18 @@ namespace CSConsoleRL.Game.Managers
             return entity;
         }
 
-        public void FireWaiting(object sender)
+        public List<Entity> GetEntities<T>()
         {
-            if (WaitingForInput != null) WaitingForInput(sender, new EventArgs());
-        }
+            var matchingEnts = new List<Entity>();
+            foreach (var ent in Entities)
+            {
+                if(ent.GetType() == typeof(T))
+                {
+                    matchingEnts.Add(ent);
+                }
+            }
 
-        public void FireDone(object sender)
-        {
-            if (DoneWithInput != null) DoneWithInput(sender, new EventArgs());
+            return matchingEnts;
         }
 
         public void BroadcastUiEvent(/*GameEvent evt*/)

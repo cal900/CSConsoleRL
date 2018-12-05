@@ -90,7 +90,11 @@ namespace CSConsoleRL.Helpers
 
             private void CalculateLowestCostNode()
             {
-                if (_list.Count == 0) return;
+                if (_list.Count == 0)
+                {
+                    LowestCostNode = null;
+                    return;
+                }
 
                 var lowestNode = _list[0];
 
@@ -101,6 +105,8 @@ namespace CSConsoleRL.Helpers
                         lowestNode = _list[i];
                     }
                 }
+
+                LowestCostNode = lowestNode;
             }
 
             public PathfindingNode Add(PathfindingNode node)
@@ -213,6 +219,11 @@ namespace CSConsoleRL.Helpers
                 list.Add(node.Coord);
                 node = node.Parent;
             }
+
+            list.Reverse();
+
+            //Remove last co-ordinate which will just correspond to current location
+            list.RemoveAt(list.Count - 1);
 
             return list;
         }

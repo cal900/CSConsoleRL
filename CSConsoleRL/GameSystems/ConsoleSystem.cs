@@ -184,6 +184,9 @@ namespace CSConsoleRL.GameSystems
                 case "ce":
                     CreateEntity(cmdParams);
                     break;
+                case "l":
+                    ListEntities(cmdParams);
+                    break;
                 default:
                     console.WriteText(string.Format("Unrecognized command: {0}", cmdParams[0]));
                     break;
@@ -234,6 +237,26 @@ namespace CSConsoleRL.GameSystems
                     break;
                 default:
                     console.WriteText(string.Format("Specified entity {0} is unrecognized", args[1]));
+                    break;
+            }
+        }
+
+        private void ListEntities(string[] args)
+        {
+            if(args.Length < 2)
+            {
+                console.WriteText(string.Format("ListEntities requires 2 inputs"));
+            }
+
+            switch(args[1])
+            {
+                case "actorentity":
+                    var ents = SystemManager.GetEntities<ActorEntity>();
+                    foreach (var ent in ents)
+                    {
+                        var positionComponent = ((PositionComponent)ent.Components[typeof(PositionComponent)]);
+                        console.WriteText(string.Format("Id: {0}, x: {1}, y: {2}", ent.Id, positionComponent.ComponentXPositionOnMap, positionComponent.ComponentYPositionOnMap));
+                    }
                     break;
             }
         }
