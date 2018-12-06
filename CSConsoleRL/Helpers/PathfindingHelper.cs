@@ -271,7 +271,8 @@ namespace CSConsoleRL.Helpers
                                 var existingNode = openPath.GetNodeByCoords(new Vector2i(x, y));
                                 if (existingNode == null)
                                 {
-                                    openPath.Add(new PathfindingNode(x, y, currentNode));
+                                    existingNode = openPath.Add(new PathfindingNode(x, y, currentNode));
+                                    currentNode.Children.Add(existingNode);
                                 }
                                 else
                                 {
