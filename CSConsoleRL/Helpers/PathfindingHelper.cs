@@ -220,10 +220,10 @@ namespace CSConsoleRL.Helpers
                 node = node.Parent;
             }
 
-            list.Reverse();
-
             //Remove last co-ordinate which will just correspond to current location
             list.RemoveAt(list.Count - 1);
+
+            list.Reverse();
 
             return list;
         }
@@ -271,8 +271,7 @@ namespace CSConsoleRL.Helpers
                                 var existingNode = openPath.GetNodeByCoords(new Vector2i(x, y));
                                 if (existingNode == null)
                                 {
-                                    existingNode = openPath.Add(new PathfindingNode(x, y, currentNode));
-                                    currentNode.Children.Add(existingNode);
+                                    openPath.Add(new PathfindingNode(x, y, currentNode));
                                 }
                                 else
                                 {

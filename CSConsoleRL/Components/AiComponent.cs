@@ -29,8 +29,8 @@ namespace CSConsoleRL.Components
                     _path = value;
                     if (_path.Count > 0)
                     {
-                        DesiredX = _path[_path.Count - 1].X;
-                        DesiredY = _path[_path.Count - 1].Y;
+                        DesiredX = _path[0].X;
+                        DesiredY = _path[0].Y;
                     }
                 }
             }
