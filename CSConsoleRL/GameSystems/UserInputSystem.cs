@@ -25,6 +25,10 @@ namespace CSConsoleRL.GameSystems
         private const Keyboard.Key _inputDown = Keyboard.Key.S;
         private const Keyboard.Key _inputLeft = Keyboard.Key.A;
         private const Keyboard.Key _inputRight = Keyboard.Key.D;
+        private const Keyboard.Key _inputUpLeft = Keyboard.Key.Q;
+        private const Keyboard.Key _inputUpRight = Keyboard.Key.E;
+        private const Keyboard.Key _inputDownLeft = Keyboard.Key.Z;
+        private const Keyboard.Key _inputDownRight = Keyboard.Key.X;
         private const Keyboard.Key _inputMenuUp = Keyboard.Key.Up;
         private const Keyboard.Key _inputMenuDown = Keyboard.Key.Down;
         private const Keyboard.Key _inputToggleConsole = Keyboard.Key.Tilde;
@@ -125,6 +129,18 @@ namespace CSConsoleRL.GameSystems
                         return true;
                     case (_inputRight):
                         BroadCastMovementInputToAllEntities(1, 0);
+                        return true;
+                    case (_inputUpLeft):
+                        BroadCastMovementInputToAllEntities(-1, -1);
+                        return true;
+                    case (_inputUpRight):
+                        BroadCastMovementInputToAllEntities(1, -1);
+                        return true;
+                    case (_inputDownLeft):
+                        BroadCastMovementInputToAllEntities(-1, 1);
+                        return true;
+                    case (_inputDownRight):
+                        BroadCastMovementInputToAllEntities(1, 1);
                         return true;
                     case (_inputToggleConsole):
                         BroadcastMessage(new ToggleConsoleEvent());

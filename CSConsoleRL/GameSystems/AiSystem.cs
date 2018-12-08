@@ -84,7 +84,7 @@ namespace CSConsoleRL.GameSystems
 
             //Call to A* Pathfinding to get path
             var path = PathfindingHelper.Instance.Path(_gameTiles, new Vector2i(position.ComponentXPositionOnMap, position.ComponentYPositionOnMap),
-                new Vector2i(_actorEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap + 2, _actorEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap));
+                new Vector2i(_actorEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap + 1, _actorEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap));
 
             if(path != null)
             {
