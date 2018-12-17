@@ -54,11 +54,11 @@ namespace CSConsoleRL.GameSystems
             //Not useful yet as currently what game writes to console is considered a "command"
             public void GoUpHistory()
             {
-                if(activeCommandIndex < 0)
+                if (activeCommandIndex < 0)
                 {
                     ActiveCommand = Commands[Commands.Count - 2];
                 }
-                else if(activeCommandIndex > 0) //If active command is index 0, nowhere to go, only go up if higher than 0
+                else if (activeCommandIndex > 0) //If active command is index 0, nowhere to go, only go up if higher than 0
                 {
                     ActiveCommand = Commands[--activeCommandIndex];
                 }
@@ -147,7 +147,7 @@ namespace CSConsoleRL.GameSystems
             {
                 console.GoDownHistory();
             }
-            else if(key == Keyboard.Key.Space)
+            else if (key == Keyboard.Key.Space)
             {
                 console.ActiveCommand += " ";
             }
@@ -199,7 +199,7 @@ namespace CSConsoleRL.GameSystems
         /// <param name="cmdParams"></param>
         private void Toggle(string toggleArg)
         {
-            switch(toggleArg)
+            switch (toggleArg)
             {
                 case "fow":
                     BroadcastMessage(new ToggleFowEvent());
@@ -213,13 +213,13 @@ namespace CSConsoleRL.GameSystems
 
         private void CreateEntity(string[] args)
         {
-            if(args.Length < 4)
+            if (args.Length < 4)
             {
                 console.WriteText(string.Format("CreateEntity requires 4 inputs"));
                 return;
             }
 
-            switch(args[1])
+            switch (args[1])
             {
                 case "marker":
                     var markerEnt = new XMarkerEntity();
@@ -243,12 +243,12 @@ namespace CSConsoleRL.GameSystems
 
         private void ListEntities(string[] args)
         {
-            if(args.Length < 2)
+            if (args.Length < 2)
             {
                 console.WriteText(string.Format("ListEntities requires 2 inputs"));
             }
 
-            switch(args[1])
+            switch (args[1])
             {
                 case "actorentity":
                     var ents = SystemManager.GetEntities<ActorEntity>();

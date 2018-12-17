@@ -79,7 +79,7 @@ namespace CSConsoleRL.Helpers
             {
                 foreach (var listItem in _list)
                 {
-                    if(listItem.Coord.X == coords.X && listItem.Coord.Y == coords.Y)
+                    if (listItem.Coord.X == coords.X && listItem.Coord.Y == coords.Y)
                     {
                         return listItem;
                     }
@@ -115,14 +115,14 @@ namespace CSConsoleRL.Helpers
                 int verDist = Math.Abs(node.Coord.Y - TargetCoords.Y);
                 node.H = horDist > verDist ? horDist : verDist;
 
-                if(ContainsCoords(new Vector2i(node.Coord.X, node.Coord.Y)))
+                if (ContainsCoords(new Vector2i(node.Coord.X, node.Coord.Y)))
                 {
                     throw new Exception(string.Format("List already contains a node at co-ordinate {0}, {1}", node.Coord.X, node.Coord.Y));
                 }
 
                 _list.Add(node);
 
-                if(LowestCostNode == null)
+                if (LowestCostNode == null)
                 {
                     LowestCostNode = node;
                 }
@@ -162,7 +162,7 @@ namespace CSConsoleRL.Helpers
             {
                 foreach (var listItem in _list)
                 {
-                    if(listItem.Coord.X == coords.X && listItem.Coord.Y == coords.Y)
+                    if (listItem.Coord.X == coords.X && listItem.Coord.Y == coords.Y)
                     {
                         return true;
                     }
@@ -214,7 +214,7 @@ namespace CSConsoleRL.Helpers
         {
             var list = new List<Vector2i>();
 
-            while(node != null)
+            while (node != null)
             {
                 list.Add(node.Coord);
                 node = node.Parent;
@@ -261,7 +261,7 @@ namespace CSConsoleRL.Helpers
                         if (!(x == currentNode.Coord.X && y == currentNode.Coord.Y))
                         {
                             //Reached goal co-ordinates
-                            if(currentNode.Coord.X == end.X && currentNode.Coord.Y == end.Y)
+                            if (currentNode.Coord.X == end.X && currentNode.Coord.Y == end.Y)
                             {
                                 return BuildPathFromNodeChain(currentNode);
                             }
@@ -278,7 +278,7 @@ namespace CSConsoleRL.Helpers
                                     //If openPath already contains node, and if this path has smaller cost update the node
                                     int h = Math.Abs(x - end.X) < Math.Abs(y - end.Y) ? Math.Abs(x - end.X) : Math.Abs(y - end.Y);
                                     int f = (currentNode.G + 1) + h;
-                                    if(f < existingNode.F)
+                                    if (f < existingNode.F)
                                     {
                                         existingNode.UpdateParent(currentNode);
                                     }

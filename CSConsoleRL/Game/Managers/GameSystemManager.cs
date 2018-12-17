@@ -92,7 +92,7 @@ namespace CSConsoleRL.Game.Managers
             var matchingEnts = new List<Entity>();
             foreach (var ent in Entities)
             {
-                if(ent.GetType() == typeof(T))
+                if (ent.GetType() == typeof(T))
                 {
                     matchingEnts.Add(ent);
                 }

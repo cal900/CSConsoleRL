@@ -135,7 +135,7 @@ namespace CSConsoleRL.GameSystems
             decimal relX = 0;
             decimal relY = 0;
 
-            for(int i = 0; i < sightRange; i++)
+            for (int i = 0; i < sightRange; i++)
             {
                 relX = i * increX;
                 relY = i * increY;
@@ -146,7 +146,7 @@ namespace CSConsoleRL.GameSystems
                 _gameTiles[absX, absY].IsInLos = true;
 
                 //If present tile blocks sight, stop the ray trace (unless tile is where the user is e.g. a door)
-                if(i > 0 && _tileDictionary[_gameTiles[absX, absY].TileType].BlocksVision)
+                if (i > 0 && _tileDictionary[_gameTiles[absX, absY].TileType].BlocksVision)
                 {
                     return;
                 }

@@ -42,7 +42,7 @@ namespace CSConsoleRL.Components
         }
     }
 
-    public class SeekerAiComponent: AiComponent
+    public class SeekerAiComponent : AiComponent
     {
         public SeekerAiComponent(Entity entity) : base(entity) { }
     }
