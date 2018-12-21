@@ -66,7 +66,11 @@ namespace CSConsoleRL.Data
 
             public List<string> GetPathBranches(string path, List<string> branches)
             {
-                
+                //If reached end of the road return
+                if(path.Length == 1)
+                {
+                    branches.Add()
+                }
             }
         }
     }
