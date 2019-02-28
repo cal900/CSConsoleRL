@@ -210,6 +210,7 @@ namespace CSConsoleRL.Helpers
 
             return false;
         }
+
         private List<Vector2i> BuildPathFromNodeChain(PathfindingNode node)
         {
             var list = new List<Vector2i>();
@@ -228,7 +229,7 @@ namespace CSConsoleRL.Helpers
             return list;
         }
 
-        public List<Vector2i> Path(Tile[,] gameTiles, Vector2i start, Vector2i end)
+        public List<Vector2i>[] Path(Tile[,] gameTiles, Vector2i start, Vector2i end)
         {
             var openPath = new PathfindingList(end);
             var closedPath = new List<Vector2i>();
@@ -263,7 +264,8 @@ namespace CSConsoleRL.Helpers
                             //Reached goal co-ordinates
                             if (currentNode.Coord.X == end.X && currentNode.Coord.Y == end.Y)
                             {
-                                return BuildPathFromNodeChain(currentNode);
+                                var path = BuildPathFromNodeChain(currentNode);
+                                return new List<Vector2i>[] { path, closedPath };
                             }
                             else if (!_tileDict[gameTiles[x, y].TileType].BlocksMovement
                                 && !ListContainsCoords(closedPath, x, y))

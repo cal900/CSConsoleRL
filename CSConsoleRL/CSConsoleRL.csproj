@@ -75,12 +75,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\AiComponent.cs" />
+    <Compile Include="Components\FadingSfmlComponent.cs" />
+    <Compile Include="Components\AnimatedSfmlComponent.cs" />
     <Compile Include="Components\LosComponent.cs" />
     <Compile Include="Components\CollisionComponent.cs" />
     <Compile Include="Components\DrawableSfmlComponent.cs" />
     <Compile Include="Components\PositionComponent.cs" />
     <Compile Include="Components\UserInputComponent.cs" />
     <Compile Include="Components\Interfaces\IComponent.cs" />
+    <Compile Include="Entities\FadingColorEntity.cs" />
     <Compile Include="Entities\XMarkerEntity.cs" />
     <Compile Include="Entities\SeekerEntity.cs" />
     <Compile Include="Entities\ActorEntity.cs" />

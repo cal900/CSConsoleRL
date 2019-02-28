@@ -37,7 +37,7 @@ namespace CSConsoleRL.Data
         {
             var pathBranches = new List<string>();
 
-
+            return null;
         }
 
         private class TrieBranch
@@ -102,7 +102,7 @@ namespace CSConsoleRL.Data
                 {
                     foreach (KeyValuePair<char, TrieBranch> branch in _branches)
                     {
-                        branches.Add(branch.)
+                        //branches.Add(branch.)
                     }
                 }
             }

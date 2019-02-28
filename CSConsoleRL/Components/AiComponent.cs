@@ -35,6 +35,7 @@ namespace CSConsoleRL.Components
                 }
             }
         }
+        public List<Vector2i> AnalyzedPath; //For debugging, tiles checked but not used in A* path to target
 
         public AiComponent(Entity entity)
         {

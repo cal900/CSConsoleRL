@@ -70,7 +70,8 @@ namespace CSConsoleRL.GameSystems
 
         public override void AddEntity(Entity entity)
         {
-            if (entity.Components.ContainsKey(typeof(PositionComponent)) && entity.Components.ContainsKey(typeof(DrawableSfmlComponent)))
+            if (entity.Components.ContainsKey(typeof(PositionComponent)) 
+                && (entity.Components.ContainsKey(typeof(DrawableSfmlComponent)) || entity.Components.ContainsKey(typeof(FadingSfmlComponent))))
             {
                 _systemEntities.Add(entity);
                 AssignSfmlGraphicsComponentSprite(entity);
@@ -149,7 +150,7 @@ namespace CSConsoleRL.GameSystems
             }
 
             //Draw game sprites
-            foreach (Entity entity in _systemEntities)
+            foreach (Entity entity in _systemEntities.Where(ent => ent.HasComponent<DrawableSfmlComponent>()))
             {
                 var sfmlComponent = entity.GetComponent<DrawableSfmlComponent>();
                 var positionComponent = entity.GetComponent<PositionComponent>();
@@ -159,6 +160,22 @@ namespace CSConsoleRL.GameSystems
 
                 sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition, spriteYPosition);
                 sfmlWindow.Draw(sfmlComponent.GameSprite);
+            }
+
+            //Draw animated sprites
+
+            //Draw fading sprites
+            foreach (Entity entity in _systemEntities.Where(ent => ent.HasComponent<FadingSfmlComponent>()))
+            {
+                var sfmlComponent = entity.GetComponent<FadingSfmlComponent>();
+                var positionComponent = entity.GetComponent<PositionComponent>();
+
+                int spriteXPosition = (positionComponent.ComponentXPositionOnMap - windowXPositionInWorld) * tilePixelSize;
+                int spriteYPosition = (positionComponent.ComponentYPositionOnMap - windowYPositionInWorld) * tilePixelSize;
+
+                sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition, spriteYPosition);
+                sfmlWindow.Draw(sfmlComponent.GameSprite);
+                sfmlComponent.NextFrame();
             }
         }
 
@@ -213,7 +230,11 @@ namespace CSConsoleRL.GameSystems
 
         private void AssignSfmlGraphicsComponentSprite(Entity entity)
         {
-            var sfmlComponent = entity.GetComponent<DrawableSfmlComponent>();
+            dynamic sfmlComponent = entity.GetComponent<DrawableSfmlComponent>();
+            if(sfmlComponent == null)
+            {
+                sfmlComponent = entity.GetComponent<FadingSfmlComponent>();
+            }
             switch (sfmlComponent.SpriteType)
             {
                 case EnumSfmlSprites.MainCharacter:
@@ -227,6 +248,12 @@ namespace CSConsoleRL.GameSystems
                     break;
                 case EnumSfmlSprites.RedX:
                     sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.RedX]);
+                    break;
+                case EnumSfmlSprites.GreenSquare:
+                    sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.GreenSquare]);
+                    break;
+                case EnumSfmlSprites.YellowSquare:
+                    sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.YellowSquare]);
                     break;
             }
         }
@@ -242,6 +269,8 @@ namespace CSConsoleRL.GameSystems
                 Add(EnumSfmlSprites.HumanEnemy, new Texture(fileName, new IntRect(20, 140, 20, 20)));
                 Add(EnumSfmlSprites.Dog, new Texture(fileName, new IntRect(0, 0, 20, 20)));
                 Add(EnumSfmlSprites.RedX, new Texture(fileName, new IntRect(0, 160, 20, 20)));
+                Add(EnumSfmlSprites.GreenSquare, new Texture(fileName, new IntRect(20, 160, 20, 20)));
+                Add(EnumSfmlSprites.YellowSquare, new Texture(fileName, new IntRect(40, 160, 20, 20)));
             }
         }
     }

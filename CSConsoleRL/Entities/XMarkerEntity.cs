@@ -7,7 +7,6 @@ using CSConsoleRL.Components;
 
 namespace CSConsoleRL.Entities
 {
-    //Meant to be used for player character
     public class XMarkerEntity : Entity
     {
         public XMarkerEntity() 

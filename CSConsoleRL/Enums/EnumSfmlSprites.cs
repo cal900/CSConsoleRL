@@ -12,5 +12,7 @@ namespace CSConsoleRL.Enums
         Dog,
         HumanEnemy,
         RedX,
+        GreenSquare,
+        YellowSquare
     }
 }
