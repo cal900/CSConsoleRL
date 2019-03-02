@@ -21,18 +21,19 @@ namespace CSConsoleRL.Game.Managers
         public event EventHandler DoneWithInput;
         public List<Entity> Entities { get; set; }
         public Dictionary<Type, GameSystem> Systems { get; set; }
-        private RenderWindow sfmlWindow { get; set; }
-        private MapFile gameMap { get; set; }
+        private List<Entity> _entitiesToRemove { get; set; }
+        private RenderWindow _sfmlWindow { get; set; }
+        private MapFile _gameMap { get; set; }
 
         private bool exitGame;
 
         public GameSystemManager(MapFile _gameMap)
         {
-            gameMap = _gameMap;
+            this._gameMap = _gameMap;
             Entities = new List<Entity>();
             Systems = new Dictionary<Type, GameSystem>();
 
-            sfmlWindow = new RenderWindow(new VideoMode(600, 600), "CSConsoleRL");
+            _sfmlWindow = new RenderWindow(new VideoMode(600, 600), "CSConsoleRL");
 
             CreateSystems();
 
@@ -52,12 +53,12 @@ namespace CSConsoleRL.Game.Managers
 
         private void CreateSystems()
         {
-            RegisterSystem(new MovementSystem(this, gameMap.TileSet));
-            RegisterSystem(new LosSystem(this, gameMap.TileSet));
-            RegisterSystem(new SfmlGraphicsSystem(this, sfmlWindow, gameMap.TileSet));
-            RegisterSystem(new UserInputSystem(this, sfmlWindow));
+            RegisterSystem(new MovementSystem(this, _gameMap.TileSet));
+            RegisterSystem(new LosSystem(this, _gameMap.TileSet));
+            RegisterSystem(new SfmlGraphicsSystem(this, _sfmlWindow, _gameMap.TileSet));
+            RegisterSystem(new UserInputSystem(this, _sfmlWindow));
             RegisterSystem(new ConsoleSystem(this));
-            RegisterSystem(new AiSystem(this, gameMap.TileSet));
+            RegisterSystem(new AiSystem(this, _gameMap.TileSet));
         }
 
         private void InitializeSystems()
@@ -101,6 +102,32 @@ namespace CSConsoleRL.Game.Managers
             return matchingEnts;
         }
 
+        /// <summary>
+        /// Entities are only removed at beginning of frame, this marks as to be deleted
+        /// </summary>
+        /// <param name="entity"></param>
+        public void RemoveEntity(Entity entity)
+        {
+            _entitiesToRemove.Add(entity);
+        }
+
+        /// <summary>
+        /// Removes all entities that have been marked as to be deleted
+        /// </summary>
+        /// <param name="entity"></param>
+        private void DeleteMarkedEntities()
+        {
+            for (int i = _entitiesToRemove.Count - 1; i >= 0; i--)
+            {
+                foreach (var system in Systems.Values)
+                {
+                    system.RemoveEntity(_entitiesToRemove[i]);
+                }
+
+                Entities.Remove(_entitiesToRemove[i]);
+            }
+        }
+
         public void BroadcastUiEvent(/*GameEvent evt*/)
         {
             //if(_gameStateManager != null)_gameStateManager.CurrentState().HandleEvent(evt);
@@ -127,15 +154,16 @@ namespace CSConsoleRL.Game.Managers
         private void MainGameLoop()
         {
             //Clock clock = new Clock();
-            sfmlWindow.SetFramerateLimit(30);
-            sfmlWindow.SetVerticalSyncEnabled(false);
+            _sfmlWindow.SetFramerateLimit(30);
+            _sfmlWindow.SetVerticalSyncEnabled(false);
 
             var nextFrameEvent = new NextFrameEvent();
 
-            while (sfmlWindow.IsOpen && !exitGame)
+            while (_sfmlWindow.IsOpen && !exitGame)
             {
                 //var timeElapsed = clock.ElapsedTime;
-                sfmlWindow.DispatchEvents();
+                DeleteMarkedEntities();
+                _sfmlWindow.DispatchEvents();
                 BroadcastEvent(nextFrameEvent);
             }
         }

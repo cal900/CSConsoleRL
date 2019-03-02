@@ -267,5 +267,15 @@ namespace CSConsoleRL.GameSystems
                     break;
             }
         }
+
+        private void DeleteEntity(string[] args)
+        {
+            if(args.Length < 3)
+            {
+                console.WriteText(string.Format("DeleteEntity requires 3 inputs"));
+            }
+
+
+        }
     }
 }
