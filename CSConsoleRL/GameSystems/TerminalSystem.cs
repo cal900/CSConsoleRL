@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CSConsoleRL.Game.Managers;
-using CSConsoleRL.Components;
-using CSConsoleRL.Components.Interfaces;
-using CSConsoleRL.Events;
+﻿using CSConsoleRL.Components;
 using CSConsoleRL.Entities;
-using CSConsoleRL.Enums;
+using CSConsoleRL.Events;
+using CSConsoleRL.Game.Managers;
 using SFML.Window;
+using System.Collections.Generic;
 
 namespace CSConsoleRL.GameSystems
 {
-    public class ConsoleSystem : GameSystem
+    public class TerminalSystem : GameSystem
     {
-        private class gameConsole
+        private class gameTerminal
         {
             private int activeCommandIndex = -1;
             public List<string> Commands { get; private set; }
@@ -32,7 +26,7 @@ namespace CSConsoleRL.GameSystems
             }
 
             //Initialize with a string so ActiveCommand doesn't get messed up by Count of 0
-            public gameConsole() { Commands = new List<string>() { ">" }; }
+            public gameTerminal() { Commands = new List<string>() { ">" }; }
 
             public void NewLine()
             {
@@ -78,12 +72,12 @@ namespace CSConsoleRL.GameSystems
         }
 
         private bool consoleOn;
-        private gameConsole console;
+        private gameTerminal console;
 
-        public ConsoleSystem(GameSystemManager manager)
+        public TerminalSystem(GameSystemManager manager)
         {
             SystemManager = manager;
-            console = new gameConsole();
+            console = new gameTerminal();
         }
 
         public override void InitializeSystem()
@@ -270,12 +264,10 @@ namespace CSConsoleRL.GameSystems
 
         private void DeleteEntity(string[] args)
         {
-            if(args.Length < 3)
+            if (args.Length < 3)
             {
                 console.WriteText(string.Format("DeleteEntity requires 3 inputs"));
             }
-
-
         }
     }
 }

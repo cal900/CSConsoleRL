@@ -34,6 +34,7 @@ namespace CSConsoleRL.Game.Managers
             Systems = new Dictionary<Type, GameSystem>();
 
             _sfmlWindow = new RenderWindow(new VideoMode(600, 600), "CSConsoleRL");
+            _entitiesToRemove = new List<Entity>();
 
             CreateSystems();
 
@@ -57,7 +58,7 @@ namespace CSConsoleRL.Game.Managers
             RegisterSystem(new LosSystem(this, _gameMap.TileSet));
             RegisterSystem(new SfmlGraphicsSystem(this, _sfmlWindow, _gameMap.TileSet));
             RegisterSystem(new UserInputSystem(this, _sfmlWindow));
-            RegisterSystem(new ConsoleSystem(this));
+            RegisterSystem(new TerminalSystem(this));
             RegisterSystem(new AiSystem(this, _gameMap.TileSet));
         }
 
