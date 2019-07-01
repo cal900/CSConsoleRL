@@ -5,6 +5,7 @@ using CSConsoleRL.Game.Managers;
 using SFML.Window;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CSConsoleRL.GameSystems
@@ -18,11 +19,55 @@ namespace CSConsoleRL.GameSystems
             public Func<List<string>, string> ShellFunction;
         }
 
+        private class shellHistory
+        {
+            private int _historyIndex;
+            private List<string> _history;
+
+            public shellHistory()
+            {
+                _history = new List<string>();
+            }
+
+            public void AddInputToHistory(string input)
+            {
+                _history.Add(input);
+                ResetHistory();
+            }
+
+            public string PrevHist()
+            {
+                if (_historyIndex > 0) _historyIndex--;
+                return _history[_historyIndex];
+            }
+
+            public string NextHist()
+            {
+                if (_historyIndex < _history.Count - 1)
+                {
+                    _historyIndex++;
+                    return _history[_historyIndex];
+                }
+                else
+                {
+                    return "";
+                }
+            }
+
+            public void ResetHistory()
+            {
+                _historyIndex = _history.Count - 1;
+            }
+        }
+
         private Dictionary<string, ShellCommand> _supportedShellFunctions;
+        private shellHistory _shellHistory;
 
         public ShellSystem(GameSystemManager manager)
         {
             SystemManager = manager;
+            DefineSupportedShellFunctions();
+            _shellHistory = new shellHistory();
         }
 
         public override void InitializeSystem()
@@ -40,11 +85,55 @@ namespace CSConsoleRL.GameSystems
 
         }
 
+        public string HandleInput(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return "";
+
+            _shellHistory.AddInputToHistory(input);
+
+            var inputArray = input.Split(' ');
+
+            if (_supportedShellFunctions.ContainsKey(inputArray[0]))
+            {
+                try
+                {
+                    var inputs = new List<string>(inputArray.Skip(1));
+
+                    return _supportedShellFunctions[inputArray[0]].ShellFunction(inputs);
+                }
+                catch(Exception e)
+                {
+                    return e.Message;
+                }
+            }
+            else
+            {
+                return string.Format("Command {0} not recognized, type 'help' for supported commands", input[0]);
+            }
+        }
+
+        public string GetPrev()
+        {
+            return _shellHistory.PrevHist();
+        }
+
+        public string GetNext()
+        {
+            return _shellHistory.NextHist();
+        }
+
+        public void Reset()
+        {
+            _shellHistory.ResetHistory();
+        }
+
         /// <summary>
         /// Define supported shell functions here for use through the game terminal
         /// </summary>
         private void DefineSupportedShellFunctions()
         {
+            _supportedShellFunctions = new Dictionary<string, ShellCommand>();
+
             var helpCmd = new ShellCommand()
             {
                 Desc = "List Supported Commands",
@@ -67,7 +156,7 @@ namespace CSConsoleRL.GameSystems
             {
                 Desc = "Toggle Specified System",
                 SupportedInputs = new List<string>() { "fow - fog of war" },
-                ShellFunction = CreateEntity
+                ShellFunction = Toggle
             });
             _supportedShellFunctions.Add("ce", new ShellCommand()
             {
@@ -89,12 +178,13 @@ namespace CSConsoleRL.GameSystems
             var shellCommands = new StringBuilder();
 
             shellCommands.AppendLine("");
+            if (!verbose) shellCommands.AppendLine("Add input 'v' for verbose help - shows all supported inputs for each command");
 
             foreach (var shellCmd in _supportedShellFunctions)
             {
                 shellCommands.AppendLine(shellCmd.Key + " - " + shellCmd.Value.Desc);
 
-                if(shellCmd.Value.SupportedInputs != null && shellCmd.Value.SupportedInputs.Count > 0)
+                if (verbose && shellCmd.Value.SupportedInputs != null && shellCmd.Value.SupportedInputs.Count > 0)
                 {
                     foreach (var input in shellCmd.Value.SupportedInputs)
                     {
