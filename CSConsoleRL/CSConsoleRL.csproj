@@ -97,8 +97,8 @@
     <Compile Include="Events\KeyReleasedEvent.cs" />
     <Compile Include="Events\KeyPressedEvent.cs" />
     <Compile Include="Events\SendConsoleDataEvent.cs" />
-    <Compile Include="Events\RequestConsoleDataEvent.cs" />
-    <Compile Include="Events\ConsoleReferenceEvent.cs" />
+    <Compile Include="Events\RequestTerminalDataEvent.cs" />
+    <Compile Include="Events\TerminalReferenceEvent.cs" />
     <Compile Include="Events\ToggleFowEvent.cs" />
     <Compile Include="Events\ToggleConsoleEvent.cs" />
     <Compile Include="Events\NextTurnEvent.cs" />

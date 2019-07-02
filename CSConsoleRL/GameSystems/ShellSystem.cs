@@ -50,13 +50,14 @@ namespace CSConsoleRL.GameSystems
                 }
                 else
                 {
+                    _historyIndex = _history.Count;
                     return "";
                 }
             }
 
             public void ResetHistory()
             {
-                _historyIndex = _history.Count - 1;
+                _historyIndex = _history.Count;
             }
         }
 
@@ -108,7 +109,7 @@ namespace CSConsoleRL.GameSystems
             }
             else
             {
-                return string.Format("Command {0} not recognized, type 'help' for supported commands", input[0]);
+                return string.Format("Command {0} not recognized, type 'help' for supported commands", input);
             }
         }
 

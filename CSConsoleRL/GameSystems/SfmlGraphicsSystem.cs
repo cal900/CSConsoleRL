@@ -37,9 +37,10 @@ namespace CSConsoleRL.GameSystems
         private int windowYPositionInWorld = 0;
         private const int windowXSize = 600;
         private const int windowYSize = 600;
-        private bool showConsole;
-        private const int consoleDisplayLines = 5;
-        private List<string> console;
+        private bool _showTerminal;
+        private const int _terminalDisplayLines = 5;
+        private List<string> _terminalLines;
+        private const uint _termCharSize = 16;
 
         private TileTypeDictionary _tileDictionary;
         private SfmlTextureDictionary _textureDictionary;
@@ -89,10 +90,10 @@ namespace CSConsoleRL.GameSystems
                     ScreenPositionChange((int)gameEvent.EventParams[0], (int)gameEvent.EventParams[1]);
                     break;
                 case "SendConsoleData":
-                    console = (List<string>)gameEvent.EventParams[0];
+                    _terminalLines = (List<string>)gameEvent.EventParams[0];
                     break;
                 case "ToggleConsole":
-                    showConsole = !showConsole;
+                    _showTerminal = !_showTerminal;
                     break;
                 case "ConsoleReference":
                     consoleCommands = (List<string>)gameEvent.EventParams[0];
@@ -103,9 +104,11 @@ namespace CSConsoleRL.GameSystems
         private void NextFrame()
         {
             DrawSfmlGraphics();
-            if (showConsole)
+            if (_showTerminal)
             {
-                BroadcastMessage(new RequestConsoleDataEvent(consoleDisplayLines));
+                // Since drawing the lines relies on rendering, need to do the terminal line parsing here
+                // Request lines want to see, and will trim down based on graphics in DrawConsole()
+                BroadcastMessage(new RequestTerminalDataEvent(_terminalDisplayLines));
                 DrawConsole();
             }
 
@@ -182,7 +185,7 @@ namespace CSConsoleRL.GameSystems
         private void DrawConsole()
         {
             //Console is black rect with white text
-            var rect = new RectangleShape(new Vector2f(windowXSize, tilePixelSize * consoleDisplayLines));
+            var rect = new RectangleShape(new Vector2f(windowXSize, tilePixelSize * _terminalDisplayLines));
             rect.Position = new Vector2f(0, 0);
             rect.FillColor = new Color(0, 0, 0, 150);
             sfmlWindow.Draw(rect);
@@ -190,10 +193,10 @@ namespace CSConsoleRL.GameSystems
             //Draw console command text
             var textColor = new Color(255, 255, 255);
             //Iterate through commands, write line by line to console
-            for (int i = console.Count - 1; i >= 0; i--)
+            for (int i = _terminalLines.Count - 1; i >= 0; i--)
             {
-                var lineStartYCoord = (consoleDisplayLines - i - 1) * yPlayableAreaCharHeight;
-                var lineText = new Text(console[console.Count - 1 - i], _gameFont, 16);
+                var lineStartYCoord = (_terminalDisplayLines - i - 1) * yPlayableAreaCharHeight;
+                var lineText = new Text(_terminalLines[_terminalLines.Count - 1 - i], _gameFont, _termCharSize);
                 lineText.Color = textColor;
                 lineText.Position = new Vector2f(0, lineStartYCoord);
                 sfmlWindow.Draw(lineText);

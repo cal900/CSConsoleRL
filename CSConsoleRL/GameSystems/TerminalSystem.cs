@@ -13,42 +13,78 @@ namespace CSConsoleRL.GameSystems
 
         private class gameTerminal
         {
-            private int activeCommandIndex = -1;
-            public List<string> TermLines { get; private set; }
+            private int _termViewportStart;
+            private List<string> _termLines;
             public string ActiveLine
             {
                 get
                 {
-                    return TermLines[TermLines.Count - 1];
+                    return _termLines[_termLines.Count - 1];
                 }
                 set
                 {
-                    TermLines[TermLines.Count - 1] = value;
+                    _termLines[_termLines.Count - 1] = value;
+                    _termViewportStart = _termLines.Count;
                 }
             }
 
-            //Initialize with a string so ActiveCommand doesn't get messed up by Count of 0
-            public gameTerminal() { TermLines = new List<string>() { ">" }; }
+            // Initialize with a string so ActiveCommand doesn't get messed up by Count of 0
+            public gameTerminal() { _termLines = new List<string>() { ">" }; }
+
+            public List<string> GetTermLines(int numLines)
+            {
+                var requestedTermLines = new List<string>();
+
+                // If we have less terminal lines than what will fill up terminal area, return lines from top downwards
+                if(numLines >= _termLines.Count)
+                {
+                    requestedTermLines = _termLines;
+                }
+                else
+                {
+                    // If viewport is so low would go past terminal lines, just return bottom terminal lines equal to numLines
+                    if(_termViewportStart + numLines >= _termLines.Count)
+                    {
+                        requestedTermLines = _termLines.GetRange(_termLines.Count - numLines, numLines);
+                    }
+                    else
+                    {
+                        requestedTermLines = _termLines.GetRange(_termViewportStart, numLines);
+                    }
+                }
+
+                return requestedTermLines;
+            }
 
             public void NewLine()
             {
-                TermLines.Add("");
+                _termLines.Add("");
             }
 
             public void AddLine(string line)
             {
-                TermLines.Add(line);
+                _termLines.Add(line);
             }
 
             public void AddCommand()
             {
-                TermLines.Add(">");
+                _termLines.Add(">");
             }
 
             public void WriteText(string text)
             {
                 NewLine();
                 ActiveLine = string.Format("{0}", text);
+            }
+
+            public void ViewportUp()
+            {
+                if(_termViewportStart > 0) _termViewportStart--;
+            }
+
+            public void ViewportDown()
+            {
+                if (_termViewportStart < _termLines.Count - 1) _termViewportStart++;
             }
         }
 
@@ -60,13 +96,13 @@ namespace CSConsoleRL.GameSystems
             SystemManager = manager;
             console = new gameTerminal();
 
-            //Initiate ShellSystem (do it here as Terminal and Shell need each other, can't operate independently)
+            // Initiate ShellSystem (do it here as Terminal and Shell need each other, can't operate independently)
             _shellSystem = new ShellSystem(manager);
         }
 
         public override void InitializeSystem()
         {
-            BroadcastMessage(new ConsoleReferenceEvent(console.TermLines));
+            // BroadcastMessage(new TerminalReferenceEvent(console.TermLines));
         }
 
         public override void AddEntity(Entity entity)
@@ -87,8 +123,8 @@ namespace CSConsoleRL.GameSystems
                 case "KeyPressed":
                     if (consoleOn) HandleKeyPressed((Keyboard.Key)((KeyPressedEvent)gameEvent).EventParams[0]);
                     break;
-                case "RequestConsoleData":
-                    BroadcastMessage(new SendConsoleDataEvent(console.TermLines));
+                case "RequestTerminalData":
+                    BroadcastMessage(new SendConsoleDataEvent(console.GetTermLines((int)gameEvent.EventParams[0])));
                     break;
             }
         }
@@ -130,6 +166,14 @@ namespace CSConsoleRL.GameSystems
             else if (key == Keyboard.Key.Down)
             {
                 console.ActiveLine = ">" + _shellSystem.GetNext();
+            }
+            else if(key == Keyboard.Key.PageUp)
+            {
+                console.ViewportUp();
+            }
+            else if(key == Keyboard.Key.PageDown)
+            {
+                console.ViewportDown();
             }
             else if (key == Keyboard.Key.Space)
             {
