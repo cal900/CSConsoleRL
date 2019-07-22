@@ -38,7 +38,7 @@ namespace CSConsoleRL.GameSystems
         private const int windowXSize = 600;
         private const int windowYSize = 600;
         private bool _showTerminal;
-        private const int _terminalDisplayLines = 5;
+        private const int _terminalDisplayLines = 15;
         private List<string> _terminalLines;
         private const uint _termCharSize = 16;
 
