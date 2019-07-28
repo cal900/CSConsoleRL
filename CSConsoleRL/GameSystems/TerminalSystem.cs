@@ -142,7 +142,7 @@ namespace CSConsoleRL.GameSystems
 
         private void HandleKeyPressed(Keyboard.Key key)
         {
-            if (key == Keyboard.Key.Return)
+            if (key == Keyboard.Key.Enter)
             {
                 if (console.ActiveLine.Length > 1) console.AddLine(_shellSystem.HandleInput(console.ActiveLine.Substring(1))); //Start at index 1 to get rid of '>' char
                 console.AddCommand();
@@ -155,7 +155,7 @@ namespace CSConsoleRL.GameSystems
             {
                 ToggleConsole();
             }
-            else if (key == Keyboard.Key.BackSpace)
+            else if (key == Keyboard.Key.Backspace)
             {
                 if (console.ActiveLine.Length > 1) console.ActiveLine = console.ActiveLine.Remove(console.ActiveLine.Length - 1);
             }
