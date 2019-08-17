@@ -33,7 +33,6 @@ namespace Utilities
             {
                 string json = sr.ReadToEnd();
                 _preferences = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
-                var test = 5;
             }
         }
 

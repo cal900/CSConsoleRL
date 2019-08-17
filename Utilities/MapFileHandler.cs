@@ -115,7 +115,7 @@ namespace Utilities
 
     public void LoadMapFileBrowser(ref MapFile mapFileToLoadTo)
     {
-      var mapDir = @"G:\Programming\CSConsoleRL\CSConsoleRL\Data\Maps\";
+      var mapDir = GameGlobals.Instance().Get<string>("mapDir");
       if (!Directory.Exists(mapDir)) mapDir = @"D:\Programming\CSConsoleRL\Data\Maps\";
       string[] filesInDirectory = Directory.GetFiles(mapDir, "*.csr");
 

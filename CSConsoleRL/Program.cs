@@ -36,8 +36,6 @@ namespace CSConsoleRL
                 }
             }
 
-            var test = Utilities.GameGlobals.Instance();
-
             var gameSystemManager = new GameSystemManager(mapInfo);
         }
     }
