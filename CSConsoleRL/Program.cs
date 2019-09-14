@@ -12,33 +12,36 @@ using CSConsoleRL.Game.Managers;
 
 namespace CSConsoleRL
 {
-    public class Program
+  public class Program
+  {
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
+      var mapInfo = new MapFile(new Tile[30, 30], new List<Spawn>());
+      for (int y = 0; y < mapInfo.TileSet.GetLength(1); y++)
+      {
+        for (int x = 0; x < mapInfo.TileSet.GetLength(0); x++)
         {
-            var mapInfo = new MapFile(new Tile[30, 30], new List<Spawn>());
-            for (int y = 0; y < mapInfo.TileSet.GetLength(1); y++)
-            {
-                for (int x = 0; x < mapInfo.TileSet.GetLength(0); x++)
-                {
-                    mapInfo.TileSet[x, y].TileType = EnumTileTypes.Snow;
-                }
-            }
-
-            var newFileMenu = new MapFileHandler(ref mapInfo);
-
-            //Set LOS default
-            for (int y = 0; y < mapInfo.TileSet.GetLength(1); y++)
-            {
-                for (int x = 0; x < mapInfo.TileSet.GetLength(0); x++)
-                {
-                    mapInfo.TileSet[x, y].IsInLos = false;
-                }
-            }
-
-            var test = Utilities.GameGlobals.Instance();
-
-            var gameSystemManager = new GameSystemManager(mapInfo);
+          mapInfo.TileSet[x, y].TileType = EnumTileTypes.Snow;
         }
+      }
+
+      // var newFileMenu = new MapFileHandler(ref mapInfo);
+
+      // //Set LOS default
+      // for (int y = 0; y < mapInfo.TileSet.GetLength(1); y++)
+      // {
+      //     for (int x = 0; x < mapInfo.TileSet.GetLength(0); x++)
+      //     {
+      //         mapInfo.TileSet[x, y].IsInLos = false;
+      //     }
+      // }
+
+      var test = Utilities.GameGlobals.Instance();
+
+      var numChange = Utilities.GameGlobals.Instance().Get<Int64>("numChange");
+      var per = Utilities.GameGlobals.Instance().Get<Double>("per");
+
+      var gameSystemManager = new GameSystemManager(mapInfo);
     }
+  }
 }
