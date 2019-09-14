@@ -36,12 +36,8 @@ namespace CSConsoleRL
       //     }
       // }
 
-      var test = Utilities.GameGlobals.Instance();
-
-      var numChange = Utilities.GameGlobals.Instance().Get<Int64>("numChange");
-      var per = Utilities.GameGlobals.Instance().Get<Double>("per");
-
       var gameSystemManager = new GameSystemManager(mapInfo);
     }
   }
+}
 }
