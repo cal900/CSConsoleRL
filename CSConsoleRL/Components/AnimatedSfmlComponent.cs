@@ -11,7 +11,7 @@ using SFML.Graphics;
 
 namespace CSConsoleRL.Components
 {
-    public class AnimatedSfmlComponent : IComponent
+    public abstract class AnimatedSfmlComponent : IComponent
     {
         public Entity EntityAttachedTo { get; set; }
         public Sprite GameSprite { get; set; }
@@ -23,13 +23,10 @@ namespace CSConsoleRL.Components
 
             SpriteType = spriteType;
         }
-        
+
         /// <summary>
         /// Component's update logic for next frame
         /// </summary>
-        public virtual void NextFrame()
-        {
-
-        }
+        public abstract void NextFrame();
     }
 }

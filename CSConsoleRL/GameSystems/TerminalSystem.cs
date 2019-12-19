@@ -96,6 +96,8 @@ namespace CSConsoleRL.GameSystems
             SystemManager = manager;
             console = new gameTerminal();
 
+            _systemEntities = new List<Entity>();
+
             // Initiate ShellSystem (do it here as Terminal and Shell need each other, can't operate independently)
             _shellSystem = new ShellSystem(manager);
         }

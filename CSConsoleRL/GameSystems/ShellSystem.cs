@@ -69,6 +69,7 @@ namespace CSConsoleRL.GameSystems
             SystemManager = manager;
             DefineSupportedShellFunctions();
             _shellHistory = new shellHistory();
+            _systemEntities = new List<Entity>();
         }
 
         public override void InitializeSystem()

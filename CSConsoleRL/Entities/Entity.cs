@@ -83,5 +83,10 @@ namespace CSConsoleRL.Entities
         {
             return Id.GetHashCode();
         }
+
+        public virtual bool RequestEntityDeletion()
+        {
+            return false;
+        }
     }
 }

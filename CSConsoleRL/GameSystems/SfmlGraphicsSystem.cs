@@ -174,12 +174,19 @@ namespace CSConsoleRL.GameSystems
         var sfmlComponent = entity.GetComponent<FadingSfmlComponent>();
         var positionComponent = entity.GetComponent<PositionComponent>();
 
-        int spriteXPosition = (positionComponent.ComponentXPositionOnMap - windowXPositionInWorld) * tilePixelSize;
-        int spriteYPosition = (positionComponent.ComponentYPositionOnMap - windowYPositionInWorld) * tilePixelSize;
+        if(sfmlComponent.ShouldDelete())
+        {
+          SystemManager.RemoveEntity(entity);
+        }
+        else
+        {
+          int spriteXPosition = (positionComponent.ComponentXPositionOnMap - windowXPositionInWorld) * tilePixelSize;
+          int spriteYPosition = (positionComponent.ComponentYPositionOnMap - windowYPositionInWorld) * tilePixelSize;
 
-        sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition, spriteYPosition);
-        sfmlWindow.Draw(sfmlComponent.GameSprite);
-        sfmlComponent.NextFrame();
+          sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition, spriteYPosition);
+          sfmlWindow.Draw(sfmlComponent.GameSprite);
+          sfmlComponent.NextFrame();
+        }
       }
     }
 

@@ -29,5 +29,10 @@ namespace CSConsoleRL.Components
 
             GameSprite.Color = currentColor;
         }
+
+        public bool ShouldDelete()
+        {
+            return GameSprite.Color.A > 0 ? true : false;
+        }
     }
 }
