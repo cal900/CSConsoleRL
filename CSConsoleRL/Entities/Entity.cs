@@ -8,7 +8,7 @@ using CSConsoleRL.Events;
 
 namespace CSConsoleRL.Entities
 {
-    public class Entity
+    public abstract class Entity
     {
         public Guid Id { get; set; }
         public Dictionary<Type, IComponent> Components { get; set; }
@@ -82,11 +82,6 @@ namespace CSConsoleRL.Entities
         public override int GetHashCode()
         {
             return Id.GetHashCode();
-        }
-
-        public virtual bool RequestEntityDeletion()
-        {
-            return false;
         }
     }
 }

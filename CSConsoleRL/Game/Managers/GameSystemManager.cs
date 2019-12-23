@@ -12,6 +12,7 @@ using SFML.Graphics;
 using SFML.System;
 using GameTiles.Tiles;
 using GameTiles;
+using CSConsoleRL.Logging;
 
 namespace CSConsoleRL.Game.Managers
 {
@@ -35,6 +36,8 @@ namespace CSConsoleRL.Game.Managers
 
             _sfmlWindow = new RenderWindow(new VideoMode(600, 600), "CSConsoleRL");
             _entitiesToRemove = new List<Entity>();
+
+            GameLogger.Instance();
 
             CreateSystems();
 
@@ -102,6 +105,17 @@ namespace CSConsoleRL.Game.Managers
 
             return matchingEnts;
         }
+
+        public List<Entity> GetEntities()
+        {
+          var matchingEnts = new List<Entity>();
+          foreach (var ent in Entities)
+          {
+            matchingEnts.Add(ent);
+          }
+
+          return matchingEnts;
+    }
 
         /// <summary>
         /// Entities are only removed at beginning of frame, this marks as to be deleted

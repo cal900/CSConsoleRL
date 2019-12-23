@@ -32,7 +32,7 @@ namespace CSConsoleRL.Components
 
         public bool ShouldDelete()
         {
-            return GameSprite.Color.A > 0 ? true : false;
+            return GameSprite.Color.A == 0 ? true : false;
         }
     }
 }

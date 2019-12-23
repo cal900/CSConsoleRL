@@ -188,6 +188,9 @@ namespace CSConsoleRL.GameSystems
           sfmlComponent.NextFrame();
         }
       }
+
+      //Draw UI
+
     }
 
     private void DrawConsole()
