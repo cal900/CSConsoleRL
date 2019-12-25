@@ -11,6 +11,7 @@ using CSConsoleRL.Events;
 using CSConsoleRL.Enums;
 using GameTiles.Tiles;
 using GameTiles.Enums;
+using Utilities;
 using SFML.Window;
 using SFML.Graphics;
 using SFML.System;
@@ -20,9 +21,9 @@ namespace CSConsoleRL.GameSystems
 {
   public class SfmlGraphicsSystem : GameSystem
   {
-    private const int xWindowCharWidth = 20;
-    private const int yPlayableAreaCharHeight = 20;
-    private const int tilePixelSize = 20;
+    private int xWindowCharWidth = 20;
+    private int yPlayableAreaCharHeight = 20;
+    private int tilePixelSize = 20;
     private const int xWindowPositionOnMap = 0;
     private const int yWindowPositionOnMap = 0;
     private const int yUiAreaCharHeight = 5;
@@ -35,8 +36,8 @@ namespace CSConsoleRL.GameSystems
     private int worldYLength;
     private int windowXPositionInWorld = 0;
     private int windowYPositionInWorld = 0;
-    private const int windowXSize = 600;
-    private const int windowYSize = 600;
+    private int windowXSize = 600;
+    private int windowYSize = 600;
     private bool _showTerminal;
     private const int _terminalDisplayLines = 15;
     private List<string> _terminalLines;
@@ -49,6 +50,8 @@ namespace CSConsoleRL.GameSystems
 
     public SfmlGraphicsSystem(GameSystemManager manager, RenderWindow _sfmlWindow, Tile[,] _gameTiles)
     {
+      LoadGlobals();
+
       SystemManager = manager;
 
       sfmlWindow = _sfmlWindow;   //Don't create window here as we need the events to be in user input system
@@ -212,6 +215,24 @@ namespace CSConsoleRL.GameSystems
         lineText.Position = new Vector2f(0, lineStartYCoord);
         sfmlWindow.Draw(lineText);
       }
+    }
+
+    private void LoadGlobals()
+    {
+      var xWindowCharWidth = GameGlobals.Instance().Get<long>("xWindowCharWidth");
+      if(xWindowCharWidth != null) this.xWindowCharWidth = (int)xWindowCharWidth;
+
+      var yPlayableAreaCharHeight = GameGlobals.Instance().Get<long>("yPlayableAreaCharHeight");
+      if (yPlayableAreaCharHeight != null) this.yPlayableAreaCharHeight = (int)yPlayableAreaCharHeight;
+
+      var tilePixelSize = GameGlobals.Instance().Get<long>("tilePixelSize");
+      if (tilePixelSize != null) this.tilePixelSize = (int)tilePixelSize;
+
+      var windowXSize = GameGlobals.Instance().Get<long>("windowXSize");
+      if (windowXSize != null) this.windowXSize = (int)windowXSize;
+
+      var windowYSize = GameGlobals.Instance().Get<long>("windowYSize");
+      if (windowYSize != null) this.windowYSize = (int)windowYSize;
     }
 
     private void LoadTextures()

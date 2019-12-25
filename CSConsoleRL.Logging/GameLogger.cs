@@ -21,6 +21,7 @@ namespace CSConsoleRL.Logging
         .CreateLogger();
 
       Log.Information("Logger initialized");
+      Log.Information("Information");
       Log.Debug("Debug");
       Log.Error("Error");
     }
@@ -38,6 +39,21 @@ namespace CSConsoleRL.Logging
     public void Cleanup()
     {
       Log.CloseAndFlush();
+    }
+
+    public void LogInformation(string info, object[] parameters)
+    {
+      Log.Information(info, parameters);
+    }
+
+    public void LogDebug(string info, object[] parameters)
+    {
+      Log.Debug(info, parameters);
+    }
+
+    public void LogError(string info, object[] parameters)
+    {
+      Log.Error(info, parameters);
     }
   }
 }
