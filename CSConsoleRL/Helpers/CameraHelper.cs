@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using CSConsoleRL.Entities;
+using CSConsoleRL.Components;
+
+namespace CSConsoleRL.Helpers
+{
+  public class CameraHelper
+  {
+    private Entity _entity;
+
+    public CameraHelper(Entity entity)
+    {
+      //We can't snap the camera to an entity without a position...common man
+      if(entity.HasComponent<PositionComponent>())
+      {
+        _entity = entity;
+      }
+      else
+      {
+        throw new Exception("CameraHelper was initialized with an entity that doesn't have a PositionComponent");
+      }
+    }
+
+    public void SetEntity(Entity entity)
+    {
+      if (entity.HasComponent<PositionComponent>())
+      {
+        _entity = entity;
+      }
+      else
+      {
+        throw new Exception("Tried to set camera's entity to one that doesn't have a PositionComponent");
+      }
+    }
+  }
+}

@@ -41,17 +41,17 @@ namespace CSConsoleRL.Logging
       Log.CloseAndFlush();
     }
 
-    public void LogInformation(string info, object[] parameters)
+    public void LogInformation(string info, params object[] parameters)
     {
       Log.Information(info, parameters);
     }
 
-    public void LogDebug(string info, object[] parameters)
+    public void LogDebug(string info, params object[] parameters)
     {
       Log.Debug(info, parameters);
     }
 
-    public void LogError(string info, object[] parameters)
+    public void LogError(string info, params object[] parameters)
     {
       Log.Error(info, parameters);
     }

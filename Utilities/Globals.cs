@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using CSConsoleRL.Logging;
 
 namespace Utilities
 {
@@ -31,6 +32,9 @@ namespace Utilities
 
       using (StreamReader sr = new StreamReader(preferencesPath))
       {
+        GameLogger.Instance().LogDebug("Attempting to read preferences from path {@path}",
+          Path.Combine(Environment.CurrentDirectory, preferencesPath)
+        );
         string json = sr.ReadToEnd();
         _preferences = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
       }

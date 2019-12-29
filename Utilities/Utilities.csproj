@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CSConsoleRL.Logging\CSConsoleRL.Logging.csproj" />
     <ProjectReference Include="..\GameTiles\GameTiles.csproj" />
   </ItemGroup>
 
