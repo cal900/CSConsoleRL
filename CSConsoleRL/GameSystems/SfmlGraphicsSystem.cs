@@ -16,6 +16,7 @@ using SFML.Window;
 using SFML.Graphics;
 using SFML.System;
 using System.IO;
+using CSConsoleRL.Helpers;
 
 namespace CSConsoleRL.GameSystems
 {
@@ -45,6 +46,7 @@ namespace CSConsoleRL.GameSystems
 
     private TileTypeDictionary _tileDictionary;
     private SfmlTextureDictionary _textureDictionary;
+    private CameraHelper _cameraHelper;
 
     private Font _gameFont;
 
@@ -102,6 +104,8 @@ namespace CSConsoleRL.GameSystems
         case "ConsoleReference":
           consoleCommands = (List<string>)gameEvent.EventParams[0];
           break;
+        case "SnapCameraToEntity":
+          if(_cameraHelper != null) _cameraHelper.SetEntity()
       }
     }
 

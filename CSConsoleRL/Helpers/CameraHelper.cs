@@ -34,5 +34,15 @@ namespace CSConsoleRL.Helpers
         throw new Exception("Tried to set camera's entity to one that doesn't have a PositionComponent");
       }
     }
+
+    public int GetEntityXPositionOnMap()
+    {
+      return _entity.GetComponent<PositionComponent>().ComponentXPositionOnMap;
+    }
+
+    public int GetEntityYPositionOnMap()
+    {
+      return _entity.GetComponent<PositionComponent>().ComponentYPositionOnMap;
+    }
   }
 }
