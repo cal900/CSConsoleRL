@@ -63,7 +63,7 @@ namespace CSConsoleRL.GameSystems
             int desiredYPos = entityToMove.GetComponent<PositionComponent>().ComponentYPositionOnMap + (int)movementEvent.EventParams[2];
 
             //If movement would carry entity out of map just return
-            if (desiredYPos < 0 || desiredXPos < 0 || desiredYPos > _gameTiles.GetLength(1) || desiredXPos > _gameTiles.GetLength(0)) return;
+            if (desiredYPos < 0 || desiredXPos < 0 || desiredYPos > _gameTiles.GetLength(1) - 1 || desiredXPos > _gameTiles.GetLength(0) - 1) return;
 
             //iterate through all entities with collision component, check if collision
             List<Entity> collisionEntities = _systemEntities.Where(ent => ent.Components.ContainsKey(typeof(CollisionComponent))).ToList();

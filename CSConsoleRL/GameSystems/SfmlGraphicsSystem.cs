@@ -134,6 +134,9 @@ namespace CSConsoleRL.GameSystems
 
     private void DrawSfmlGraphics()
     {
+      //If no _cameraHelper initialized have no reference point to draw scene
+      if (_cameraHelper == null) return;
+
       //Get all background tiles in view of current window position
       var startingTileXPosition = windowXPositionInWorld / tilePixelSize;
       var endingTileXPosition = startingTileXPosition + (windowXSize / tilePixelSize);
@@ -145,8 +148,11 @@ namespace CSConsoleRL.GameSystems
       //Draw background tiles
       for (int x = startingTileXPosition; x < endingTileXPosition; x++)
       {
+        if (x < 0 || x > gameTiles.GetLength(0)) continue;
         for (int y = startingTileYPosition; y < endingTileYPosition; y++)
         {
+          if (y < 0 || y > gameTiles.GetLength(1)) continue;
+
           gameTiles[x, y].TileSprite.Position = new Vector2f(x * tilePixelSize, y * tilePixelSize);
 
           //Check if tile is in LOS
