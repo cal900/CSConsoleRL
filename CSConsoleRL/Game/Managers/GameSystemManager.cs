@@ -53,6 +53,8 @@ namespace CSConsoleRL.Game.Managers
             var mainChar = new ActorEntity();
             RegisterEntity(mainChar);
             ((LosSystem)Systems[typeof(LosSystem)]).SystemEntities = mainChar;
+            var snapCamera = new SnapCameraToEntityEvent(mainChar);
+            BroadcastEvent(snapCamera);
         }
 
         private void CreateSystems()

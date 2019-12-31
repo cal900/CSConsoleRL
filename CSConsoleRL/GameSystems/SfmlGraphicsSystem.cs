@@ -105,7 +105,10 @@ namespace CSConsoleRL.GameSystems
           consoleCommands = (List<string>)gameEvent.EventParams[0];
           break;
         case "SnapCameraToEntity":
-          if(_cameraHelper != null) _cameraHelper.SetEntity()
+          var newEnt = (Entity)gameEvent.EventParams[0];
+          if (_cameraHelper != null) _cameraHelper.SetEntity(newEnt);
+          else _cameraHelper = new CameraHelper(newEnt);
+          break;
       }
     }
 
