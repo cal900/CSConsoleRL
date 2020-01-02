@@ -22,12 +22,12 @@ namespace CSConsoleRL.GameSystems
 {
   public class SfmlGraphicsSystem : GameSystem
   {
-    private int xWindowCharWidth = 20;
-    private int yPlayableAreaCharHeight = 20;
-    private int tilePixelSize = 20;
-    private const int xWindowPositionOnMap = 0;
-    private const int yWindowPositionOnMap = 0;
-    private const int yUiAreaCharHeight = 5;
+    private int _xWindowCharWidth = 20;
+    private int _yPlayableAreaCharHeight = 20;
+    private int _tilePixelSize = 20;
+    private const int _xWindowPositionOnMap = 0;
+    private const int _yWindowPositionOnMap = 0;
+    private const int _yUiAreaCharHeight = 5;
     private const ConsoleColor foregroundColor = ConsoleColor.DarkGray;
     private const ConsoleColor backgroundColor = ConsoleColor.Black;
     private RenderWindow sfmlWindow;
@@ -37,8 +37,8 @@ namespace CSConsoleRL.GameSystems
     private int worldYLength;
     private int windowXPositionInWorld = 0;
     private int windowYPositionInWorld = 0;
-    private int windowXSize = 600;
-    private int windowYSize = 600;
+    private int _windowXSize = 620;
+    private int _windowYSize = 620;
     private bool _showTerminal;
     private const int _terminalDisplayLines = 15;
     private List<string> _terminalLines;
@@ -137,23 +137,42 @@ namespace CSConsoleRL.GameSystems
       //If no _cameraHelper initialized have no reference point to draw scene
       if (_cameraHelper == null) return;
 
-      //Get all background tiles in view of current window position
-      var startingTileXPosition = windowXPositionInWorld / tilePixelSize;
-      var endingTileXPosition = startingTileXPosition + (windowXSize / tilePixelSize);
-      var startingTileYPosition = windowYPositionInWorld / tilePixelSize;
-      var endingTileYPosition = startingTileYPosition + (windowYSize / tilePixelSize);
+      //Find out pixel co-ordinates need to be drawn
+      var xCoordOnMap = _cameraHelper.GetEntityXPositionOnMap();
+      var yCoordOnMap = _cameraHelper.GetEntityYPositionOnMap();
+
+      //Based on tile position, figure out pixel co-ords in world
+      var xPixelOnMap = CoordsToPixels(xCoordOnMap);
+      var yPixelOnMap = CoordsToPixels(yCoordOnMap);
+
+      //Since camera should be centered, shift left and up
+      var xPixelOffset = 0 - (_windowXSize / 2);
+      var yPixelOffset = 0 - (_windowYSize / 2);
+
+      //Slight shift to take into account tile size
+      xPixelOffset = xPixelOffset + (_tilePixelSize / 2 - 1);
+      yPixelOffset = yPixelOffset + (_tilePixelSize / 2 - 1);
+
+      xPixelOnMap = xPixelOnMap + xPixelOffset;
+      yPixelOnMap = yPixelOnMap + xPixelOffset;
+
+      //Based on that, figure out what tile range that covers
+      var startingTileXPosition = (int)Math.Floor(PixelsToCoords(xPixelOnMap));
+      var startingTileYPosition = (int)Math.Floor(PixelsToCoords(yPixelOnMap));
+      var endingTileXPosition = Math.Ceiling(PixelsToCoords(xPixelOnMap + _windowXSize));
+      var endingTileYPosition = Math.Ceiling(PixelsToCoords(yPixelOnMap + _windowYSize));
 
       sfmlWindow.Clear(Color.Black);
 
       //Draw background tiles
       for (int x = startingTileXPosition; x < endingTileXPosition; x++)
       {
-        if (x < 0 || x > gameTiles.GetLength(0)) continue;
+        if (x < 0 || x >= gameTiles.GetLength(0)) continue;
         for (int y = startingTileYPosition; y < endingTileYPosition; y++)
         {
-          if (y < 0 || y > gameTiles.GetLength(1)) continue;
+          if (y < 0 || y >= gameTiles.GetLength(1)) continue;
 
-          gameTiles[x, y].TileSprite.Position = new Vector2f(x * tilePixelSize, y * tilePixelSize);
+          gameTiles[x, y].TileSprite.Position = new Vector2f(x * _tilePixelSize + xPixelOffset, y * _tilePixelSize + yPixelOffset);
 
           //Check if tile is in LOS
           if (gameTiles[x, y].IsInLos)
@@ -175,8 +194,8 @@ namespace CSConsoleRL.GameSystems
         var sfmlComponent = entity.GetComponent<DrawableSfmlComponent>();
         var positionComponent = entity.GetComponent<PositionComponent>();
 
-        int spriteXPosition = (positionComponent.ComponentXPositionOnMap - windowXPositionInWorld) * tilePixelSize;
-        int spriteYPosition = (positionComponent.ComponentYPositionOnMap - windowYPositionInWorld) * tilePixelSize;
+        int spriteXPosition = (positionComponent.ComponentXPositionOnMap - windowXPositionInWorld) * _tilePixelSize;
+        int spriteYPosition = (positionComponent.ComponentYPositionOnMap - windowYPositionInWorld) * _tilePixelSize;
 
         sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition, spriteYPosition);
         sfmlWindow.Draw(sfmlComponent.GameSprite);
@@ -196,8 +215,8 @@ namespace CSConsoleRL.GameSystems
         }
         else
         {
-          int spriteXPosition = (positionComponent.ComponentXPositionOnMap - windowXPositionInWorld) * tilePixelSize;
-          int spriteYPosition = (positionComponent.ComponentYPositionOnMap - windowYPositionInWorld) * tilePixelSize;
+          int spriteXPosition = (positionComponent.ComponentXPositionOnMap - windowXPositionInWorld) * _tilePixelSize;
+          int spriteYPosition = (positionComponent.ComponentYPositionOnMap - windowYPositionInWorld) * _tilePixelSize;
 
           sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition, spriteYPosition);
           sfmlWindow.Draw(sfmlComponent.GameSprite);
@@ -212,7 +231,7 @@ namespace CSConsoleRL.GameSystems
     private void DrawConsole()
     {
       //Console is black rect with white text
-      var rect = new RectangleShape(new Vector2f(windowXSize, tilePixelSize * _terminalDisplayLines));
+      var rect = new RectangleShape(new Vector2f(_windowXSize, _tilePixelSize * _terminalDisplayLines));
       rect.Position = new Vector2f(0, 0);
       rect.FillColor = new Color(0, 0, 0, 150);
       sfmlWindow.Draw(rect);
@@ -222,7 +241,7 @@ namespace CSConsoleRL.GameSystems
       //Iterate through commands, write line by line to console
       for (int i = _terminalLines.Count - 1; i >= 0; i--)
       {
-        var lineStartYCoord = (_terminalDisplayLines - i - 1) * yPlayableAreaCharHeight;
+        var lineStartYCoord = (_terminalDisplayLines - i - 1) * _yPlayableAreaCharHeight;
         var lineText = new Text(_terminalLines[_terminalLines.Count - 1 - i], _gameFont, _termCharSize);
         lineText.Color = textColor;
         lineText.Position = new Vector2f(0, lineStartYCoord);
@@ -233,19 +252,19 @@ namespace CSConsoleRL.GameSystems
     private void LoadGlobals()
     {
       var xWindowCharWidth = GameGlobals.Instance().Get<long>("xWindowCharWidth");
-      if(xWindowCharWidth != null) this.xWindowCharWidth = (int)xWindowCharWidth;
+      if(xWindowCharWidth != null) this._xWindowCharWidth = (int)xWindowCharWidth;
 
       var yPlayableAreaCharHeight = GameGlobals.Instance().Get<long>("yPlayableAreaCharHeight");
-      if (yPlayableAreaCharHeight != null) this.yPlayableAreaCharHeight = (int)yPlayableAreaCharHeight;
+      if (yPlayableAreaCharHeight != null) this._yPlayableAreaCharHeight = (int)yPlayableAreaCharHeight;
 
       var tilePixelSize = GameGlobals.Instance().Get<long>("tilePixelSize");
-      if (tilePixelSize != null) this.tilePixelSize = (int)tilePixelSize;
+      if (tilePixelSize != null) this._tilePixelSize = (int)tilePixelSize;
 
       var windowXSize = GameGlobals.Instance().Get<long>("windowXSize");
-      if (windowXSize != null) this.windowXSize = (int)windowXSize;
+      if (windowXSize != null) this._windowXSize = (int)windowXSize;
 
       var windowYSize = GameGlobals.Instance().Get<long>("windowYSize");
-      if (windowYSize != null) this.windowYSize = (int)windowYSize;
+      if (windowYSize != null) this._windowYSize = (int)windowYSize;
     }
 
     private void LoadTextures()
@@ -304,6 +323,16 @@ namespace CSConsoleRL.GameSystems
           sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.YellowSquare]);
           break;
       }
+    }
+
+    private double PixelsToCoords(int pixels)
+    {
+      return pixels / _tilePixelSize;
+    }
+
+    private int CoordsToPixels(int coords)
+    {
+      return coords * _tilePixelSize;
     }
 
     public class SfmlTextureDictionary : Dictionary<EnumSfmlSprites, Texture>
