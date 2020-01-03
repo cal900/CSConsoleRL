@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using GameTiles;
-using GameTiles.Tiles;
+using Utilities;
 
-namespace Utilities
+namespace MapFileHandler
 {
   public class MapFileHandler
   {

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GameTiles.Enums;
 using SFML.Graphics;
+using Utilities;
 
 namespace GameTiles.Tiles
 {
@@ -25,7 +26,8 @@ namespace GameTiles.Tiles
   {
     public TileTypeDictionary() : base()
     {
-      string fileName = @"G:\Programming\CSConsoleRL\CSConsoleRL\CSConsoleRL\bin\x64\Debug\Data\Sprites\Tiles20x20.png";
+      var fileName = GameGlobals.Instance().Get<string>("textureDir");
+      if (!File.Exists(fileName)) fileName = @"G:\Programming\CSConsoleRL\CSConsoleRL\CSConsoleRL\bin\x64\Debug\Data\Sprites\Tiles20x20.png";
       if (!File.Exists(fileName)) fileName = @"D:\Programming\CSConsoleRL\Data\Sprites\Tiles20x20.png";
       if (!File.Exists(fileName)) fileName = @"/home/jason/dev/CSConsoleRL/Data/Sprites/Tiles20x20.png";
       Add(EnumTileTypes.Snow, new TileData('~', new Texture(fileName, new IntRect(0, 0, 20, 20)), ConsoleColor.Gray, false, false));
@@ -38,6 +40,7 @@ namespace GameTiles.Tiles
       Add(EnumTileTypes.Tree, new TileData('T', new Texture(fileName, new IntRect(0, 20, 20, 20)), ConsoleColor.DarkGreen, true, true));
       Add(EnumTileTypes.River, new TileData('^', new Texture(fileName, new IntRect(0, 100, 20, 20)), ConsoleColor.Blue, true, false));
       Add(EnumTileTypes.CabinWindow, new TileData('_', new Texture(fileName, new IntRect(0, 80, 20, 20)), ConsoleColor.DarkMagenta, true, false));
+      Add(EnumTileTypes.Mountain, new TileData('^', new Texture(fileName, new IntRect(40, 20, 20, 20)), ConsoleColor.DarkGray, true, true));
     }
   }
 }

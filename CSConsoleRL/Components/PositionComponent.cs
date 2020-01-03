@@ -9,17 +9,17 @@ using CSConsoleRL.Events;
 
 namespace CSConsoleRL.Components
 {
-    public class PositionComponent : IComponent
-    {
-        public Entity EntityAttachedTo { get; set; }
-        public int ComponentXPositionOnMap { get; set; }
-        public int ComponentYPositionOnMap { get; set; }
+  public class PositionComponent : IComponent
+  {
+    public Entity EntityAttachedTo { get; set; }
+    public int ComponentXPositionOnMap { get; set; }
+    public int ComponentYPositionOnMap { get; set; }
 
-        public PositionComponent(Entity entity)
-        {
-            EntityAttachedTo = entity;
-            ComponentXPositionOnMap = 0;
-            ComponentYPositionOnMap = 0;
-        }
+    public PositionComponent(Entity entity)
+    {
+      EntityAttachedTo = entity;
+      ComponentXPositionOnMap = 15;
+      ComponentYPositionOnMap = 15;
     }
+  }
 }

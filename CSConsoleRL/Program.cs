@@ -25,7 +25,7 @@ namespace CSConsoleRL
                 }
             }
 
-            var newFileMenu = new MapFileHandler(ref mapInfo);
+            var newFileMenu = new MapFileHandler.MapFileHandler(ref mapInfo);
 
             //Set LOS default
             for (int y = 0; y < mapInfo.TileSet.GetLength(1); y++)

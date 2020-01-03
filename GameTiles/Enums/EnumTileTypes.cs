@@ -17,6 +17,7 @@ namespace GameTiles.Enums
         CabinDoor,
         Tree,
         River,
-        CabinWindow
+        CabinWindow,
+        Mountain
     }
 }

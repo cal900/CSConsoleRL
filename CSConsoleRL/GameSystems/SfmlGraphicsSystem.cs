@@ -146,15 +146,15 @@ namespace CSConsoleRL.GameSystems
       var yPixelOnMap = CoordsToPixels(yCoordOnMap);
 
       //Since camera should be centered, shift left and up
-      var xPixelOffset = 0 - (_windowXSize / 2);
-      var yPixelOffset = 0 - (_windowYSize / 2);
+      xPixelOnMap = xPixelOnMap - (_windowXSize / 2);
+      yPixelOnMap = yPixelOnMap - (_windowYSize / 2);
 
       //Slight shift to take into account tile size
-      xPixelOffset = xPixelOffset + (_tilePixelSize / 2 - 1);
-      yPixelOffset = yPixelOffset + (_tilePixelSize / 2 - 1);
+      xPixelOnMap = xPixelOnMap + (_tilePixelSize / 2);
+      yPixelOnMap = yPixelOnMap + (_tilePixelSize / 2);
 
-      xPixelOnMap = xPixelOnMap + xPixelOffset;
-      yPixelOnMap = yPixelOnMap + xPixelOffset;
+      //xPixelOnMap = xPixelOnMap + xPixelOffset;
+      //yPixelOnMap = yPixelOnMap + xPixelOffset;
 
       //Based on that, figure out what tile range that covers
       var startingTileXPosition = (int)Math.Floor(PixelsToCoords(xPixelOnMap));
@@ -172,7 +172,7 @@ namespace CSConsoleRL.GameSystems
         {
           if (y < 0 || y >= gameTiles.GetLength(1)) continue;
 
-          gameTiles[x, y].TileSprite.Position = new Vector2f(x * _tilePixelSize + xPixelOffset, y * _tilePixelSize + yPixelOffset);
+          gameTiles[x, y].TileSprite.Position = new Vector2f(x * _tilePixelSize - xPixelOnMap, y * _tilePixelSize - yPixelOnMap);
 
           //Check if tile is in LOS
           if (gameTiles[x, y].IsInLos)
@@ -197,7 +197,7 @@ namespace CSConsoleRL.GameSystems
         int spriteXPosition = (positionComponent.ComponentXPositionOnMap - windowXPositionInWorld) * _tilePixelSize;
         int spriteYPosition = (positionComponent.ComponentYPositionOnMap - windowYPositionInWorld) * _tilePixelSize;
 
-        sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition, spriteYPosition);
+        sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition - xPixelOnMap, spriteYPosition - yPixelOnMap);
         sfmlWindow.Draw(sfmlComponent.GameSprite);
       }
 
@@ -218,7 +218,7 @@ namespace CSConsoleRL.GameSystems
           int spriteXPosition = (positionComponent.ComponentXPositionOnMap - windowXPositionInWorld) * _tilePixelSize;
           int spriteYPosition = (positionComponent.ComponentYPositionOnMap - windowYPositionInWorld) * _tilePixelSize;
 
-          sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition, spriteYPosition);
+          sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition - xPixelOnMap, spriteYPosition - yPixelOnMap);
           sfmlWindow.Draw(sfmlComponent.GameSprite);
           sfmlComponent.NextFrame();
         }

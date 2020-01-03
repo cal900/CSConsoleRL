@@ -25,7 +25,7 @@ namespace CSConsoleRL.Components
         {
             var currentColor = GameSprite.Color;
 
-            if (currentColor.A > 0) currentColor.A--;
+            if (currentColor.A > 0) currentColor.A -= 5;
 
             GameSprite.Color = currentColor;
         }

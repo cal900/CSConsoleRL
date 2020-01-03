@@ -34,7 +34,7 @@ namespace CSConsoleRL.Game.Managers
             Entities = new List<Entity>();
             Systems = new Dictionary<Type, GameSystem>();
 
-            _sfmlWindow = new RenderWindow(new VideoMode(600, 600), "CSConsoleRL");
+            _sfmlWindow = new RenderWindow(new VideoMode(620, 620), "CSConsoleRL");
             _entitiesToRemove = new List<Entity>();
 
             GameLogger.Instance();
