@@ -249,6 +249,11 @@ namespace CSConsoleRL.GameSystems
       }
     }
 
+    private void DrawUi()
+    {
+
+    }
+
     private void LoadGlobals()
     {
       var xWindowCharWidth = GameGlobals.Instance().Get<long>("xWindowCharWidth");
