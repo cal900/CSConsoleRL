@@ -9,15 +9,14 @@ using CSConsoleRL.Events;
 
 namespace CSConsoleRL.Components
 {
-    public class LosComponent : IComponent
-    {
-        public Entity EntityAttachedTo { get; set; }
-        public bool IsInLos { get; set; }
+  public class LosComponent : IComponent
+  {
+    private List<>
+    public Entity EntityAttachedTo { get; set; }
 
-        public LosComponent(Entity entity)
-        {
-            EntityAttachedTo = entity;
-            IsInLos = false;
-        }
+    public LosComponent(Entity entity)
+    {
+      EntityAttachedTo = entity;
     }
+  }
 }
