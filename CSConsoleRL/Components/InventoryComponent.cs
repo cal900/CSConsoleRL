@@ -6,17 +6,21 @@ using System.Threading.Tasks;
 using CSConsoleRL.Components.Interfaces;
 using CSConsoleRL.Entities;
 using CSConsoleRL.Events;
+using CSConsoleRL.Data;
 
 namespace CSConsoleRL.Components
 {
-  public class LosComponent : IComponent
+  public class InventoryComponent : IComponent
   {
-    private List<>
+    private List<Item> _items;
+    private Item _activeItem;
     public Entity EntityAttachedTo { get; set; }
 
-    public LosComponent(Entity entity)
+    public InventoryComponent(Entity entity)
     {
       EntityAttachedTo = entity;
+
+      _items = new List<Item>();
     }
   }
 }

@@ -50,7 +50,7 @@ namespace Utilities
       }
       else
       {
-        throw new Exception("Key {key} not found in preferences");
+        throw new Exception("Key \"" + key + "\" not found in preferences");
       }
     }
   }

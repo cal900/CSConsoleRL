@@ -9,13 +9,13 @@ using CSConsoleRL.Events;
 
 namespace CSConsoleRL.Components
 {
-    public class InventoryComponent : IComponent
-    {
-        public Entity EntityAttachedTo { get; set; }
+  public class LosComponent : IComponent
+  {
+    public Entity EntityAttachedTo { get; set; }
 
-        public InventoryComponent(Entity entity)
-        {
-            EntityAttachedTo = entity;
-        }
+    public LosComponent(Entity entity)
+    {
+      EntityAttachedTo = entity;
     }
+  }
 }

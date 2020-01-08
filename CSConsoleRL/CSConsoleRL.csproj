@@ -19,6 +19,7 @@
     <ProjectReference Include="..\GameTiles\GameTiles.csproj" />
     <ProjectReference Include="..\MapFileHandler\MapFileHandler.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
+    <ProjectReference Include="..\CSConsoleRL.Data\CSConsoleRL.Data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,13 @@
 {
-  "mapDir": "\\",
-  "fontDir": "\\",
-  "textureDir": "\\",
+  "mapDir": "/home/jason/dev/CSConsoleRL/Data/Maps",
+  "fontDir": "/home/jason/dev/CSConsoleRL/Data/Fonts",
+  "textureDir": "/home/jason/dev/CSConsoleRL/Data/Sprites",
   "numChange": 5,
-  "per": 0.5
+  "per": 0.5,
+  "xWindowCharWidth": 620,
+  "yWindowCharWidth": 620,
+  "yPlayableAreaCharHeight": 5,
+  "tilePixelSize": 20,
+  "windowXSize": 620,
+  "windowYSize": 620
 }
