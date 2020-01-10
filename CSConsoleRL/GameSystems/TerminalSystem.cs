@@ -126,7 +126,7 @@ namespace CSConsoleRL.GameSystems
                     if (consoleOn) HandleKeyPressed((Keyboard.Key)((KeyPressedEvent)gameEvent).EventParams[0]);
                     break;
                 case "RequestTerminalData":
-                    BroadcastMessage(new SendConsoleDataEvent(console.GetTermLines((int)gameEvent.EventParams[0])));
+                    BroadcastMessage(new SendTerminalDataEvent(console.GetTermLines((int)gameEvent.EventParams[0])));
                     break;
             }
         }

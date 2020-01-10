@@ -95,7 +95,7 @@ namespace CSConsoleRL.GameSystems
         case "ScreenPositionChange":
           ScreenPositionChange((int)gameEvent.EventParams[0], (int)gameEvent.EventParams[1]);
           break;
-        case "SendConsoleData":
+        case "SendTerminalData":
           _terminalLines = (List<string>)gameEvent.EventParams[0];
           break;
         case "ToggleConsole":
