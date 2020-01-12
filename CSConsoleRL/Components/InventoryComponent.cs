@@ -22,5 +22,10 @@ namespace CSConsoleRL.Components
 
       _items = new List<Item>();
     }
+
+    public Item GetActiveItem()
+    {
+      return _activeItem;
+    }
   }
 }

@@ -10,14 +10,12 @@ using CSConsoleRL.Events;
 using CSConsoleRL.Entities;
 using CSConsoleRL.Enums;
 using GameTiles.Tiles;
+using CSConsoleRL.Data;
 
 namespace CSConsoleRL.GameSystems
 {
   public class InventorySystem : GameSystem
   {
-    private Tile[,] _gameTiles;
-    private TileTypeDictionary _tileDictionary;
-
     public InventorySystem(GameSystemManager manager)
     {
       SystemManager = manager;
@@ -42,8 +40,20 @@ namespace CSConsoleRL.GameSystems
       switch (gameEvent.EventName)
       {
         case "RequestActiveItem":
-          
+          var id = (Guid)gameEvent.EventParams[0];
+          SystemManager.BroadcastEvent(new SendActiveItemEvent(GetActiveItemForEntity(id)));
+          break;
       }
+    }
+    private Tile[,] _gameTiles;
+    private TileTypeDictionary _tileDictionary;
+
+    private Item GetActiveItemForEntity(Guid id)
+    {
+      var entity = _systemEntities.Where(ent => ent.Id == id).First();
+      var inventory = entity.GetComponent<InventoryComponent>();
+
+      return inventory.GetActiveItem();
     }
   }
 }
