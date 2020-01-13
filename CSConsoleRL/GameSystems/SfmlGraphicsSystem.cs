@@ -209,7 +209,7 @@ namespace CSConsoleRL.GameSystems
         var sfmlComponent = entity.GetComponent<FadingSfmlComponent>();
         var positionComponent = entity.GetComponent<PositionComponent>();
 
-        if(sfmlComponent.ShouldDelete())
+        if (sfmlComponent.ShouldDelete())
         {
           SystemManager.RemoveEntity(entity);
         }
@@ -257,7 +257,7 @@ namespace CSConsoleRL.GameSystems
     private void LoadGlobals()
     {
       var xWindowCharWidth = GameGlobals.Instance().Get<long>("xWindowCharWidth");
-      if(xWindowCharWidth != null) this._xWindowCharWidth = (int)xWindowCharWidth;
+      if (xWindowCharWidth != null) this._xWindowCharWidth = (int)xWindowCharWidth;
 
       var yPlayableAreaCharHeight = GameGlobals.Instance().Get<long>("yPlayableAreaCharHeight");
       if (yPlayableAreaCharHeight != null) this._yPlayableAreaCharHeight = (int)yPlayableAreaCharHeight;

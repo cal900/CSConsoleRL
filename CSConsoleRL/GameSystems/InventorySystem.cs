@@ -45,8 +45,6 @@ namespace CSConsoleRL.GameSystems
           break;
       }
     }
-    private Tile[,] _gameTiles;
-    private TileTypeDictionary _tileDictionary;
 
     private Item GetActiveItemForEntity(Guid id)
     {
