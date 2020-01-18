@@ -13,6 +13,20 @@ namespace CSConsoleRL.Enums
         HumanEnemy,
         RedX,
         GreenSquare,
-        YellowSquare
+        YellowSquare,
+        RoadLaneBot,
+        RoadLaneLeft,
+        RoadLaneTop,
+        RoadLaneRight,
+        Pavement,
+        MetalFence,
+        MetalFenceKeyhole,
+        CarTopLeft,
+        CarTopRight,
+        CarBotLeft,
+        CarBotRight,
+        ItemKnife,
+        ItemPistol,
+        ItemKey
     }
 }

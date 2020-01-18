@@ -354,6 +354,25 @@ namespace CSConsoleRL.GameSystems
         Add(EnumSfmlSprites.RedX, new Texture(fileName, new IntRect(0, 160, 20, 20)));
         Add(EnumSfmlSprites.GreenSquare, new Texture(fileName, new IntRect(20, 160, 20, 20)));
         Add(EnumSfmlSprites.YellowSquare, new Texture(fileName, new IntRect(40, 160, 20, 20)));
+
+        Add(EnumSfmlSprites.RoadLaneBot, new Texture(fileName, new IntRect(0, 380, 20, 20)));
+        Add(EnumSfmlSprites.RoadLaneLeft, new Texture(fileName, new IntRect(20, 380, 20, 20)));
+        Add(EnumSfmlSprites.RoadLaneTop, new Texture(fileName, new IntRect(40, 380, 20, 20)));
+        Add(EnumSfmlSprites.RoadLaneRight, new Texture(fileName, new IntRect(60, 380, 20, 20)));
+
+        Add(EnumSfmlSprites.Pavement, new Texture(fileName, new IntRect(0, 400, 20, 20)));
+        Add(EnumSfmlSprites.MetalFence, new Texture(fileName, new IntRect(20, 400, 20, 20)));
+        Add(EnumSfmlSprites.MetalFenceKeyhole, new Texture(fileName, new IntRect(40, 400, 20, 20)));
+
+        Add(EnumSfmlSprites.CarTopLeft, new Texture(fileName, new IntRect(0, 420, 20, 20)));
+        Add(EnumSfmlSprites.CarTopRight, new Texture(fileName, new IntRect(20, 420, 20, 20)));
+
+        Add(EnumSfmlSprites.CarBotLeft, new Texture(fileName, new IntRect(0, 440, 20, 20)));
+        Add(EnumSfmlSprites.CarBotRight, new Texture(fileName, new IntRect(20, 440, 20, 20)));
+
+        Add(EnumSfmlSprites.ItemKnife, new Texture(fileName, new IntRect(0, 460, 20, 20)));
+        Add(EnumSfmlSprites.ItemPistol, new Texture(fileName, new IntRect(20, 460, 20, 20)));
+        Add(EnumSfmlSprites.ItemKey, new Texture(fileName, new IntRect(60, 460, 20, 20)));
       }
     }
   }
