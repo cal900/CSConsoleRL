@@ -251,6 +251,7 @@ namespace CSConsoleRL.GameSystems
 
     private void DrawUi()
     {
+      //Currently Active Item - Square in bottom right
 
     }
 
