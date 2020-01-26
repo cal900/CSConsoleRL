@@ -260,11 +260,17 @@ namespace CSConsoleRL.GameSystems
       borderRect.Position = new Vector2f(itemXCoord, itemYCoord);
       itemRect.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
 
-      borderRect.FillColor = new Color(0, 155, 155);
-      itemRect.FillColor = Color.Black;
+      borderRect.FillColor = new Color(155, 155, 0);
+      itemRect.FillColor = new Color(25, 25, 25);
+
+      //Get currently active item
+      var itemSprite = new Sprite(_textureDictionary[EnumSfmlSprites.ItemKnife]);
+      itemSprite.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
+      itemSprite.Scale = new Vector2f(2, 2);
 
       sfmlWindow.Draw(borderRect);
       sfmlWindow.Draw(itemRect);
+      sfmlWindow.Draw(itemSprite);
     }
 
     private void LoadGlobals()
@@ -358,7 +364,7 @@ namespace CSConsoleRL.GameSystems
       public SfmlTextureDictionary()
           : base()
       {
-        string fileName = @"G:\Programming\CSConsoleRL\Oct172018Try\CSConsoleRL\Data\Sprites\Tiles20x20.png";
+        string fileName = @"G:\Programming\CSConsoleRL\June302019Try\CSConsoleRL\Data\Sprites\Tiles20x20.png";
         if (!File.Exists(fileName)) fileName = @"D:\Programming\CSConsoleRL\Data\Sprites\Tiles20x20.png";
         if (!File.Exists(fileName)) fileName = @"/home/jason/dev/CSConsoleRL/Data/Sprites/Tiles20x20.png";
         Add(EnumSfmlSprites.MainCharacter, new Texture(fileName, new IntRect(0, 140, 20, 20)));
