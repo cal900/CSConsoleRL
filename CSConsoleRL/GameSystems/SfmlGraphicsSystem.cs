@@ -225,7 +225,7 @@ namespace CSConsoleRL.GameSystems
       }
 
       //Draw UI
-
+      DrawUi();
     }
 
     private void DrawConsole()
@@ -252,7 +252,19 @@ namespace CSConsoleRL.GameSystems
     private void DrawUi()
     {
       //Currently Active Item - Square in bottom right
+      var borderRect = new RectangleShape(new Vector2f((float)(_tilePixelSize * 2 + 10), (float)(_tilePixelSize * 2 + 10)));
+      var itemRect = new RectangleShape(new Vector2f((_tilePixelSize * 2), (_tilePixelSize * 2)));
 
+      var itemXCoord = _windowXSize - (_tilePixelSize * 2) - 15;
+      var itemYCoord = _windowYSize - (_tilePixelSize * 2) - 15;
+      borderRect.Position = new Vector2f(itemXCoord, itemYCoord);
+      itemRect.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
+
+      borderRect.FillColor = new Color(0, 155, 155);
+      itemRect.FillColor = Color.Black;
+
+      sfmlWindow.Draw(borderRect);
+      sfmlWindow.Draw(itemRect);
     }
 
     private void LoadGlobals()
