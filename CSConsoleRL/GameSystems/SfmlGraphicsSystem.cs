@@ -17,6 +17,7 @@ using SFML.Graphics;
 using SFML.System;
 using System.IO;
 using CSConsoleRL.Helpers;
+using CSConsoleRL.Data;
 
 namespace CSConsoleRL.GameSystems
 {
@@ -49,6 +50,8 @@ namespace CSConsoleRL.GameSystems
     private CameraHelper _cameraHelper;
 
     private Font _gameFont;
+
+    private Item _activeItem;
 
     public SfmlGraphicsSystem(GameSystemManager manager, RenderWindow _sfmlWindow, Tile[,] _gameTiles)
     {
@@ -108,6 +111,9 @@ namespace CSConsoleRL.GameSystems
           var newEnt = (Entity)gameEvent.EventParams[0];
           if (_cameraHelper != null) _cameraHelper.SetEntity(newEnt);
           else _cameraHelper = new CameraHelper(newEnt);
+          break;
+        case "SendActiveItem":
+          _activeItem = (Item)gameEvent.EventParams[0];
           break;
       }
     }
@@ -264,7 +270,8 @@ namespace CSConsoleRL.GameSystems
       itemRect.FillColor = new Color(25, 25, 25);
 
       //Get currently active item
-      var itemSprite = new Sprite(_textureDictionary[EnumSfmlSprites.ItemKnife]);
+      BroadcastMessage(new RequestActiveItemEvent(_cameraHelper.GetEntity().Id));
+      var itemSprite = new Sprite(_textureDictionary[GetItemSpriteEnum(_activeItem.ItemType)]);
       itemSprite.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
       itemSprite.Scale = new Vector2f(2, 2);
 
@@ -357,6 +364,23 @@ namespace CSConsoleRL.GameSystems
     private int CoordsToPixels(int coords)
     {
       return coords * _tilePixelSize;
+    }
+
+    private EnumSfmlSprites GetItemSpriteEnum(EnumItemTypes item)
+    {
+      switch(item)
+      {
+        case EnumItemTypes.GateKey:
+          return EnumSfmlSprites.ItemKey;
+        case EnumItemTypes.Knife:
+          return EnumSfmlSprites.ItemKnife;
+        case EnumItemTypes.Pistol:
+          return EnumSfmlSprites.ItemPistol;
+        case EnumItemTypes.SniperRifle:
+          return EnumSfmlSprites.ItemPistol;
+        default:
+          return EnumSfmlSprites.ItemKnife;
+      }
     }
 
     public class SfmlTextureDictionary : Dictionary<EnumSfmlSprites, Texture>

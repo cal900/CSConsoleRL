@@ -18,9 +18,9 @@ namespace CSConsoleRL.Events
     /// Changes the active item to the next item in inventory
     /// </summary>
     /// <param name="entity"></param>
-    public ChangeActiveItemEvent(Entity entity)
+    public ChangeActiveItemEvent(Guid id)
     {
-      EventParams = new List<object>() { entity };
+      EventParams = new List<object>() { id };
     }
 
     /// <summary>
@@ -28,9 +28,9 @@ namespace CSConsoleRL.Events
     /// </summary>
     /// <param name="entity"></param>
     /// <param name="newActiveItem"></param>
-    public ChangeActiveItemEvent(Entity entity, Item newActiveItem)
+    public ChangeActiveItemEvent(Guid id, Item newActiveItem)
     {
-      EventParams = new List<object>() { entity, newActiveItem };
+      EventParams = new List<object>() { id, newActiveItem };
     }
   }
 }

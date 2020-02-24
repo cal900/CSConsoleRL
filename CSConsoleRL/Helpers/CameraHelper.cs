@@ -35,6 +35,11 @@ namespace CSConsoleRL.Helpers
       }
     }
 
+    public Entity GetEntity()
+    {
+      return _entity;
+    }
+
     public int GetEntityXPositionOnMap()
     {
       return _entity.GetComponent<PositionComponent>().ComponentXPositionOnMap;

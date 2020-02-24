@@ -40,9 +40,18 @@ namespace CSConsoleRL.GameSystems
       switch (gameEvent.EventName)
       {
         case "RequestActiveItem":
-          var id = (Guid)gameEvent.EventParams[0];
-          SystemManager.BroadcastEvent(new SendActiveItemEvent(GetActiveItemForEntity(id)));
-          break;
+          {
+            var id = (Guid)gameEvent.EventParams[0];
+            SystemManager.BroadcastEvent(new SendActiveItemEvent(GetActiveItemForEntity(id)));
+            break;
+          }
+        case "ChangeActiveItem":
+          {
+            var id = (Guid)gameEvent.EventParams[0];
+            var ent = _systemEntities.Where(e => e.Id == id).First();
+            ent.GetComponent<InventoryComponent>().IncrementActiveItem();
+            break;
+          }
       }
     }
 

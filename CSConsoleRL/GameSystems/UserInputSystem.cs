@@ -147,8 +147,12 @@ namespace CSConsoleRL.GameSystems
             BroadcastMessage(new ToggleConsoleEvent());
             break;
           case (_inputToggleActiveItem):
-            b
-                    case (Keyboard.Key.Escape):
+            foreach (var ent in _systemEntities)
+            {
+              BroadcastMessage(new ChangeActiveItemEvent(ent.Id));
+            }
+            break;
+          case (Keyboard.Key.Escape):
             BroadcastMessage(new ExitGameEvent());
             break;
         }
