@@ -35,6 +35,10 @@ namespace MapFileHandler
       Console.ForegroundColor = ConsoleColor.White;
       Console.Write("]oad Map\n[");
       Console.ForegroundColor = ConsoleColor.Yellow;
+      Console.Write("M");
+      Console.ForegroundColor = ConsoleColor.White;
+      Console.Write("]ap Editor\n[");
+      Console.ForegroundColor = ConsoleColor.Yellow;
       Console.Write("B");
       Console.ForegroundColor = ConsoleColor.White;
       Console.Write("]ack\n");
@@ -54,6 +58,10 @@ namespace MapFileHandler
           mapFileLoadSave.LoadMapFileBrowser(ref mapFileToSave);
           return;
         }
+        else if (keyPressed.Key == ConsoleKey.M)
+        {
+          throw new NotImplementedException("Haven't implemented Map Editor yet");
+        }
 
         Console.ForegroundColor = ConsoleColor.White;
         Console.Write("[");
@@ -65,6 +73,10 @@ namespace MapFileHandler
         Console.Write("L");
         Console.ForegroundColor = ConsoleColor.White;
         Console.Write("]oad Map\n[");
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write("M");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write("]ap Editor\n[");
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write("B");
         Console.ForegroundColor = ConsoleColor.White;
