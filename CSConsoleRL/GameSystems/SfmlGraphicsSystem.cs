@@ -283,19 +283,19 @@ namespace CSConsoleRL.GameSystems
     private void LoadGlobals()
     {
       var xWindowCharWidth = GameGlobals.Instance().Get<long>("xWindowCharWidth");
-      if (xWindowCharWidth != null) this._xWindowCharWidth = (int)xWindowCharWidth;
+      if (xWindowCharWidth > 0) _xWindowCharWidth = (int)xWindowCharWidth;
 
       var yPlayableAreaCharHeight = GameGlobals.Instance().Get<long>("yPlayableAreaCharHeight");
-      if (yPlayableAreaCharHeight != null) this._yPlayableAreaCharHeight = (int)yPlayableAreaCharHeight;
+      if (yPlayableAreaCharHeight > 0) _yPlayableAreaCharHeight = (int)yPlayableAreaCharHeight;
 
       var tilePixelSize = GameGlobals.Instance().Get<long>("tilePixelSize");
-      if (tilePixelSize != null) this._tilePixelSize = (int)tilePixelSize;
+      if (tilePixelSize > 0) _tilePixelSize = (int)tilePixelSize;
 
       var windowXSize = GameGlobals.Instance().Get<long>("windowXSize");
-      if (windowXSize != null) this._windowXSize = (int)windowXSize;
+      if (windowXSize > 0) _windowXSize = (int)windowXSize;
 
       var windowYSize = GameGlobals.Instance().Get<long>("windowYSize");
-      if (windowYSize != null) this._windowYSize = (int)windowYSize;
+      if (windowYSize > 0) _windowYSize = (int)windowYSize;
     }
 
     private void LoadTextures()
