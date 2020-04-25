@@ -247,7 +247,7 @@ namespace CSConsoleRL.GameSystems
       //Iterate through commands, write line by line to console
       for (int i = _terminalLines.Count - 1; i >= 0; i--)
       {
-        var lineStartYCoord = (_terminalDisplayLines - i - 1) * _yPlayableAreaCharHeight;
+        var lineStartYCoord = (_terminalDisplayLines - i) * _termCharSize;
         var lineText = new Text(_terminalLines[_terminalLines.Count - 1 - i], _gameFont, _termCharSize);
         lineText.Color = textColor;
         lineText.Position = new Vector2f(0, lineStartYCoord);
@@ -368,7 +368,7 @@ namespace CSConsoleRL.GameSystems
 
     private EnumSfmlSprites GetItemSpriteEnum(EnumItemTypes item)
     {
-      switch(item)
+      switch (item)
       {
         case EnumItemTypes.GateKey:
           return EnumSfmlSprites.ItemKey;
