@@ -7,13 +7,13 @@ using CSConsoleRL.Components;
 
 namespace CSConsoleRL.Entities
 {
-    public class XMarkerEntity : Entity
+  public class XMarkerEntity : Entity
+  {
+    public XMarkerEntity()
+        : base()
     {
-        public XMarkerEntity() 
-            : base()
-        {
-            AddComponent(new PositionComponent(this));
-            AddComponent(new DrawableSfmlComponent(this, Enums.EnumSfmlSprites.RedX));
-        }
+      AddComponent(new PositionComponent(this));
+      AddComponent(new DrawableSfmlComponent(this, Enums.EnumSfmlSprites.RedX));
     }
+  }
 }

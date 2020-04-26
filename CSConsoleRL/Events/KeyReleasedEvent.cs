@@ -9,14 +9,14 @@ using SFML.Window;
 
 namespace CSConsoleRL.Events
 {
-    public class KeyReleasedEvent : IGameEvent
-    {
-        public string EventName { get { return "KeyReleased"; } }
-        public List<object> EventParams { get; set; }
+  public class KeyReleasedEvent : IGameEvent
+  {
+    public string EventName { get { return "KeyReleased"; } }
+    public List<object> EventParams { get; set; }
 
-        public KeyReleasedEvent(Keyboard.Key keyPressed)
-        {
-            EventParams.Add(keyPressed);
-        }
+    public KeyReleasedEvent(Keyboard.Key keyPressed)
+    {
+      EventParams.Add(keyPressed);
     }
+  }
 }

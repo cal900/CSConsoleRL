@@ -8,14 +8,14 @@ using CSConsoleRL.Entities;
 
 namespace CSConsoleRL.Events
 {
-    public class NextTurnEvent : IGameEvent
+  public class NextTurnEvent : IGameEvent
+  {
+    public string EventName { get { return "NextTurn"; } }
+    public List<object> EventParams { get; set; }
+
+    public NextTurnEvent()
     {
-        public string EventName { get { return "NextTurn"; } }
-        public List<object> EventParams { get; set; }
 
-        public NextTurnEvent()
-        {
-
-        }
     }
+  }
 }

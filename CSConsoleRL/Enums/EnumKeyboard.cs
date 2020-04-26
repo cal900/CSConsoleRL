@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace CSConsoleRL.Enums
 {
-    public enum EnumKeyboard
-    {
-        Up,
-        Down,
-        Left,
-        Right
-    }
+  public enum EnumKeyboard
+  {
+    Up,
+    Down,
+    Left,
+    Right
+  }
 }

@@ -8,15 +8,15 @@ using CSConsoleRL.Entities;
 
 namespace CSConsoleRL.Events
 {
-    public class TerminalReferenceEvent : IGameEvent
-    {
-        public string EventName { get { return "PassConsoleReference"; } }
-        public List<object> EventParams { get; set; }
+  public class TerminalReferenceEvent : IGameEvent
+  {
+    public string EventName { get { return "PassConsoleReference"; } }
+    public List<object> EventParams { get; set; }
 
-        public TerminalReferenceEvent(List<string> terminalCommands)
-        {
-            EventParams = new List<object>();
-            EventParams.Add(terminalCommands);
-        }
+    public TerminalReferenceEvent(List<string> terminalCommands)
+    {
+      EventParams = new List<object>();
+      EventParams.Add(terminalCommands);
     }
+  }
 }

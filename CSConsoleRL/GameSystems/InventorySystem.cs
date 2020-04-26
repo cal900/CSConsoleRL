@@ -48,8 +48,8 @@ namespace CSConsoleRL.GameSystems
         case "ChangeActiveItem":
           {
             var id = (Guid)gameEvent.EventParams[0];
-            var ent = _systemEntities.Where(e => e.Id == id).First();
-            ent.GetComponent<InventoryComponent>().IncrementActiveItem();
+            var ent = _systemEntities.Where(e => e.Id == id).FirstOrDefault();
+            if (ent != null) ent.GetComponent<InventoryComponent>().IncrementActiveItem();
             break;
           }
       }

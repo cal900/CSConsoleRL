@@ -7,17 +7,17 @@ using GameTiles.Tiles;
 
 namespace CSConsoleRL.Game.Managers
 {
-    public class TileManager
+  public class TileManager
+  {
+    public Tile[,] TileSet;
+
+    GameSystemManager SystemManager;
+
+    public TileManager(GameSystemManager manager)
     {
-        public Tile[,] TileSet;
+      SystemManager = manager;
 
-        GameSystemManager SystemManager;
-
-        public TileManager(GameSystemManager manager)
-        {
-            SystemManager = manager;
-
-            TileSet = new Tile[10, 10];
-        }
+      TileSet = new Tile[10, 10];
     }
+  }
 }

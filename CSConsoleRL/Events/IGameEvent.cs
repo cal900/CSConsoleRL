@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CSConsoleRL.Events
 {
-    public interface IGameEvent
-    {
-        string EventName { get; }
-        List<object> EventParams { get; set; }
-    }
+  public interface IGameEvent
+  {
+    string EventName { get; }
+    List<object> EventParams { get; set; }
+  }
 }

@@ -9,17 +9,17 @@ using SFML.Window;
 
 namespace CSConsoleRL.Events
 {
-    public class MovementInputEvent : IGameEvent
-    {
-        public string EventName { get { return "MovementInput"; } }
-        public List<object> EventParams { get; set; }
+  public class MovementInputEvent : IGameEvent
+  {
+    public string EventName { get { return "MovementInput"; } }
+    public List<object> EventParams { get; set; }
 
-        public MovementInputEvent(Guid id, int movementX, int movementY)
-        {
-            EventParams = new List<object>();
-            EventParams.Add(id);
-            EventParams.Add(movementX);
-            EventParams.Add(movementY);
-        }
+    public MovementInputEvent(Guid id, int movementX, int movementY)
+    {
+      EventParams = new List<object>();
+      EventParams.Add(id);
+      EventParams.Add(movementX);
+      EventParams.Add(movementY);
     }
+  }
 }

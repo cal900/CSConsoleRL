@@ -9,15 +9,15 @@ using SFML.Window;
 
 namespace CSConsoleRL.Events
 {
-    public class SnapCameraToEntityEvent : IGameEvent
-    {
-        public string EventName { get { return "SnapCameraToEntity"; } }
-        public List<object> EventParams { get; set; }
+  public class SnapCameraToEntityEvent : IGameEvent
+  {
+    public string EventName { get { return "SnapCameraToEntity"; } }
+    public List<object> EventParams { get; set; }
 
-        public SnapCameraToEntityEvent(Entity entity)
-        {
-            EventParams = new List<object>();
-            EventParams.Add(entity);
-        }
+    public SnapCameraToEntityEvent(Entity entity)
+    {
+      EventParams = new List<object>();
+      EventParams.Add(entity);
     }
+  }
 }

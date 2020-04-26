@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace CSConsoleRL.Enums
 {
-    public enum EnumDirections
-    {
-        North,
-        NorthWest,
-        NorthEast,
-        South,
-        SouthWest,
-        SouthEast,
-        West,
-        East
-    }
+  public enum EnumDirections
+  {
+    North,
+    NorthWest,
+    NorthEast,
+    South,
+    SouthWest,
+    SouthEast,
+    West,
+    East
+  }
 }

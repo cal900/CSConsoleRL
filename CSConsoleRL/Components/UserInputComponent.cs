@@ -10,13 +10,13 @@ using CSConsoleRL.Enums;
 
 namespace CSConsoleRL.Components
 {
-    public class UserInputComponent : IComponent
-    {
-        public Entity EntityAttachedTo { get; set; }
+  public class UserInputComponent : IComponent
+  {
+    public Entity EntityAttachedTo { get; set; }
 
-        public UserInputComponent(Entity entity)
-        {
-            EntityAttachedTo = entity;
-        }
+    public UserInputComponent(Entity entity)
+    {
+      EntityAttachedTo = entity;
     }
+  }
 }

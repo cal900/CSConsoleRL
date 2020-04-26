@@ -8,18 +8,18 @@ using CSConsoleRL.Entities;
 
 namespace CSConsoleRL.Events
 {
-    public class RequestTerminalDataEvent : IGameEvent
-    {
-        public string EventName { get { return "RequestTerminalData"; } }
-        public List<object> EventParams { get; set; }
+  public class RequestTerminalDataEvent : IGameEvent
+  {
+    public string EventName { get { return "RequestTerminalData"; } }
+    public List<object> EventParams { get; set; }
 
-        /// <summary>
-        /// We pass in numCommands to indicate how many commands/lines of the console is displayed at once (to avoid passing entire command history)
-        /// </summary>
-        /// <param name="numCommands"></param>
-        public RequestTerminalDataEvent(int numCommands)
-        {
-            EventParams = new List<object>() { numCommands };
-        }
+    /// <summary>
+    /// We pass in numCommands to indicate how many commands/lines of the console is displayed at once (to avoid passing entire command history)
+    /// </summary>
+    /// <param name="numCommands"></param>
+    public RequestTerminalDataEvent(int numCommands)
+    {
+      EventParams = new List<object>() { numCommands };
     }
+  }
 }

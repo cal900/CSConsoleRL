@@ -8,8 +8,8 @@ using CSConsoleRL.Events;
 
 namespace CSConsoleRL.Components.Interfaces
 {
-    public interface IComponent
-    {
-        Entity EntityAttachedTo { get; set; }
-    }
+  public interface IComponent
+  {
+    Entity EntityAttachedTo { get; set; }
+  }
 }

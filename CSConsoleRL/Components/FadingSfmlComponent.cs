@@ -11,28 +11,28 @@ using SFML.Graphics;
 
 namespace CSConsoleRL.Components
 {
-    public class FadingSfmlComponent : AnimatedSfmlComponent, IComponent
+  public class FadingSfmlComponent : AnimatedSfmlComponent, IComponent
+  {
+    public FadingSfmlComponent(Entity entity, EnumSfmlSprites spriteType)
+        : base(entity, spriteType)
     {
-        public FadingSfmlComponent(Entity entity, EnumSfmlSprites spriteType)
-            : base(entity, spriteType)
-        {
-            EntityAttachedTo = entity;
+      EntityAttachedTo = entity;
 
-            SpriteType = spriteType;
-        }
-
-        public override void NextFrame()
-        {
-            var currentColor = GameSprite.Color;
-
-            if (currentColor.A > 0) currentColor.A -= 5;
-
-            GameSprite.Color = currentColor;
-        }
-
-        public bool ShouldDelete()
-        {
-            return GameSprite.Color.A == 0 ? true : false;
-        }
+      SpriteType = spriteType;
     }
+
+    public override void NextFrame()
+    {
+      var currentColor = GameSprite.Color;
+
+      if (currentColor.A > 0) currentColor.A -= 5;
+
+      GameSprite.Color = currentColor;
+    }
+
+    public bool ShouldDelete()
+    {
+      return GameSprite.Color.A == 0 ? true : false;
+    }
+  }
 }

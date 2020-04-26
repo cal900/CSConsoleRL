@@ -9,13 +9,13 @@ using CSConsoleRL.Events;
 
 namespace CSConsoleRL.Components
 {
-    public class CollisionComponent : IComponent
-    {
-        public Entity EntityAttachedTo { get; set; }
+  public class CollisionComponent : IComponent
+  {
+    public Entity EntityAttachedTo { get; set; }
 
-        public CollisionComponent(Entity entity)
-        {
-            EntityAttachedTo = entity;
-        }
+    public CollisionComponent(Entity entity)
+    {
+      EntityAttachedTo = entity;
     }
+  }
 }

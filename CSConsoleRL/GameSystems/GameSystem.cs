@@ -10,26 +10,26 @@ using CSConsoleRL.Entities;
 
 namespace CSConsoleRL.GameSystems
 {
-    public abstract class GameSystem
+  public abstract class GameSystem
+  {
+    protected List<Entity> _systemEntities;
+    public GameSystemManager SystemManager { get; set; }
+
+    public abstract void InitializeSystem();
+    public abstract void AddEntity(Entity entity);
+    public abstract void HandleMessage(IGameEvent gameEvent);
+
+    public void BroadcastMessage(IGameEvent evnt)
     {
-        protected List<Entity> _systemEntities;
-        public GameSystemManager SystemManager { get; set; }
-
-        public abstract void InitializeSystem();
-        public abstract void AddEntity(Entity entity);
-        public abstract void HandleMessage(IGameEvent gameEvent);
-
-        public void BroadcastMessage(IGameEvent evnt)
-        {
-            SystemManager.BroadcastEvent(evnt);
-        }
-
-        public void RemoveEntity(Entity entityToRemove)
-        {
-            if(_systemEntities.Contains(entityToRemove))
-            {
-                _systemEntities.Remove(entityToRemove);
-            }
-        }
+      SystemManager.BroadcastEvent(evnt);
     }
+
+    public void RemoveEntity(Entity entityToRemove)
+    {
+      if (_systemEntities.Contains(entityToRemove))
+      {
+        _systemEntities.Remove(entityToRemove);
+      }
+    }
+  }
 }

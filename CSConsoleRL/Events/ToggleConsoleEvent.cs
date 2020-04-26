@@ -8,14 +8,14 @@ using CSConsoleRL.Entities;
 
 namespace CSConsoleRL.Events
 {
-    public class ToggleConsoleEvent : IGameEvent
+  public class ToggleConsoleEvent : IGameEvent
+  {
+    public string EventName { get { return "ToggleConsole"; } }
+    public List<object> EventParams { get; set; }
+
+    public ToggleConsoleEvent()
     {
-        public string EventName { get { return "ToggleConsole"; } }
-        public List<object> EventParams { get; set; }
 
-        public ToggleConsoleEvent()
-        {
-
-        }
     }
+  }
 }

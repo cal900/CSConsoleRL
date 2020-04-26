@@ -11,17 +11,17 @@ using SFML.Graphics;
 
 namespace CSConsoleRL.Components
 {
-    public class DrawableSfmlComponent : IComponent
+  public class DrawableSfmlComponent : IComponent
+  {
+    public Entity EntityAttachedTo { get; set; }
+    public Sprite GameSprite { get; set; }
+    public EnumSfmlSprites SpriteType { get; set; }
+
+    public DrawableSfmlComponent(Entity entity, EnumSfmlSprites spriteType)
     {
-        public Entity EntityAttachedTo { get; set; }
-        public Sprite GameSprite { get; set; }
-        public EnumSfmlSprites SpriteType { get; set; }
+      EntityAttachedTo = entity;
 
-        public DrawableSfmlComponent(Entity entity, EnumSfmlSprites spriteType)
-        {
-            EntityAttachedTo = entity;
-
-            SpriteType = spriteType;
-        }
+      SpriteType = spriteType;
     }
+  }
 }

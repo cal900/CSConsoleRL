@@ -13,7 +13,7 @@ namespace CSConsoleRL.Helpers
     public CameraHelper(Entity entity)
     {
       //We can't snap the camera to an entity without a position...common man
-      if(entity.HasComponent<PositionComponent>())
+      if (entity.HasComponent<PositionComponent>())
       {
         _entity = entity;
       }

@@ -11,22 +11,22 @@ using SFML.Graphics;
 
 namespace CSConsoleRL.Components
 {
-    public abstract class AnimatedSfmlComponent : IComponent
+  public abstract class AnimatedSfmlComponent : IComponent
+  {
+    public Entity EntityAttachedTo { get; set; }
+    public Sprite GameSprite { get; set; }
+    public EnumSfmlSprites SpriteType { get; set; }
+
+    public AnimatedSfmlComponent(Entity entity, EnumSfmlSprites spriteType)
     {
-        public Entity EntityAttachedTo { get; set; }
-        public Sprite GameSprite { get; set; }
-        public EnumSfmlSprites SpriteType { get; set; }
+      EntityAttachedTo = entity;
 
-        public AnimatedSfmlComponent(Entity entity, EnumSfmlSprites spriteType)
-        {
-            EntityAttachedTo = entity;
-
-            SpriteType = spriteType;
-        }
-
-        /// <summary>
-        /// Component's update logic for next frame
-        /// </summary>
-        public abstract void NextFrame();
+      SpriteType = spriteType;
     }
+
+    /// <summary>
+    /// Component's update logic for next frame
+    /// </summary>
+    public abstract void NextFrame();
+  }
 }
