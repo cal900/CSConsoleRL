@@ -66,7 +66,7 @@ namespace CSConsoleRL.GameSystems
 
       _systemEntities = new List<Entity>();
       var fontPath = @"G:\Programming\CSConsoleRL\Oct172018Try\CSConsoleRL\CSConsoleRL\bin\Debug\Data\Fonts\arial.ttf";
-      if (!File.Exists(fontPath)) fontPath = @"D:\Programming\CSConsoleRL\Data\Fonts\arial.ttf";
+      if (!File.Exists(fontPath)) fontPath = @"G:\Programming\CSConsoleRL\Data\Fonts\arial.ttf";
       if (!File.Exists(fontPath)) fontPath = @"/home/jason/dev/CSConsoleRL/Data/Fonts/arial.ttf";
       _gameFont = new Font(fontPath);
 
@@ -389,7 +389,7 @@ namespace CSConsoleRL.GameSystems
           : base()
       {
         string fileName = @"G:\Programming\CSConsoleRL\June302019Try\CSConsoleRL\Data\Sprites\Tiles20x20.png";
-        if (!File.Exists(fileName)) fileName = @"D:\Programming\CSConsoleRL\Data\Sprites\Tiles20x20.png";
+        if (!File.Exists(fileName)) fileName = @"G:\Programming\CSConsoleRL\Data\Sprites\Tiles20x20.png";
         if (!File.Exists(fileName)) fileName = @"/home/jason/dev/CSConsoleRL/Data/Sprites/Tiles20x20.png";
         Add(EnumSfmlSprites.MainCharacter, new Texture(fileName, new IntRect(0, 140, 20, 20)));
         Add(EnumSfmlSprites.HumanEnemy, new Texture(fileName, new IntRect(20, 140, 20, 20)));
