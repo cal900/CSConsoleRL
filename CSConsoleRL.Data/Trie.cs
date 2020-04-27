@@ -6,108 +6,101 @@ using System.Threading.Tasks;
 
 namespace CSConsoleRL.Data
 {
-    /// <summary>
-    /// A space char is used to indicate that branch level is also an endpoint
-    /// </summary>
-    public class Trie
+  public class Trie
+  {
+    private TrieNode _rootNode;
+
+    public Trie()
     {
-        private Dictionary<char, TrieBranch> _branches;
-
-        public Trie()
-        {
-            _branches = new Dictionary<char, TrieBranch>();
-        }
-
-        public void Insert(string remainingBranches)
-        {
-            if(remainingBranches.Length > 0)
-            {
-                if(_branches.ContainsKey(remainingBranches[0]))
-                {
-                    _branches[remainingBranches[0]].Insert(remainingBranches);
-                }
-                else
-                {
-                    _branches.Add(remainingBranches[0], new TrieBranch(remainingBranches));
-                }
-            }
-        }
-
-        public List<string> GetPathBranches(string path)
-        {
-            var pathBranches = new List<string>();
-
-            return null;
-        }
-
-        private class TrieBranch
-        {
-            private Dictionary<char, TrieBranch> _branches;
-            public readonly char Value;
-
-            public TrieBranch(string remainingBranches)
-            {
-                Value = remainingBranches[0];
-
-                Insert(remainingBranches.Substring(1));
-            }
-
-            public void Insert(string remainingBranches)
-            {
-                if (remainingBranches.Length > 0)
-                {
-                    if (_branches.ContainsKey(remainingBranches[0]))
-                    {
-                        _branches[remainingBranches[0]].Insert(remainingBranches.Substring(1));
-                    }
-                    else
-                    {
-                        _branches.Add(remainingBranches[0], new TrieBranch(remainingBranches.Substring(1)));
-                    }
-                }
-            }
-
-            public void GetAllChildBranches(string localPath, List<string> paths)
-            {
-                if(_branches.Count == 0)
-                {
-                    paths.Add(localPath + Value);
-                }
-                else
-                {
-                    foreach (var branch in _branches)
-                    {
-                        GetAllChildBranches(localPath + Value, paths);
-                    }
-                }
-            }
-
-            public void GetPathBranches(string path, string fullPath, List<string> branches)
-            {
-                if(path.Length > 0)
-                {
-                    if(_branches.ContainsKey(path[0]))
-                    {
-                        //Go into child branch
-                        GetPathBranches(path.Substring(1), fullPath, branches);
-                    }
-                    else
-                    {
-                        //Reached end of road
-                        return;
-                    }
-                }
-                //If reached end of the road return all child branches
-                else
-                {
-                    foreach (KeyValuePair<char, TrieBranch> branch in _branches)
-                    {
-                        //branches.Add(branch.)
-                    }
-                }
-            }
-        }
+      _rootNode = new TrieNode(true, null);
     }
-}
 
-//Navigate until hit end of string, then return all remaining branches
+    public void Insert(string value)
+    {
+      _rootNode.Insert(value);
+    }
+
+    public List<string> GetBranches(string value)
+    {
+      return _rootNode.GetBranches(value, value);
+    }
+
+    private class TrieNode
+    {
+      private readonly bool _rootNode;
+      private readonly char? _char;
+      private readonly Dictionary<char, TrieNode> _children;
+
+      public TrieNode(bool rootNode, char? nodeChar)
+      {
+        _rootNode = rootNode;
+        _char = nodeChar;
+        _children = new Dictionary<char, TrieNode>();
+      }
+
+      public void Insert(string value)
+      {
+        // We've fully inserted value into the Trie; add null node to indicate an end
+        if (value == "")
+        {
+          _children.Add(' ', new TrieNode(false, null));
+          return;
+        }
+
+        var childChar = value[0];
+
+        if (!_children.ContainsKey(childChar))
+        {
+          _children.Add(childChar, new TrieNode(false, childChar));
+        }
+
+        _children[childChar].Insert(value.Substring(1));
+      }
+
+      /// <summary>
+      /// Finds all strings in Trie that start with specified value
+      /// </summary>
+      /// <param name="value"></param>
+      /// <returns></returns>
+      public List<string> GetBranches(string originalValue, string value)
+      {
+        // We've reached the end of the input string, return all branches from this node
+        if (value == "")
+        {
+          var branches = new List<string>();
+          GetAllBranches(branches, originalValue.Substring(0, originalValue.Length - 1));
+          return branches;
+        }
+
+        var childChar = value[0];
+
+        if (_children.ContainsKey(childChar))
+        {
+          return _children[childChar].GetBranches(originalValue, value.Substring(1));
+        }
+        else
+        {
+          // We've reached the end of the Trie branch, just return input string
+          return new List<string>() { originalValue };
+        }
+      }
+
+      private void GetAllBranches(List<string> branches, string valueSoFar)
+      {
+        if (this._char == null)
+        {
+          branches.Add(valueSoFar);
+        }
+        else
+        {
+          valueSoFar += this._char;
+
+          foreach (var key in _children.Keys)
+          {
+            _children[key].GetAllBranches(branches, valueSoFar);
+          }
+        }
+      }
+    }
+  }
+}
