@@ -11,7 +11,7 @@ namespace CSConsoleRL.Helpers
   public class PathfindingHelper
   {
     private static PathfindingHelper _instance;
-    private TileTypeDictionary _tileDict;
+    private readonly TileTypeDictionary _tileDict;
 
     private class PathfindingNode
     {

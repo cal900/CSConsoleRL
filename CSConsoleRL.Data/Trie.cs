@@ -1,25 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CSConsoleRL.Data
 {
   public class Trie
   {
-    private TrieNode _rootNode;
+    private readonly TrieNode _rootNode;
 
     public Trie()
     {
       _rootNode = new TrieNode(true, null);
     }
 
+    /// <summary>
+    /// Adds value to the Trie
+    /// </summary>
+    /// <param name="value"></param>
     public void Insert(string value)
     {
       _rootNode.Insert(value);
     }
 
+    /// <summary>
+    /// Get all strings in Trie that start with the specified value.
+    /// If the value doesn't exist  at all in Trie will return null.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public List<string> GetBranches(string value)
     {
       return _rootNode.GetBranches(value, value);
@@ -57,11 +63,6 @@ namespace CSConsoleRL.Data
         _children[childChar].Insert(value.Substring(1));
       }
 
-      /// <summary>
-      /// Finds all strings in Trie that start with specified value
-      /// </summary>
-      /// <param name="value"></param>
-      /// <returns></returns>
       public List<string> GetBranches(string originalValue, string value)
       {
         // We've reached the end of the input string, return all branches from this node
@@ -80,8 +81,9 @@ namespace CSConsoleRL.Data
         }
         else
         {
-          // We've reached the end of the Trie branch, just return input string
-          return new List<string>() { originalValue };
+          // We've reached the end of the Trie branch with still
+          // chars to go in value, return null
+          return null;
         }
       }
 
