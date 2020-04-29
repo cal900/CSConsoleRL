@@ -8,7 +8,7 @@ using GameTiles.Tiles;
 
 namespace CSConsoleRL.Helpers
 {
-  public class PathfindingHelper
+  public class PathfindingHelper2
   {
     private static PathfindingHelper _instance;
     private readonly TileTypeDictionary _tileDict;
@@ -17,9 +17,9 @@ namespace CSConsoleRL.Helpers
     {
       public Vector2i Coord;
       public List<PathfindingNode> Children;
-      public int F { get { return G + H; } }
-      public int G { get; set; }
-      public int H { get; set; }
+      public int F { get { return G + H; } }  // Determined cost of path
+      public int G { get; set; }  // Cost of path from start to this node
+      public int H { get; set; }  // Heuristic cost of direct path to goal tile
       public PathfindingNode Parent { get; private set; }
 
       public PathfindingNode(int x, int y, PathfindingNode parent)
@@ -301,6 +301,61 @@ namespace CSConsoleRL.Helpers
 
       //If path not found just return null
       return null;
+    }
+  }
+
+  public class PathfindingHelper
+  {
+    private static PathfindingHelper _instance;
+    private readonly TileTypeDictionary _tileDict;
+    public static PathfindingHelper Instance
+    {
+      get
+      {
+        if (_instance == null)
+        {
+          _instance = new PathfindingHelper();
+        }
+        return _instance;
+      }
+    }
+
+    public List<Vector2i>[] Path(Tile[,] gameTiles, Vector2i start, Vector2i end)
+    {
+      var openPath = new List<PathfindingNode>() { new PathfindingNode(start.X, start.Y, null) };
+      var closedPath = new List<PathfindingNode>();
+
+      while (openPath.Count > 0)
+      {
+        var current = openPath[0];
+
+        // Find lowest value node
+        foreach (var node in openPath)
+        {
+          if (node.F < current.F)
+          {
+            current = node;
+          }
+        }
+
+
+      }
+
+    private class PathfindingNode
+    {
+      public int X { get; private set; }
+      public int Y { get; private set; }
+      public int F { get { return G + H; } }  // Determined cost of path
+      public int G { get; set; }  // Cost of path from start to this node
+      public int H { get; set; }  // Heuristic cost of direct path to goal tile
+      public PathfindingNode Parent { get; private set; }
+
+      public PathfindingNode(int x, int y, PathfindingNode parent)
+      {
+        X = x;
+        Y = y;
+        Parent = parent;
+      }
     }
   }
 }
