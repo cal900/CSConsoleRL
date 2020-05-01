@@ -88,18 +88,18 @@ namespace CSConsoleRL.GameSystems
 
       if (path != null)
       {
-        if (path[0] != null) seekerAi.Path = path[0];
-        if (path[1] != null) seekerAi.AnalyzedPath = path[1];
+        if (path != null) seekerAi.Path = path;
+        // if (path[1] != null) seekerAi.AnalyzedPath = path[1];
 
         //For debugging color in path and analyzed tiles
-        foreach (var tile in path[1])
-        {
-          var fadingColorEnt = new FadingColorEntity("yellow");
-          fadingColorEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = tile.X;
-          fadingColorEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = tile.Y;
-          SystemManager.RegisterEntity(fadingColorEnt);
-        }
-        foreach (var tile in path[0])
+        // foreach (var tile in path[1])
+        // {
+        //   var fadingColorEnt = new FadingColorEntity("yellow");
+        //   fadingColorEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = tile.X;
+        //   fadingColorEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = tile.Y;
+        //   SystemManager.RegisterEntity(fadingColorEnt);
+        // }
+        foreach (var tile in path)
         {
           var fadingColorEnt = new FadingColorEntity("green");
           fadingColorEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = tile.X;
