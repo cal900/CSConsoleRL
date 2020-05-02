@@ -99,13 +99,13 @@ namespace CSConsoleRL.GameSystems
         //   fadingColorEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = tile.Y;
         //   SystemManager.RegisterEntity(fadingColorEnt);
         // }
-        foreach (var tile in path)
-        {
-          var fadingColorEnt = new FadingColorEntity("green");
-          fadingColorEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = tile.X;
-          fadingColorEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = tile.Y;
-          SystemManager.RegisterEntity(fadingColorEnt);
-        }
+        // foreach (var tile in path)
+        // {
+        //   var fadingColorEnt = new FadingColorEntity("green");
+        //   fadingColorEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = tile.X;
+        //   fadingColorEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = tile.Y;
+        //   SystemManager.RegisterEntity(fadingColorEnt);
+        // }
       }
 
       //Move to desired location

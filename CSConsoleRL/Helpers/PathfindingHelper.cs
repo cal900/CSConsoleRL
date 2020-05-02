@@ -75,6 +75,8 @@ namespace CSConsoleRL.Helpers
             path.Add(new Vector2i(parent.X, parent.Y));
             parent = parent.Parent;
           }
+          // Remove last tile as is starting one
+          path.RemoveAt((path.Count - 1));
           path.Reverse();
 
           return path;
@@ -88,31 +90,33 @@ namespace CSConsoleRL.Helpers
             case 0: // Above
               x = current.X;
               y = current.Y - 1;
-              if (y < 0) y = 0;
+              if (y < 0) continue;
               break;
             case 1: // Below
               x = current.X;
               y = current.Y + 1;
-              if (y >= 30) y = 29;
+              if (y >= gameTiles.GetLength(1)) continue;
               break;
             case 2: // Left
               x = current.X - 1;
               y = current.Y;
-              if (x < 0) x = 0;
+              if (x < 0) continue;
               break;
             case 3: // Right
               x = current.X + 1;
               y = current.Y;
-              if (x >= 30) x = 29;
+              if (x >= gameTiles.GetLength(0)) continue;
               break;
           }
+
+          if (GetExistingPathfindingNode(closedPath, x, y) != null) continue;
 
           if (!_tileDict[gameTiles[x, y].TileType].BlocksMovement)
           {
             var g = current.G + 1;
             var h = CalculateH(x, y, end.X, end.Y);
 
-            // Check if node already exists in closedList
+            // Check if node already exists in openList
             var existing = GetExistingPathfindingNode(openPath, x, y);
 
             // If it does but this has lower cost, update node

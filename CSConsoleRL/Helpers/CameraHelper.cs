@@ -6,7 +6,7 @@ using CSConsoleRL.Components;
 
 namespace CSConsoleRL.Helpers
 {
-  public class CameraHelper
+  public sealed class CameraHelper
   {
     private Entity _entity;
 
