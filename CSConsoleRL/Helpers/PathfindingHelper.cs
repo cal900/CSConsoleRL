@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.System;
 using GameTiles.Tiles;
+using CSConsoleRL.Logging;
 
 namespace CSConsoleRL.Helpers
 {
@@ -138,6 +139,7 @@ namespace CSConsoleRL.Helpers
         }
       }
 
+      GameLogger.Instance().LogDebug("PathfindingHelper returned null when trying to find path");
       return null;
     }
 

@@ -8,12 +8,12 @@ using CSConsoleRL.Entities;
 
 namespace CSConsoleRL.Events
 {
-  public class ToggleFowEvent : IGameEvent
+  public class ToggleAiEvent : IGameEvent
   {
-    public string EventName { get { return "ToggleFow"; } }
+    public string EventName { get { return "ToggleAi"; } }
     public List<object> EventParams { get; set; }
 
-    public ToggleFowEvent()
+    public ToggleAiEvent()
     {
 
     }

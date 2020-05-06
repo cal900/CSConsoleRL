@@ -21,12 +21,14 @@ namespace CSConsoleRL.GameSystems
   {
     private Tile[,] _gameTiles;
     private ActorEntity _actorEntity;
+    private bool _aiEnabled;
 
     public AiSystem(GameSystemManager _manager, Tile[,] _gameTiles)
     {
       SystemManager = _manager;
       _systemEntities = new List<Entity>();
       this._gameTiles = _gameTiles;
+      _aiEnabled = true;
     }
 
     public override void InitializeSystem()
@@ -54,14 +56,20 @@ namespace CSConsoleRL.GameSystems
         case "NextTurn":
           NextTurn();
           break;
+        case "ToggleAi":
+          _aiEnabled = !_aiEnabled;
+          break;
       }
     }
 
     private void NextTurn()
     {
-      foreach (var entity in _systemEntities)
+      if (_aiEnabled)
       {
-        GetAiResponse(entity);
+        foreach (var entity in _systemEntities)
+        {
+          GetAiResponse(entity);
+        }
       }
     }
 
@@ -84,7 +92,7 @@ namespace CSConsoleRL.GameSystems
 
       //Call to A* Pathfinding to get path
       var path = PathfindingHelper.Instance.Path(_gameTiles, new Vector2i(position.ComponentXPositionOnMap, position.ComponentYPositionOnMap),
-          new Vector2i(_actorEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap + 1, _actorEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap));
+          new Vector2i(_actorEntity.GetComponent<PositionComponent>().ComponentXPositionOnMap, _actorEntity.GetComponent<PositionComponent>().ComponentYPositionOnMap));
 
       if (path != null)
       {

@@ -157,7 +157,7 @@ namespace CSConsoleRL.GameSystems
       _supportedShellFunctions.Add("t", new ShellCommand()
       {
         Desc = "Toggle Specified System",
-        SupportedInputs = new List<string>() { "fow - fog of war" },
+        SupportedInputs = new List<string>() { "fow - fog of war, ai - ai for all npcs" },
         ShellFunction = Toggle
       });
       _supportedShellFunctions.Add("ce", new ShellCommand()
@@ -169,7 +169,7 @@ namespace CSConsoleRL.GameSystems
       _supportedShellFunctions.Add("le", new ShellCommand()
       {
         Desc = "List Entities",
-        SupportedInputs = new List<string>() { "actorentity" },
+        SupportedInputs = new List<string>() { "actor" },
         ShellFunction = ListEntities
       });
     }
@@ -219,6 +219,9 @@ namespace CSConsoleRL.GameSystems
         case "fow":
           BroadcastMessage(new ToggleFowEvent());
           return string.Format("Toggling Fog of War (FOW)");
+        case "ai":
+          BroadcastMessage(new ToggleAiEvent());
+          return string.Format("Toggling AI for NPCs");
         default:
           return string.Format("Unrecognized input to toggle: {0}", toggleArg);
       }
@@ -273,7 +276,7 @@ namespace CSConsoleRL.GameSystems
       {
         switch (inputs[0])
         {
-          case "actorentity":
+          case "actor":
             var ents = SystemManager.GetEntities<ActorEntity>();
             foreach (var ent in ents)
             {

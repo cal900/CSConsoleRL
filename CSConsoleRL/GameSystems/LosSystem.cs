@@ -56,6 +56,7 @@ namespace CSConsoleRL.GameSystems
           break;
         case "ToggleFow":
           _fowEnabled = !_fowEnabled;
+          CalculateLos();
           break;
       }
     }
