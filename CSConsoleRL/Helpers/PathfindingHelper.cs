@@ -49,8 +49,10 @@ namespace CSConsoleRL.Helpers
       };
       var closedPath = new List<PathfindingNode>();
 
+      var odd = -1; // Used to alternate between horizontal and vertical
       while (openPath.Count > 0)
       {
+        odd *= -1;
         var current = openPath[0];
 
         // Find lowest value node
@@ -83,7 +85,7 @@ namespace CSConsoleRL.Helpers
           return path;
         }
 
-        for (int dir = 0; dir <= 3; dir++)
+        for (int dir = (odd == 1 ? 0 : 3); odd == 1 ? dir <= 3 : dir >= 0; dir += odd)
         {
           int x = 0, y = 0;
           switch (dir)
