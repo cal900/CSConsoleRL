@@ -66,7 +66,7 @@ namespace CSConsoleRL.GameSystems
 
       _systemEntities = new List<Entity>();
       var fontPath = @"G:\Programming\CSConsoleRL\Oct172018Try\CSConsoleRL\CSConsoleRL\bin\Debug\Data\Fonts\arial.ttf";
-      if (!File.Exists(fontPath)) fontPath = @"G:\Programming\CSConsoleRL\Data\Fonts\arial.ttf";
+      if (!File.Exists(fontPath)) fontPath = @"H:\Programming\CSConsoleRL\Data\Fonts\arial.ttf";
       if (!File.Exists(fontPath)) fontPath = @"/home/jason/dev/CSConsoleRL/Data/Fonts/arial.ttf";
       _gameFont = new Font(fontPath);
 
@@ -338,8 +338,8 @@ namespace CSConsoleRL.GameSystems
         case EnumSfmlSprites.MainCharacter:
           sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.MainCharacter]);
           break;
-        case EnumSfmlSprites.HumanEnemy:
-          sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.HumanEnemy]);
+        case EnumSfmlSprites.Seeker:
+          sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.Seeker]);
           break;
         case EnumSfmlSprites.Dog:
           sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.Dog]);
@@ -389,10 +389,12 @@ namespace CSConsoleRL.GameSystems
           : base()
       {
         string fileName = @"G:\Programming\CSConsoleRL\June302019Try\CSConsoleRL\Data\Sprites\Tiles20x20.png";
-        if (!File.Exists(fileName)) fileName = @"G:\Programming\CSConsoleRL\Data\Sprites\Tiles20x20.png";
+        if (!File.Exists(fileName)) fileName = @"H:\Programming\CSConsoleRL\Data\Sprites\Tiles20x20.png";
         if (!File.Exists(fileName)) fileName = @"/home/jason/dev/CSConsoleRL/Data/Sprites/Tiles20x20.png";
         Add(EnumSfmlSprites.MainCharacter, new Texture(fileName, new IntRect(0, 140, 20, 20)));
-        Add(EnumSfmlSprites.HumanEnemy, new Texture(fileName, new IntRect(20, 140, 20, 20)));
+        Add(EnumSfmlSprites.Seeker, new Texture(fileName, new IntRect(20, 140, 20, 20)));
+        Add(EnumSfmlSprites.SeekerPistol, new Texture(fileName, new IntRect(40, 140, 20, 20)));
+        Add(EnumSfmlSprites.SeekerKnife, new Texture(fileName, new IntRect(60, 140, 20, 20)));
         Add(EnumSfmlSprites.Dog, new Texture(fileName, new IntRect(0, 0, 20, 20)));
         Add(EnumSfmlSprites.RedX, new Texture(fileName, new IntRect(0, 160, 20, 20)));
         Add(EnumSfmlSprites.GreenSquare, new Texture(fileName, new IntRect(20, 160, 20, 20)));

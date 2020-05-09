@@ -10,7 +10,9 @@ namespace CSConsoleRL.Enums
   {
     MainCharacter,
     Dog,
-    HumanEnemy,
+    Seeker,
+    SeekerPistol,
+    SeekerKnife,
     RedX,
     GreenSquare,
     YellowSquare,

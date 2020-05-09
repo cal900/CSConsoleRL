@@ -28,7 +28,7 @@ namespace GameTiles.Tiles
     {
       var fileName = GameGlobals.Instance().Get<string>("textureDir");
       if (!File.Exists(fileName)) fileName = @"G:\Programming\CSConsoleRL\CSConsoleRL\CSConsoleRL\bin\x64\Debug\Data\Sprites\Tiles20x20.png";
-      if (!File.Exists(fileName)) fileName = @"G:\Programming\CSConsoleRL\Data\Sprites\Tiles20x20.png";
+      if (!File.Exists(fileName)) fileName = @"H:\Programming\CSConsoleRL\Data\Sprites\Tiles20x20.png";
       if (!File.Exists(fileName)) fileName = @"/home/jason/dev/CSConsoleRL/Data/Sprites/Tiles20x20.png";
       Add(EnumTileTypes.Snow, new TileData('~', new Texture(fileName, new IntRect(0, 0, 20, 20)), ConsoleColor.Gray, false, false));
       Add(EnumTileTypes.SnowWalked, new TileData('8', new Texture(fileName, new IntRect(20, 20, 20, 20)), ConsoleColor.Gray, false, false));
