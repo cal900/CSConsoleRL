@@ -341,6 +341,12 @@ namespace CSConsoleRL.GameSystems
         case EnumSfmlSprites.Seeker:
           sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.Seeker]);
           break;
+        case EnumSfmlSprites.SeekerPistol:
+          sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.SeekerPistol]);
+          break;
+        case EnumSfmlSprites.SeekerKnife:
+          sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.SeekerKnife]);
+          break;
         case EnumSfmlSprites.Dog:
           sfmlComponent.GameSprite = new Sprite(_textureDictionary[EnumSfmlSprites.Dog]);
           break;
