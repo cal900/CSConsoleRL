@@ -57,6 +57,10 @@ namespace CSConsoleRL.Entities
         Components.Add(component.GetType(), component);
         component.EntityAttachedTo = this;
       }
+      else
+      {
+        throw new Exception("Trying to add a component to an Entity that already contains a component of that type");
+      }
 
       return this;
     }
