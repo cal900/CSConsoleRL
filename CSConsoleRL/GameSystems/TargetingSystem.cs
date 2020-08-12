@@ -29,7 +29,7 @@ namespace CSConsoleRL.GameSystems
 
     public override void InitializeSystem()
     {
-
+      _targetingPath = PlotCourse((new Vector2i(0, 0)), new Vector2i(15, 10));
     }
 
     public override void HandleMessage(IGameEvent gameEvent)
@@ -45,8 +45,8 @@ namespace CSConsoleRL.GameSystems
           var dir = (EnumDirections)gameEvent.EventParams[0];
           MoveTargetingCursor(dir);
           break;
-        case "RequestTargetingArray":
-          
+        case "RequestTargetingPath":
+          BroadcastMessage(new SendTargetingPathEvent(_targetingPath));
           break;
       }
     }

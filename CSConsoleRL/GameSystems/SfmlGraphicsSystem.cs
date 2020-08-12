@@ -52,6 +52,7 @@ namespace CSConsoleRL.GameSystems
     private Font _gameFont;
 
     private Item _activeItem;
+    private List<Vector2i> _targetingPath;
 
     public SfmlGraphicsSystem(GameSystemManager manager, RenderWindow _sfmlWindow, Tile[,] _gameTiles)
     {
@@ -114,6 +115,9 @@ namespace CSConsoleRL.GameSystems
           break;
         case "SendActiveItem":
           _activeItem = (Item)gameEvent.EventParams[0];
+          break;
+        case "SendTargetingPath":
+          _targetingPath = (List<Vector2i>)gameEvent.EventParams[0];
           break;
       }
     }
@@ -232,6 +236,8 @@ namespace CSConsoleRL.GameSystems
 
       //Draw UI
       DrawUi();
+
+      DrawTargetingPath(xPixelOnMap, yPixelOnMap);
     }
 
     private void DrawConsole()
@@ -278,6 +284,27 @@ namespace CSConsoleRL.GameSystems
       sfmlWindow.Draw(borderRect);
       sfmlWindow.Draw(itemRect);
       sfmlWindow.Draw(itemSprite);
+    }
+
+    private void DrawTargetingPath(int xPixelOnMap, int yPixelOnMap)
+    {
+      BroadcastMessage(new RequestTargetingPathEvent());
+
+      if (_targetingPath == null)
+      {
+        return;
+      }
+
+      for (int i = 0; i < _targetingPath.Count; i++)
+      {
+        var targetingSprite = new Sprite(_textureDictionary[EnumSfmlSprites.RedX]);
+
+        int spriteXPosition = (_targetingPath[i].X - windowXPositionInWorld) * _tilePixelSize;
+        int spriteYPosition = (_targetingPath[i].Y - windowYPositionInWorld) * _tilePixelSize;
+        targetingSprite.Position = new Vector2f(spriteXPosition - xPixelOnMap, spriteYPosition - yPixelOnMap);
+
+        sfmlWindow.Draw(targetingSprite);
+      }
     }
 
     private void LoadGlobals()

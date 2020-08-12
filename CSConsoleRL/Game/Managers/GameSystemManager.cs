@@ -69,6 +69,7 @@ namespace CSConsoleRL.Game.Managers
       RegisterSystem(new TerminalSystem(this));
       RegisterSystem(new AiSystem(this, _gameMap.TileSet));
       RegisterSystem(new InventorySystem(this));
+      RegisterSystem(new TargetingSystem(this, _gameMap.TileSet));
     }
 
     private void InitializeSystems()
