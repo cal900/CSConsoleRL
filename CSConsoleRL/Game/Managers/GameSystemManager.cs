@@ -7,6 +7,7 @@ using CSConsoleRL.GameSystems;
 using CSConsoleRL.Entities;
 using CSConsoleRL.Events;
 using CSConsoleRL.Components;
+using CSConsoleRL.Helpers;
 using SFML.Window;
 using SFML.Graphics;
 using SFML.System;
@@ -62,14 +63,17 @@ namespace CSConsoleRL.Game.Managers
 
     private void CreateSystems()
     {
-      RegisterSystem(new MovementSystem(this, _gameMap.TileSet));
-      RegisterSystem(new LosSystem(this, _gameMap.TileSet));
-      RegisterSystem(new SfmlGraphicsSystem(this, _sfmlWindow, _gameMap.TileSet));
-      RegisterSystem(new UserInputSystem(this, _sfmlWindow));
-      RegisterSystem(new TerminalSystem(this));
-      RegisterSystem(new AiSystem(this, _gameMap.TileSet));
-      RegisterSystem(new InventorySystem(this));
-      RegisterSystem(new TargetingSystem(this, _gameMap.TileSet));
+      DependencyInjectionHelper.Register(this);
+      DependencyInjectionHelper.Register(_sfmlWindow);
+      DependencyInjectionHelper.Register(_gameMap.TileSet);
+      RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(MovementSystem)));
+      RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(LosSystem)));
+      RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(SfmlGraphicsSystem)));
+      RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(UserInputSystem)));
+      RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(TerminalSystem)));
+      RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(AiSystem)));
+      RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(InventorySystem)));
+      RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(TargetingSystem)));
     }
 
     private void InitializeSystems()
