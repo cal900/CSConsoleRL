@@ -15,9 +15,15 @@ namespace CSConsoleRL.Helpers
 
   public sealed class GameStateHelper
   {
+    public EnumGameState GameState { get; private set; }
     public GameStateHelper()
     {
+      GameState = EnumGameState.RegularGame;
+    }
 
+    public void SetGameState(EnumGameState newState)
+    {
+      GameState = newState;
     }
   }
 }

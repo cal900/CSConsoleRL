@@ -31,9 +31,10 @@ namespace CSConsoleRL.GameSystems
     private const int _yUiAreaCharHeight = 5;
     private const ConsoleColor foregroundColor = ConsoleColor.DarkGray;
     private const ConsoleColor backgroundColor = ConsoleColor.Black;
-    private RenderWindow sfmlWindow;
+    private GameStateHelper _gameStateHelper;
+    private RenderWindow _sfmlWindow;
+    private Tile[,] _gameTiles;
     private List<string> consoleCommands;
-    private Tile[,] gameTiles;
     private int worldXLength;
     private int worldYLength;
     private int windowXPositionInWorld = 0;
@@ -54,16 +55,17 @@ namespace CSConsoleRL.GameSystems
     private Item _activeItem;
     private List<Vector2i> _targetingPath;
 
-    public SfmlGraphicsSystem(GameSystemManager manager, RenderWindow _sfmlWindow, Tile[,] _gameTiles)
+    public SfmlGraphicsSystem(GameSystemManager manager, GameStateHelper gameStateHelper, RenderWindow sfmlWindow, Tile[,] gameTiles)
     {
       LoadGlobals();
 
       SystemManager = manager;
 
-      sfmlWindow = _sfmlWindow;   //Don't create window here as we need the events to be in user input system
-      gameTiles = _gameTiles;
-      worldXLength = gameTiles.GetLength(0);
-      worldYLength = gameTiles.GetLength(1);
+      _gameStateHelper = gameStateHelper;
+      _sfmlWindow = sfmlWindow;   //Don't create window here as we need the events to be in user input system
+      _gameTiles = gameTiles;
+      worldXLength = this._gameTiles.GetLength(0);
+      worldYLength = this._gameTiles.GetLength(1);
 
       _systemEntities = new List<Entity>();
       var fontPath = @"G:\Programming\CSConsoleRL\Oct172018Try\CSConsoleRL\CSConsoleRL\bin\Debug\Data\Fonts\arial.ttf";
@@ -133,7 +135,7 @@ namespace CSConsoleRL.GameSystems
         DrawConsole();
       }
 
-      sfmlWindow.Display();
+      _sfmlWindow.Display();
     }
 
     private void ScreenPositionChange(int newX, int newY)
@@ -172,28 +174,28 @@ namespace CSConsoleRL.GameSystems
       var endingTileXPosition = Math.Ceiling(PixelsToCoords(xPixelOnMap + _windowXSize));
       var endingTileYPosition = Math.Ceiling(PixelsToCoords(yPixelOnMap + _windowYSize));
 
-      sfmlWindow.Clear(Color.Black);
+      _sfmlWindow.Clear(Color.Black);
 
       //Draw background tiles
       for (int x = startingTileXPosition; x < endingTileXPosition; x++)
       {
-        if (x < 0 || x >= gameTiles.GetLength(0)) continue;
+        if (x < 0 || x >= _gameTiles.GetLength(0)) continue;
         for (int y = startingTileYPosition; y < endingTileYPosition; y++)
         {
-          if (y < 0 || y >= gameTiles.GetLength(1)) continue;
+          if (y < 0 || y >= _gameTiles.GetLength(1)) continue;
 
-          gameTiles[x, y].TileSprite.Position = new Vector2f(x * _tilePixelSize - xPixelOnMap, y * _tilePixelSize - yPixelOnMap);
+          _gameTiles[x, y].TileSprite.Position = new Vector2f(x * _tilePixelSize - xPixelOnMap, y * _tilePixelSize - yPixelOnMap);
 
           //Check if tile is in LOS
-          if (gameTiles[x, y].IsInLos)
+          if (_gameTiles[x, y].IsInLos)
           {
-            gameTiles[x, y].TileSprite.Color = new Color(255, 255, 255);
-            sfmlWindow.Draw(gameTiles[x, y].TileSprite);
+            _gameTiles[x, y].TileSprite.Color = new Color(255, 255, 255);
+            _sfmlWindow.Draw(_gameTiles[x, y].TileSprite);
           }
           else
           {
-            gameTiles[x, y].TileSprite.Color = new Color(100, 100, 100);
-            sfmlWindow.Draw(gameTiles[x, y].TileSprite);
+            _gameTiles[x, y].TileSprite.Color = new Color(100, 100, 100);
+            _sfmlWindow.Draw(_gameTiles[x, y].TileSprite);
           }
         }
       }
@@ -208,7 +210,7 @@ namespace CSConsoleRL.GameSystems
         int spriteYPosition = (positionComponent.ComponentYPositionOnMap - windowYPositionInWorld) * _tilePixelSize;
 
         sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition - xPixelOnMap, spriteYPosition - yPixelOnMap);
-        sfmlWindow.Draw(sfmlComponent.GameSprite);
+        _sfmlWindow.Draw(sfmlComponent.GameSprite);
       }
 
       //Draw animated sprites
@@ -229,15 +231,15 @@ namespace CSConsoleRL.GameSystems
           int spriteYPosition = (positionComponent.ComponentYPositionOnMap - windowYPositionInWorld) * _tilePixelSize;
 
           sfmlComponent.GameSprite.Position = new Vector2f(spriteXPosition - xPixelOnMap, spriteYPosition - yPixelOnMap);
-          sfmlWindow.Draw(sfmlComponent.GameSprite);
+          _sfmlWindow.Draw(sfmlComponent.GameSprite);
           sfmlComponent.NextFrame();
         }
       }
 
+      DrawTargetingPath(xPixelOnMap, yPixelOnMap);
+
       //Draw UI
       DrawUi();
-
-      DrawTargetingPath(xPixelOnMap, yPixelOnMap);
     }
 
     private void DrawConsole()
@@ -246,7 +248,7 @@ namespace CSConsoleRL.GameSystems
       var rect = new RectangleShape(new Vector2f(_windowXSize, _tilePixelSize * _terminalDisplayLines));
       rect.Position = new Vector2f(0, 0);
       rect.FillColor = new Color(0, 0, 0, 150);
-      sfmlWindow.Draw(rect);
+      _sfmlWindow.Draw(rect);
 
       //Draw console command text
       var textColor = new Color(255, 255, 255);
@@ -257,33 +259,8 @@ namespace CSConsoleRL.GameSystems
         var lineText = new Text(_terminalLines[_terminalLines.Count - 1 - i], _gameFont, _termCharSize);
         lineText.Color = textColor;
         lineText.Position = new Vector2f(0, lineStartYCoord);
-        sfmlWindow.Draw(lineText);
+        _sfmlWindow.Draw(lineText);
       }
-    }
-
-    private void DrawUi()
-    {
-      //Currently Active Item - Square in bottom right
-      var borderRect = new RectangleShape(new Vector2f((float)(_tilePixelSize * 2 + 10), (float)(_tilePixelSize * 2 + 10)));
-      var itemRect = new RectangleShape(new Vector2f((_tilePixelSize * 2), (_tilePixelSize * 2)));
-
-      var itemXCoord = _windowXSize - (_tilePixelSize * 2) - 15;
-      var itemYCoord = _windowYSize - (_tilePixelSize * 2) - 15;
-      borderRect.Position = new Vector2f(itemXCoord, itemYCoord);
-      itemRect.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
-
-      borderRect.FillColor = new Color(155, 155, 0);
-      itemRect.FillColor = new Color(25, 25, 25);
-
-      //Get currently active item
-      BroadcastMessage(new RequestActiveItemEvent(_cameraHelper.GetEntity().Id));
-      var itemSprite = new Sprite(_textureDictionary[GetItemSpriteEnum(_activeItem.ItemType)]);
-      itemSprite.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
-      itemSprite.Scale = new Vector2f(2, 2);
-
-      sfmlWindow.Draw(borderRect);
-      sfmlWindow.Draw(itemRect);
-      sfmlWindow.Draw(itemSprite);
     }
 
     private void DrawTargetingPath(int xPixelOnMap, int yPixelOnMap)
@@ -303,8 +280,87 @@ namespace CSConsoleRL.GameSystems
         int spriteYPosition = (_targetingPath[i].Y - windowYPositionInWorld) * _tilePixelSize;
         targetingSprite.Position = new Vector2f(spriteXPosition - xPixelOnMap, spriteYPosition - yPixelOnMap);
 
-        sfmlWindow.Draw(targetingSprite);
+        _sfmlWindow.Draw(targetingSprite);
       }
+    }
+
+    private void DrawUi()
+    {
+      DrawActiveItemUi();
+      DrawGameStateUi();
+    }
+
+    private void DrawActiveItemUi()
+    {
+      //Currently Active Item - Square in bottom right
+      var borderRect = new RectangleShape(new Vector2f((float)(_tilePixelSize * 2 + 10), (float)(_tilePixelSize * 2 + 10)));
+      var itemRect = new RectangleShape(new Vector2f((_tilePixelSize * 2), (_tilePixelSize * 2)));
+
+      var itemXCoord = _windowXSize - (_tilePixelSize * 2) - 15;
+      var itemYCoord = _windowYSize - (_tilePixelSize * 2) - 15;
+      borderRect.Position = new Vector2f(itemXCoord, itemYCoord);
+      itemRect.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
+
+      borderRect.FillColor = new Color(155, 155, 0);
+      itemRect.FillColor = new Color(25, 25, 25);
+
+      //Get currently active item
+      BroadcastMessage(new RequestActiveItemEvent(_cameraHelper.GetEntity().Id));
+      var itemSprite = new Sprite(_textureDictionary[GetItemSpriteEnum(_activeItem.ItemType)]);
+      itemSprite.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
+      itemSprite.Scale = new Vector2f(2, 2);
+
+      _sfmlWindow.Draw(borderRect);
+      _sfmlWindow.Draw(itemRect);
+      _sfmlWindow.Draw(itemSprite);
+    }
+
+    private void DrawGameStateUi()
+    {
+      var borderVect = new Vector2f((float)(_tilePixelSize * 6 + 10), (float)(_tilePixelSize * 2 + 10));
+      var textVect = new Vector2f((_tilePixelSize * 6), (_tilePixelSize * 2));
+
+      var textStr = "Not Set";
+      switch (_gameStateHelper.GameState)
+      {
+        case EnumGameState.MainMenu:
+          textStr = "Main Menu";
+          break;
+        case EnumGameState.RegularGame:
+          textStr = "Regular Game";
+          break;
+        case EnumGameState.Aiming:
+          textStr = "Aiming";
+          break;
+        default:
+          break;
+      }
+
+
+      //Draw console command text
+      var textColor = new Color(255, 255, 255);
+      //Iterate through commands, write line by line to console
+      for (int i = _terminalLines.Count - 1; i >= 0; i--)
+      {
+        var lineStartYCoord = (_terminalDisplayLines - i) * _termCharSize;
+        var lineText = new Text(_terminalLines[_terminalLines.Count - 1 - i], _gameFont, _termCharSize);
+        lineText.Color = textColor;
+        lineText.Position = new Vector2f(0, lineStartYCoord);
+        _sfmlWindow.Draw(lineText);
+      }
+      var text = new Text(textStr, _gameFont, _termCharSize);
+      text.Color = textColor;
+
+
+      var borderRect = new RectangleShape(borderVect);
+      var textRect = new RectangleShape(textVect);
+      borderRect.Position = new Vector2f(_windowXSize - (_tilePixelSize * 16) - 15, _windowYSize - (_tilePixelSize * 2) - 15);
+      textRect.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
+      borderRect.FillColor = new Color(155, 155, 0);
+      textRect.FillColor = new Color(25, 25, 25);
+
+      _sfmlWindow.Draw(borderRect);
+      _sfmlWindow.Draw(textRect);
     }
 
     private void LoadGlobals()
@@ -344,11 +400,11 @@ namespace CSConsoleRL.GameSystems
     private void AssignTileSprites()
     {
       //Draw background tiles
-      for (int x = 0; x < gameTiles.GetLength(0); x++)
+      for (int x = 0; x < _gameTiles.GetLength(0); x++)
       {
-        for (int y = 0; y < gameTiles.GetLength(1); y++)
+        for (int y = 0; y < _gameTiles.GetLength(1); y++)
         {
-          gameTiles[x, y].TileSprite = new Sprite(_tileDictionary[gameTiles[x, y].TileType].Texture);
+          _gameTiles[x, y].TileSprite = new Sprite(_tileDictionary[_gameTiles[x, y].TileType].Texture);
         }
       }
     }

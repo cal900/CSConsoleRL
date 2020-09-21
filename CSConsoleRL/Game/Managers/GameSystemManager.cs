@@ -66,6 +66,8 @@ namespace CSConsoleRL.Game.Managers
       DependencyInjectionHelper.Register(this);
       DependencyInjectionHelper.Register(_sfmlWindow);
       DependencyInjectionHelper.Register(_gameMap.TileSet);
+      DependencyInjectionHelper.Resolve(typeof(GameStateHelper));
+      RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(GameStateSystem)));
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(MovementSystem)));
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(LosSystem)));
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(SfmlGraphicsSystem)));
@@ -140,7 +142,6 @@ namespace CSConsoleRL.Game.Managers
     /// <summary>
     /// Removes all entities that have been marked as to be deleted
     /// </summary>
-    /// <param name="entity"></param>
     private void DeleteMarkedEntities()
     {
       for (int i = _entitiesToRemove.Count - 1; i >= 0; i--)
