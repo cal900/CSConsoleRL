@@ -37,6 +37,13 @@ namespace CSConsoleRL.GameSystems
           var newState = (EnumGameState)gameEvent.EventParams[0];
           ChangeState(newState);
           break;
+        case "SnapCameraToEntity":
+          var entity = (Entity)gameEvent.EventParams[0];
+          _gameStateHelper.SetCameraCoords(
+            entity.GetComponent<PositionComponent>().ComponentXPositionOnMap,
+            entity.GetComponent<PositionComponent>().ComponentYPositionOnMap
+          );
+          break;
       }
     }
 

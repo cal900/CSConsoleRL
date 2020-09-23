@@ -15,6 +15,7 @@ namespace CSConsoleRL.Enums
     SouthWest,
     SouthEast,
     West,
-    East
+    East,
+    None
   }
 }

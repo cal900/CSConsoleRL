@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CSConsoleRL.Helpers;
 
 namespace CSConsoleRL.GameSystems
 {
@@ -18,28 +19,32 @@ namespace CSConsoleRL.GameSystems
     private Vector2i _startingCoords;
     private Vector2i _targetedCoords;
     private List<Vector2i> _targetingPath;
+    private GameStateHelper _gameStateHelper;
 
-    public TargetingSystem(GameSystemManager manager, Tile[,] _gameTiles)
+    public TargetingSystem(GameSystemManager manager, Tile[,] _gameTiles, GameStateHelper gameStateHelper)
     {
       SystemManager = manager;
       _systemEntities = new List<Entity>();
       _targetedCoords = new Vector2i(0, 0);
       _targetingPath = new List<Vector2i>();
+      _gameStateHelper = gameStateHelper;
     }
 
     public override void InitializeSystem()
     {
-      _targetingPath = PlotCourse((new Vector2i(0, 0)), new Vector2i(15, 10));
+      //_targetingPath = PlotCourse((new Vector2i(0, 0)), new Vector2i(15, 10));
     }
 
     public override void HandleMessage(IGameEvent gameEvent)
     {
       switch (gameEvent.EventName)
       {
-        case "StartTargetingMode":
-          var startPos = (Vector2i)gameEvent.EventParams[0];
-          _startingCoords = startPos;
-          _targetedCoords = startPos;
+        case "NotifyChangeGameState":
+          var newState = (EnumGameState)gameEvent.EventParams[0];
+          if (newState == EnumGameState.Targeting)
+          {
+            StartTargetingMode();
+          }
           break;
         case "MoveTargetingCursor":
           var dir = (EnumDirections)gameEvent.EventParams[0];
@@ -54,6 +59,14 @@ namespace CSConsoleRL.GameSystems
     public override void AddEntity(Entity entity)
     {
 
+    }
+
+    private void StartTargetingMode()
+    {
+      _startingCoords.X = _gameStateHelper.CameraCoords.X;
+      _startingCoords.Y = _gameStateHelper.CameraCoords.Y;
+      _targetedCoords.X = _gameStateHelper.CameraCoords.X;
+      _targetedCoords.Y = _gameStateHelper.CameraCoords.Y;
     }
 
     private void MoveTargetingCursor(EnumDirections dir)
@@ -103,7 +116,7 @@ namespace CSConsoleRL.GameSystems
       }
 
       // We use the smaller dimension as a base for plotting course
-      if (xDiff >= yDiff)
+      if (Math.Abs(xDiff) >= Math.Abs(yDiff))
       {
         for (int x = 0; x < xDiff; x++)
         {
@@ -116,7 +129,7 @@ namespace CSConsoleRL.GameSystems
       {
         for (int y = 0; y < yDiff; y++)
         {
-          var x = (int)Math.Round((double)y * slope);
+          var x = (int)Math.Round((double)y / slope);
 
           path.Add(new Vector2i(start.X + x, start.Y + y));
         }

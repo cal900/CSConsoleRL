@@ -329,27 +329,15 @@ namespace CSConsoleRL.GameSystems
         case EnumGameState.RegularGame:
           textStr = "Regular Game";
           break;
-        case EnumGameState.Aiming:
-          textStr = "Aiming";
+        case EnumGameState.Targeting:
+          textStr = "Targeting";
           break;
         default:
           break;
       }
 
 
-      //Draw console command text
-      var textColor = new Color(255, 255, 255);
-      //Iterate through commands, write line by line to console
-      for (int i = _terminalLines.Count - 1; i >= 0; i--)
-      {
-        var lineStartYCoord = (_terminalDisplayLines - i) * _termCharSize;
-        var lineText = new Text(_terminalLines[_terminalLines.Count - 1 - i], _gameFont, _termCharSize);
-        lineText.Color = textColor;
-        lineText.Position = new Vector2f(0, lineStartYCoord);
-        _sfmlWindow.Draw(lineText);
-      }
       var text = new Text(textStr, _gameFont, _termCharSize);
-      text.Color = textColor;
 
 
       var borderRect = new RectangleShape(borderVect);

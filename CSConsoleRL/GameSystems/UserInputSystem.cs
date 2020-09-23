@@ -11,6 +11,7 @@ using CSConsoleRL.Enums;
 using CSConsoleRL.Entities;
 using SFML.Graphics;
 using SFML.Window;
+using CSConsoleRL.Helpers;
 
 
 //Note - it is the responsibility of UserInputSystem to know what command keyboard inputs correspond to depending on the Component type.
@@ -19,7 +20,8 @@ namespace CSConsoleRL.GameSystems
 {
   public class UserInputSystem : GameSystem
   {
-    private RenderWindow sfmlWindow;
+    private RenderWindow _sfmlWindow;
+    private GameStateHelper _gameStateHelper;
 
     private const Keyboard.Key _inputUp = Keyboard.Key.W;
     private const Keyboard.Key _inputDown = Keyboard.Key.S;
@@ -33,6 +35,7 @@ namespace CSConsoleRL.GameSystems
     private const Keyboard.Key _inputMenuDown = Keyboard.Key.Down;
     private const Keyboard.Key _inputToggleConsole = Keyboard.Key.Tilde;
     private const Keyboard.Key _inputToggleActiveItem = Keyboard.Key.Tab;
+    private const Keyboard.Key _inputToggleTargetingSystem = Keyboard.Key.F;
 
     private Keyboard.Key _lastKeyPressed;
     private bool _lastKeyPressedIsDirty; //Used for situations such as console open where don't want to take multiple from a key being held down
@@ -40,14 +43,16 @@ namespace CSConsoleRL.GameSystems
     private bool _consoleOn;
     private Queue<Keyboard.Key> _inputs;
 
-    public UserInputSystem(GameSystemManager _manager, RenderWindow _sfmlWindow)
+    public UserInputSystem(GameSystemManager _manager, RenderWindow sfmlWindow, GameStateHelper gameStateHelper)
     {
       SystemManager = _manager;
       _systemEntities = new List<Entity>();
 
-      sfmlWindow = _sfmlWindow;
-      sfmlWindow.KeyPressed += SfmlWindow_KeyPressed;
-      sfmlWindow.KeyReleased += SfmlWindow_KeyReleased;
+      _sfmlWindow = sfmlWindow;
+      _sfmlWindow.KeyPressed += SfmlWindow_KeyPressed;
+      _sfmlWindow.KeyReleased += SfmlWindow_KeyReleased;
+
+      _gameStateHelper = gameStateHelper;
 
       _inputs = new Queue<Keyboard.Key>();
     }
@@ -115,51 +120,117 @@ namespace CSConsoleRL.GameSystems
     /// <returns></returns>
     private bool HandleInput(Keyboard.Key input)
     {
-      if (!_consoleOn)
+      if (_consoleOn)
       {
-        switch (input)
-        {
-          case (_inputUp):
-            BroadCastMovementInputToAllEntities(0, -1);
-            return true;
-          case (_inputDown):
-            BroadCastMovementInputToAllEntities(0, 1);
-            return true;
-          case (_inputLeft):
-            BroadCastMovementInputToAllEntities(-1, 0);
-            return true;
-          case (_inputRight):
-            BroadCastMovementInputToAllEntities(1, 0);
-            return true;
-          case (_inputUpLeft):
-            BroadCastMovementInputToAllEntities(-1, -1);
-            return true;
-          case (_inputUpRight):
-            BroadCastMovementInputToAllEntities(1, -1);
-            return true;
-          case (_inputDownLeft):
-            BroadCastMovementInputToAllEntities(-1, 1);
-            return true;
-          case (_inputDownRight):
-            BroadCastMovementInputToAllEntities(1, 1);
-            return true;
-          case (_inputToggleConsole):
-            BroadcastMessage(new ToggleConsoleEvent());
-            break;
-          case (_inputToggleActiveItem):
-            foreach (var ent in _systemEntities)
-            {
-              BroadcastMessage(new ChangeActiveItemEvent(ent.Id));
-            }
-            break;
-          case (Keyboard.Key.Escape):
-            BroadcastMessage(new ExitGameEvent());
-            break;
-        }
+        return HandleInputConsole(input);
       }
-      else
+
+      switch (_gameStateHelper.GameState)
       {
-        BroadcastMessage(new KeyPressedEvent(input));
+        case EnumGameState.RegularGame:
+          return HandleInputRegularGame(input);
+        case EnumGameState.Targeting:
+          return HandleInputTargeting(input);
+      }
+
+      return false;
+    }
+
+    private bool HandleInputConsole(Keyboard.Key input)
+    {
+      BroadcastMessage(new KeyPressedEvent(input));
+      return false;
+    }
+
+    private bool HandleInputRegularGame(Keyboard.Key input)
+    {
+      switch (input)
+      {
+        case (_inputUp):
+          BroadCastMovementInputToAllEntities(0, -1);
+          return true;
+        case (_inputDown):
+          BroadCastMovementInputToAllEntities(0, 1);
+          return true;
+        case (_inputLeft):
+          BroadCastMovementInputToAllEntities(-1, 0);
+          return true;
+        case (_inputRight):
+          BroadCastMovementInputToAllEntities(1, 0);
+          return true;
+        case (_inputUpLeft):
+          BroadCastMovementInputToAllEntities(-1, -1);
+          return true;
+        case (_inputUpRight):
+          BroadCastMovementInputToAllEntities(1, -1);
+          return true;
+        case (_inputDownLeft):
+          BroadCastMovementInputToAllEntities(-1, 1);
+          return true;
+        case (_inputDownRight):
+          BroadCastMovementInputToAllEntities(1, 1);
+          return true;
+        case (_inputToggleConsole):
+          BroadcastMessage(new ToggleConsoleEvent());
+          break;
+        case (_inputToggleActiveItem):
+          foreach (var ent in _systemEntities)
+          {
+            BroadcastMessage(new ChangeActiveItemEvent(ent.Id));
+          }
+          break;
+        case (_inputToggleTargetingSystem):
+          BroadcastMessage(new RequestChangeGameStateEvent(EnumGameState.Targeting));
+          return true;
+        case (Keyboard.Key.Escape):
+          BroadcastMessage(new ExitGameEvent());
+          break;
+      }
+
+      return false;
+    }
+
+    private bool HandleInputTargeting(Keyboard.Key input)
+    {
+      var dir = EnumDirections.None;
+
+      switch (input)
+      {
+        case Keyboard.Key.A:
+          dir = EnumDirections.West;
+          break;
+        case Keyboard.Key.D:
+          dir = EnumDirections.East;
+          break;
+        case Keyboard.Key.W:
+          dir = EnumDirections.North;
+          break;
+        case Keyboard.Key.S:
+          dir = EnumDirections.South;
+          break;
+        case Keyboard.Key.Q:
+          dir = EnumDirections.NorthWest;
+          break;
+        case Keyboard.Key.E:
+          dir = EnumDirections.NorthEast;
+          break;
+        case Keyboard.Key.Z:
+          dir = EnumDirections.SouthWest;
+          break;
+        case Keyboard.Key.X:
+          dir = EnumDirections.SouthEast;
+          break;
+        case _inputToggleTargetingSystem:
+          BroadcastMessage(new RequestChangeGameStateEvent(EnumGameState.RegularGame));
+          break;
+        case Keyboard.Key.Escape:
+          BroadcastMessage(new RequestChangeGameStateEvent(EnumGameState.RegularGame));
+          break;
+      }
+
+      if (dir != EnumDirections.None)
+      {
+        BroadcastMessage(new MoveTargetingCursorEvent(dir));
       }
 
       return false;
