@@ -118,20 +118,44 @@ namespace CSConsoleRL.GameSystems
       // We use the smaller dimension as a base for plotting course
       if (Math.Abs(xDiff) >= Math.Abs(yDiff))
       {
-        for (int x = 0; x < xDiff; x++)
+        if (xDiff >= 0)
         {
-          var y = (int)Math.Round((double)x * slope);
+          for (int x = 0; x < xDiff; x++)
+          {
+            var y = (int)Math.Round((double)x * slope);
 
-          path.Add(new Vector2i(start.X + x, start.Y + y));
+            path.Add(new Vector2i(start.X + x, start.Y + y));
+          }
+        }
+        else
+        {
+          for (int x = 0; x > xDiff; x--)
+          {
+            var y = (int)Math.Round((double)x * slope);
+
+            path.Add(new Vector2i(start.X + x, start.Y + y));
+          }
         }
       }
       else
       {
-        for (int y = 0; y < yDiff; y++)
+        if (yDiff >= 0)
         {
-          var x = (int)Math.Round((double)y / slope);
+          for (int y = 0; y < Math.Abs(yDiff); y++)
+          {
+            var x = (int)Math.Round((double)y / slope);
 
-          path.Add(new Vector2i(start.X + x, start.Y + y));
+            path.Add(new Vector2i(start.X + x, start.Y + y));
+          }
+        }
+        else
+        {
+          for (int y = 0; y > yDiff; y--)
+          {
+            var x = (int)Math.Round((double)y / slope);
+
+            path.Add(new Vector2i(start.X + x, start.Y + y));
+          }
         }
       }
 

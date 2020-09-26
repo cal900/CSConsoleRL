@@ -317,7 +317,8 @@ namespace CSConsoleRL.GameSystems
 
     private void DrawGameStateUi()
     {
-      var borderVect = new Vector2f((float)(_tilePixelSize * 6 + 10), (float)(_tilePixelSize * 2 + 10));
+      var borderThickness = 5;
+      var borderVect = new Vector2f((float)(_tilePixelSize * 6 + (borderThickness * 2)), (float)(_tilePixelSize * 2 + (borderThickness * 2)));
       var textVect = new Vector2f((_tilePixelSize * 6), (_tilePixelSize * 2));
 
       var textStr = "Not Set";
@@ -336,19 +337,25 @@ namespace CSConsoleRL.GameSystems
           break;
       }
 
-
       var text = new Text(textStr, _gameFont, _termCharSize);
+      var boxWidth = text.GetLocalBounds().Width + (borderThickness * 4);
 
+      var startingXPos = (_windowXSize - boxWidth) / 2;
 
       var borderRect = new RectangleShape(borderVect);
       var textRect = new RectangleShape(textVect);
-      borderRect.Position = new Vector2f(_windowXSize - (_tilePixelSize * 16) - 15, _windowYSize - (_tilePixelSize * 2) - 15);
-      textRect.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
+      borderRect.Position = new Vector2f(startingXPos, _windowYSize - (_tilePixelSize * 2) - 15);
+      textRect.Position = new Vector2f(borderRect.Position.X + borderThickness, borderRect.Position.Y + borderThickness);
       borderRect.FillColor = new Color(155, 155, 0);
       textRect.FillColor = new Color(25, 25, 25);
 
+      var textColor = new Color(255, 255, 255);
+      text.Color = textColor;
+      text.Position = new Vector2f(textRect.Position.X + 5, textRect.Position.Y + 5);
+
       _sfmlWindow.Draw(borderRect);
       _sfmlWindow.Draw(textRect);
+      _sfmlWindow.Draw(text);
     }
 
     private void LoadGlobals()

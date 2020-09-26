@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CSConsoleRL.Helpers
 {
-  class UiHelper
+  class UiRenderHelper
   {
   }
 }
