@@ -339,6 +339,7 @@ namespace CSConsoleRL.GameSystems
 
       var text = new Text(textStr, _gameFont, _termCharSize);
       var boxWidth = text.GetLocalBounds().Width + (borderThickness * 4);
+      var boxHeight = text.GetLocalBounds().Height + (borderThickness * 4);
 
       var startingXPos = (_windowXSize - boxWidth) / 2;
 
