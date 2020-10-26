@@ -273,6 +273,13 @@ namespace CSConsoleRL.GameSystems
         return;
       }
 
+      var targetSprite = new Sprite(_textureDictionary[EnumSfmlSprites.TealX]);
+
+      int spriteX = (target.X - windowXPositionInWorld) * _tilePixelSize;
+      int spriteY = (target.Y - windowYPositionInWorld) * _tilePixelSize;
+      targetSprite.Position = new Vector2f(spriteX - xPixelOnMap, spriteY - yPixelOnMap);
+      _sfmlWindow.Draw(targetSprite);
+
       for (int i = 1; i < targetingPath.Count; i++)
       {
         var targetingSprite = new Sprite(_textureDictionary[EnumSfmlSprites.RedX]);
@@ -283,13 +290,6 @@ namespace CSConsoleRL.GameSystems
 
         _sfmlWindow.Draw(targetingSprite);
       }
-
-      var targetSprite = new Sprite(_textureDictionary[EnumSfmlSprites.TealX]);
-
-      int spriteX = (target.X - windowXPositionInWorld) * _tilePixelSize;
-      int spriteY = (target.Y - windowYPositionInWorld) * _tilePixelSize;
-      targetSprite.Position = new Vector2f(spriteX - xPixelOnMap, spriteY - yPixelOnMap);
-      _sfmlWindow.Draw(targetSprite);
     }
 
     private void DrawUi()

@@ -19,6 +19,7 @@ namespace CSConsoleRL.GameSystems
   {
     private Vector2i _startingCoords;
     private Vector2i _targetedCoords;
+    private int _targetingRange;
     private readonly GameStateHelper _gameStateHelper;
     private readonly Tile[,] _gameTiles;
     private readonly TileTypeDictionary _tileDictionary;
@@ -71,11 +72,22 @@ namespace CSConsoleRL.GameSystems
       // When toggle to targeting mode targeting should default to character position
       var mainChar = _gameStateHelper.GetVar<ActorEntity>("MainEntity");
       var charPos = mainChar.GetComponent<PositionComponent>();
+      var activeItem = mainChar.GetComponent<InventoryComponent>().GetActiveItem();
+
       _startingCoords.X = charPos.ComponentXPositionOnMap;
       _startingCoords.Y = charPos.ComponentYPositionOnMap;
       _targetedCoords.X = charPos.ComponentXPositionOnMap;
       _targetedCoords.Y = charPos.ComponentYPositionOnMap;
       _gameStateHelper.SetVar("TargetingData", new TargetingData(new List<Vector2i>(), new Vector2i(_targetedCoords.X, _targetedCoords.Y)));
+
+      if (activeItem.GetType() == typeof(Weapon))
+      {
+        _targetingRange = ((Weapon)activeItem).Range;
+      }
+      else
+      {
+        _targetingRange = 0;
+      }
     }
 
     private void StopTargetingMode()
@@ -110,6 +122,8 @@ namespace CSConsoleRL.GameSystems
       var xDiff = end.X - start.X;
       var yDiff = end.Y - start.Y;
       var slope = 0D;
+      var mainChar = _gameStateHelper.GetVar<ActorEntity>("MainEntity");
+      var range = ((Weapon)mainChar.GetComponent<InventoryComponent>().GetActiveItem()).Range;
 
       if (xDiff == 0 && yDiff == 0)
       {
@@ -138,10 +152,9 @@ namespace CSConsoleRL.GameSystems
           {
             var y = (int)Math.Round((double)x * slope);
 
-
             path.Add(new Vector2i(start.X + x, start.Y + y));
 
-            if (TargetingHitObstacle(start.X + x, start.Y + y)) break;
+            if (TargetingShouldStop(start.X + x, start.Y + y, x)) break;
           }
         }
         else
@@ -152,7 +165,7 @@ namespace CSConsoleRL.GameSystems
 
             path.Add(new Vector2i(start.X + x, start.Y + y));
 
-            if (TargetingHitObstacle(start.X + x, start.Y + y)) break;
+            if (TargetingShouldStop(start.X + x, start.Y + y, x)) break;
           }
         }
       }
@@ -166,7 +179,7 @@ namespace CSConsoleRL.GameSystems
 
             path.Add(new Vector2i(start.X + x, start.Y + y));
 
-            if (TargetingHitObstacle(start.X + x, start.Y + y)) break;
+            if (TargetingShouldStop(start.X + x, start.Y + y, y)) break;
           }
         }
         else
@@ -177,7 +190,7 @@ namespace CSConsoleRL.GameSystems
 
             path.Add(new Vector2i(start.X + x, start.Y + y));
 
-            if (TargetingHitObstacle(start.X + x, start.Y + y)) break;
+            if (TargetingShouldStop(start.X + x, start.Y + y, y)) break;
           }
         }
       }
@@ -185,10 +198,13 @@ namespace CSConsoleRL.GameSystems
       return path;
     }
 
-    private bool TargetingHitObstacle(int x, int y)
+    private bool TargetingShouldStop(int x, int y, int distance)
     {
+      // Targeting hit obstacle
       if (x < 0 || y < 0 || x > _gameTiles.GetLength(0) - 1 || y > _gameTiles.GetLength(1) - 1
-        || _tileDictionary[_gameTiles[x, y].TileType].BlocksMovement)
+        || _tileDictionary[_gameTiles[x, y].TileType].BlocksProjectiles)
+        return true;
+      else if (Math.Abs(distance) >= _targetingRange)
         return true;
       else
         return false;

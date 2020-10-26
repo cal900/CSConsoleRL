@@ -56,8 +56,8 @@ namespace CSConsoleRL.Game.Managers
     private void CreateEntities()
     {
       RegisterEntity(_mainEntity);
-      _mainEntity.GetComponent<InventoryComponent>().AddItem(new Item(EnumItemTypes.Knife));
-      _mainEntity.GetComponent<InventoryComponent>().AddItem(new Item(EnumItemTypes.Pistol));
+      _mainEntity.GetComponent<InventoryComponent>().AddItem(new Weapon(EnumItemTypes.Knife, 1));
+      _mainEntity.GetComponent<InventoryComponent>().AddItem(new Weapon(EnumItemTypes.Pistol, 14));
       ((LosSystem)Systems[typeof(LosSystem)]).SystemEntities = _mainEntity;
       var snapCamera = new SnapCameraToEntityEvent(_mainEntity);
       BroadcastEvent(snapCamera);
