@@ -326,8 +326,6 @@ namespace CSConsoleRL.GameSystems
     private void DrawGameStateUi()
     {
       var borderThickness = 5;
-      var borderVect = new Vector2f((float)(_tilePixelSize * 6 + (borderThickness * 2)), (float)(_tilePixelSize * 2 + (borderThickness * 2)));
-      var textVect = new Vector2f((_tilePixelSize * 6), (_tilePixelSize * 2));
 
       var textStr = "Not Set";
       switch (_gameStateHelper.GameState)
@@ -346,21 +344,25 @@ namespace CSConsoleRL.GameSystems
       }
 
       var text = new Text(textStr, _gameFont, _termCharSize);
+      // * 4 because of border (* 2 as on both sides) + space between border and text (* 2 both sides again)
       var boxWidth = text.GetLocalBounds().Width + (borderThickness * 4);
       var boxHeight = text.GetLocalBounds().Height + (borderThickness * 4);
 
-      var startingXPos = (_windowXSize - boxWidth) / 2;
+      var borderStartingXPos = (_windowXSize - boxWidth) / 2;
+
+      var borderVect = new Vector2f(boxWidth, boxHeight);
+      var textVect = new Vector2f(boxWidth - (borderThickness * 2), boxHeight - (borderThickness * 2));
 
       var borderRect = new RectangleShape(borderVect);
       var textRect = new RectangleShape(textVect);
-      borderRect.Position = new Vector2f(startingXPos, _windowYSize - (_tilePixelSize * 2) - 15);
-      textRect.Position = new Vector2f(borderRect.Position.X + borderThickness, borderRect.Position.Y + borderThickness);
+      borderRect.Position = new Vector2f(borderStartingXPos, _windowYSize - (_tilePixelSize * 2) - 15);
+      textRect.Position = new Vector2f(borderStartingXPos + borderThickness, borderRect.Position.Y + borderThickness);
       borderRect.FillColor = new Color(155, 155, 0);
       textRect.FillColor = new Color(25, 25, 25);
 
       var textColor = new Color(255, 255, 255);
       text.Color = textColor;
-      text.Position = new Vector2f(textRect.Position.X + 5, textRect.Position.Y + 5);
+      text.Position = new Vector2f(textRect.Position.X + borderThickness, textRect.Position.Y + borderThickness);
 
       _sfmlWindow.Draw(borderRect);
       _sfmlWindow.Draw(textRect);
