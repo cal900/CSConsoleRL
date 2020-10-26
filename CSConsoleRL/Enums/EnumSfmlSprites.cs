@@ -14,6 +14,7 @@ namespace CSConsoleRL.Enums
     SeekerPistol,
     SeekerKnife,
     RedX,
+    TealX,
     GreenSquare,
     YellowSquare,
     RoadLaneBot,

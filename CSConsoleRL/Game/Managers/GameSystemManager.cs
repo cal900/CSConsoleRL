@@ -29,6 +29,7 @@ namespace CSConsoleRL.Game.Managers
     private MapFile _gameMap { get; set; }
 
     private bool exitGame;
+    private readonly Entity _mainEntity;
 
     public GameSystemManager(MapFile _gameMap)
     {
@@ -38,6 +39,8 @@ namespace CSConsoleRL.Game.Managers
 
       _sfmlWindow = new RenderWindow(new VideoMode(620, 620), "CSConsoleRL");
       _entitiesToRemove = new List<Entity>();
+
+      _mainEntity = new ActorEntity();
 
       GameLogger.Instance();
 
@@ -52,12 +55,11 @@ namespace CSConsoleRL.Game.Managers
 
     private void CreateEntities()
     {
-      var mainChar = new ActorEntity();
-      RegisterEntity(mainChar);
-      mainChar.GetComponent<InventoryComponent>().AddItem(new Item(EnumItemTypes.Knife));
-      mainChar.GetComponent<InventoryComponent>().AddItem(new Item(EnumItemTypes.Pistol));
-      ((LosSystem)Systems[typeof(LosSystem)]).SystemEntities = mainChar;
-      var snapCamera = new SnapCameraToEntityEvent(mainChar);
+      RegisterEntity(_mainEntity);
+      _mainEntity.GetComponent<InventoryComponent>().AddItem(new Item(EnumItemTypes.Knife));
+      _mainEntity.GetComponent<InventoryComponent>().AddItem(new Item(EnumItemTypes.Pistol));
+      ((LosSystem)Systems[typeof(LosSystem)]).SystemEntities = _mainEntity;
+      var snapCamera = new SnapCameraToEntityEvent(_mainEntity);
       BroadcastEvent(snapCamera);
     }
 
@@ -67,6 +69,7 @@ namespace CSConsoleRL.Game.Managers
       DependencyInjectionHelper.Register(_sfmlWindow);
       DependencyInjectionHelper.Register(_gameMap.TileSet);
       DependencyInjectionHelper.Resolve(typeof(GameStateHelper));
+      ((GameStateHelper)DependencyInjectionHelper.Resolve(typeof(GameStateHelper))).SetVar("MainEntity", _mainEntity);
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(GameStateSystem)));
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(MovementSystem)));
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(LosSystem)));

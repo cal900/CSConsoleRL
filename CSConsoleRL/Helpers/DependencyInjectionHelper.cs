@@ -21,6 +21,11 @@ namespace CSConsoleRL.Helpers
       _typeInstances.Add(instance.GetType(), instance);
     }
 
+    /// <summary>
+    /// Returns the specified object type, if it doesn't exist it will be constructed and added to DI helper
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public static object Resolve(Type type)
     {
       if (_typeInstances.ContainsKey(type))

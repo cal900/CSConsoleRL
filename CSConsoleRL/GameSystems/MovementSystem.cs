@@ -10,20 +10,23 @@ using CSConsoleRL.Events;
 using CSConsoleRL.Entities;
 using CSConsoleRL.Enums;
 using GameTiles.Tiles;
+using CSConsoleRL.Helpers;
 
 namespace CSConsoleRL.GameSystems
 {
   public class MovementSystem : GameSystem
   {
-    private Tile[,] _gameTiles;
-    private TileTypeDictionary _tileDictionary;
+    private readonly Tile[,] _gameTiles;
+    private readonly TileTypeDictionary _tileDictionary;
+    private readonly GameStateHelper _gameState;
 
-    public MovementSystem(GameSystemManager manager, Tile[,] _gameTiles)
+    public MovementSystem(GameSystemManager manager, Tile[,] gameTiles, GameStateHelper gameState)
     {
       SystemManager = manager;
       _systemEntities = new List<Entity>();
-      this._gameTiles = _gameTiles;
+      _gameTiles = gameTiles;
       _tileDictionary = new TileTypeDictionary();
+      _gameState = gameState;
     }
 
     public override void InitializeSystem()

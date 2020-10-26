@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CSConsoleRL.Helpers;
+using CSConsoleRL.Data;
 
 namespace CSConsoleRL.GameSystems
 {
@@ -18,16 +19,19 @@ namespace CSConsoleRL.GameSystems
   {
     private Vector2i _startingCoords;
     private Vector2i _targetedCoords;
-    private List<Vector2i> _targetingPath;
-    private GameStateHelper _gameStateHelper;
+    private readonly GameStateHelper _gameStateHelper;
+    private readonly Tile[,] _gameTiles;
+    private readonly TileTypeDictionary _tileDictionary;
 
-    public TargetingSystem(GameSystemManager manager, Tile[,] _gameTiles, GameStateHelper gameStateHelper)
+    public TargetingSystem(GameSystemManager manager, Tile[,] gameTiles, GameStateHelper gameStateHelper)
     {
       SystemManager = manager;
       _systemEntities = new List<Entity>();
       _targetedCoords = new Vector2i(0, 0);
-      _targetingPath = new List<Vector2i>();
       _gameStateHelper = gameStateHelper;
+      _gameTiles = gameTiles;
+      _tileDictionary = new TileTypeDictionary();
+      StopTargetingMode();
     }
 
     public override void InitializeSystem()
@@ -45,13 +49,14 @@ namespace CSConsoleRL.GameSystems
           {
             StartTargetingMode();
           }
+          else
+          {
+            StopTargetingMode();
+          }
           break;
         case "MoveTargetingCursor":
           var dir = (EnumDirections)gameEvent.EventParams[0];
           MoveTargetingCursor(dir);
-          break;
-        case "RequestTargetingPath":
-          BroadcastMessage(new SendTargetingPathEvent(_targetingPath));
           break;
       }
     }
@@ -63,10 +68,19 @@ namespace CSConsoleRL.GameSystems
 
     private void StartTargetingMode()
     {
-      _startingCoords.X = _gameStateHelper.CameraCoords.X;
-      _startingCoords.Y = _gameStateHelper.CameraCoords.Y;
-      _targetedCoords.X = _gameStateHelper.CameraCoords.X;
-      _targetedCoords.Y = _gameStateHelper.CameraCoords.Y;
+      // When toggle to targeting mode targeting should default to character position
+      var mainChar = _gameStateHelper.GetVar<ActorEntity>("MainEntity");
+      var charPos = mainChar.GetComponent<PositionComponent>();
+      _startingCoords.X = charPos.ComponentXPositionOnMap;
+      _startingCoords.Y = charPos.ComponentYPositionOnMap;
+      _targetedCoords.X = charPos.ComponentXPositionOnMap;
+      _targetedCoords.Y = charPos.ComponentYPositionOnMap;
+      _gameStateHelper.SetVar("TargetingData", new TargetingData(new List<Vector2i>(), new Vector2i(_targetedCoords.X, _targetedCoords.Y)));
+    }
+
+    private void StopTargetingMode()
+    {
+      _gameStateHelper.SetVar("TargetingData", new TargetingData(new List<Vector2i>(), new Vector2i()));
     }
 
     private void MoveTargetingCursor(EnumDirections dir)
@@ -87,7 +101,7 @@ namespace CSConsoleRL.GameSystems
           break;
       }
 
-      _targetingPath = PlotCourse(_startingCoords, _targetedCoords);
+      _gameStateHelper.SetVar("TargetingData", new TargetingData(PlotCourse(_startingCoords, _targetedCoords), _targetedCoords));
     }
 
     private List<Vector2i> PlotCourse(Vector2i start, Vector2i end)
@@ -120,20 +134,25 @@ namespace CSConsoleRL.GameSystems
       {
         if (xDiff >= 0)
         {
-          for (int x = 0; x < xDiff; x++)
+          for (int x = 0; x <= xDiff; x++)
           {
             var y = (int)Math.Round((double)x * slope);
 
+
             path.Add(new Vector2i(start.X + x, start.Y + y));
+
+            if (TargetingHitObstacle(start.X + x, start.Y + y)) break;
           }
         }
         else
         {
-          for (int x = 0; x > xDiff; x--)
+          for (int x = 0; x >= xDiff; x--)
           {
             var y = (int)Math.Round((double)x * slope);
 
             path.Add(new Vector2i(start.X + x, start.Y + y));
+
+            if (TargetingHitObstacle(start.X + x, start.Y + y)) break;
           }
         }
       }
@@ -141,25 +160,38 @@ namespace CSConsoleRL.GameSystems
       {
         if (yDiff >= 0)
         {
-          for (int y = 0; y < Math.Abs(yDiff); y++)
+          for (int y = 0; y <= Math.Abs(yDiff); y++)
           {
             var x = (int)Math.Round((double)y / slope);
 
             path.Add(new Vector2i(start.X + x, start.Y + y));
+
+            if (TargetingHitObstacle(start.X + x, start.Y + y)) break;
           }
         }
         else
         {
-          for (int y = 0; y > yDiff; y--)
+          for (int y = 0; y >= yDiff; y--)
           {
             var x = (int)Math.Round((double)y / slope);
 
             path.Add(new Vector2i(start.X + x, start.Y + y));
+
+            if (TargetingHitObstacle(start.X + x, start.Y + y)) break;
           }
         }
       }
 
       return path;
+    }
+
+    private bool TargetingHitObstacle(int x, int y)
+    {
+      if (x < 0 || y < 0 || x > _gameTiles.GetLength(0) - 1 || y > _gameTiles.GetLength(1) - 1
+        || _tileDictionary[_gameTiles[x, y].TileType].BlocksMovement)
+        return true;
+      else
+        return false;
     }
   }
 }

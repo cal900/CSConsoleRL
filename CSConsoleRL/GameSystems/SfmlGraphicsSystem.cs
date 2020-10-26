@@ -53,7 +53,6 @@ namespace CSConsoleRL.GameSystems
     private Font _gameFont;
 
     private Item _activeItem;
-    private List<Vector2i> _targetingPath;
 
     public SfmlGraphicsSystem(GameSystemManager manager, GameStateHelper gameStateHelper, RenderWindow sfmlWindow, Tile[,] gameTiles)
     {
@@ -117,9 +116,6 @@ namespace CSConsoleRL.GameSystems
           break;
         case "SendActiveItem":
           _activeItem = (Item)gameEvent.EventParams[0];
-          break;
-        case "SendTargetingPath":
-          _targetingPath = (List<Vector2i>)gameEvent.EventParams[0];
           break;
       }
     }
@@ -236,7 +232,10 @@ namespace CSConsoleRL.GameSystems
         }
       }
 
-      DrawTargetingPath(xPixelOnMap, yPixelOnMap);
+      if (_gameStateHelper.GameState == EnumGameState.Targeting)
+      {
+        DrawTargetingPath(xPixelOnMap, yPixelOnMap);
+      }
 
       //Draw UI
       DrawUi();
@@ -265,23 +264,32 @@ namespace CSConsoleRL.GameSystems
 
     private void DrawTargetingPath(int xPixelOnMap, int yPixelOnMap)
     {
-      BroadcastMessage(new RequestTargetingPathEvent());
+      var targetingData = _gameStateHelper.GetVar<TargetingData>("TargetingData");
+      var targetingPath = targetingData.Path;
+      var target = targetingData.Target;
 
-      if (_targetingPath == null)
+      if (targetingPath == null)
       {
         return;
       }
 
-      for (int i = 0; i < _targetingPath.Count; i++)
+      for (int i = 1; i < targetingPath.Count; i++)
       {
         var targetingSprite = new Sprite(_textureDictionary[EnumSfmlSprites.RedX]);
 
-        int spriteXPosition = (_targetingPath[i].X - windowXPositionInWorld) * _tilePixelSize;
-        int spriteYPosition = (_targetingPath[i].Y - windowYPositionInWorld) * _tilePixelSize;
+        int spriteXPosition = (targetingPath[i].X - windowXPositionInWorld) * _tilePixelSize;
+        int spriteYPosition = (targetingPath[i].Y - windowYPositionInWorld) * _tilePixelSize;
         targetingSprite.Position = new Vector2f(spriteXPosition - xPixelOnMap, spriteYPosition - yPixelOnMap);
 
         _sfmlWindow.Draw(targetingSprite);
       }
+
+      var targetSprite = new Sprite(_textureDictionary[EnumSfmlSprites.TealX]);
+
+      int spriteX = (target.X - windowXPositionInWorld) * _tilePixelSize;
+      int spriteY = (target.Y - windowYPositionInWorld) * _tilePixelSize;
+      targetSprite.Position = new Vector2f(spriteX - xPixelOnMap, spriteY - yPixelOnMap);
+      _sfmlWindow.Draw(targetSprite);
     }
 
     private void DrawUi()
@@ -481,9 +489,11 @@ namespace CSConsoleRL.GameSystems
         Add(EnumSfmlSprites.SeekerPistol, new Texture(fileName, new IntRect(40, 140, 20, 20)));
         Add(EnumSfmlSprites.SeekerKnife, new Texture(fileName, new IntRect(60, 140, 20, 20)));
         Add(EnumSfmlSprites.Dog, new Texture(fileName, new IntRect(0, 0, 20, 20)));
+
         Add(EnumSfmlSprites.RedX, new Texture(fileName, new IntRect(0, 160, 20, 20)));
         Add(EnumSfmlSprites.GreenSquare, new Texture(fileName, new IntRect(20, 160, 20, 20)));
         Add(EnumSfmlSprites.YellowSquare, new Texture(fileName, new IntRect(40, 160, 20, 20)));
+        Add(EnumSfmlSprites.TealX, new Texture(fileName, new IntRect(60, 160, 20, 20)));
 
         Add(EnumSfmlSprites.RoadLaneBot, new Texture(fileName, new IntRect(0, 380, 20, 20)));
         Add(EnumSfmlSprites.RoadLaneLeft, new Texture(fileName, new IntRect(20, 380, 20, 20)));
