@@ -1,10 +1,11 @@
 using CSConsoleRL.Helpers;
+using CSConsoleRL.Events;
 
 namespace CSConsoleRL.Ai.Interfaces
 {
   public interface IAiState
   {
     public string GetName();
-    public void GetAiStateResponse(GameStateHelper gameStateHelper);
+    public IGameEvent GetAiStateResponse(GameStateHelper gameStateHelper);
   }
 }

@@ -5,19 +5,21 @@ using CSConsoleRL.Ai.Interfaces;
 using CSConsoleRL.Helpers;
 using CSConsoleRL.Logging;
 using CSConsoleRL.Entities;
+using CSConsoleRL.Events;
 
 namespace CSConsoleRL.Ai
 {
   public delegate bool Condition(Entity entity, GameStateHelper gameStateHelper);
   public sealed class AiStateMachine
   {
-    private Dictionary<string, IAiState> _states;
-    private List<AiStateMachineNode> _nodes;
+    private readonly Dictionary<string, IAiState> _states;
+    private readonly List<AiStateMachineNode> _nodes;
     public string CurrentState { get; private set; }
 
     public AiStateMachine()
     {
-
+      _states = new Dictionary<string, IAiState>();
+      _nodes = new List<AiStateMachineNode>();
     }
 
     private List<AiStateMachineNode> GetAllNodesForCurrentState()
@@ -45,6 +47,7 @@ namespace CSConsoleRL.Ai
     public void AddState(string name, IAiState state)
     {
       _states.Add(name, state);
+      if (CurrentState == null) CurrentState = name;
     }
 
     public void AddStateChange(string preState, string postState, Condition condition)
@@ -55,13 +58,13 @@ namespace CSConsoleRL.Ai
       _nodes.Add(new AiStateMachineNode(preState, postState, condition));
     }
 
-    public void GetCurrentStateResponse(Entity entity, GameStateHelper gameStateHelper)
+    public IGameEvent GetCurrentStateResponse(Entity entity, GameStateHelper gameStateHelper)
     {
       EvaluateConditions(entity, gameStateHelper);
 
       var currentState = _states[CurrentState];
 
-      currentState.GetAiStateResponse(gameStateHelper);
+      return currentState.GetAiStateResponse(gameStateHelper);
     }
 
     private class AiStateMachineNode

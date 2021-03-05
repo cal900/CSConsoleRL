@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CSConsoleRL.Components.Interfaces;
 using CSConsoleRL.Events;
+using CSConsoleRL.Components;
 
 namespace CSConsoleRL.Entities
 {
@@ -52,9 +53,16 @@ namespace CSConsoleRL.Entities
 
     public Entity AddComponent(IComponent component)
     {
-      if (!Components.ContainsKey(component.GetType()))
+      var compType = component.GetType();
+
+      if (component is IAiComponent)
       {
-        Components.Add(component.GetType(), component);
+        compType = typeof(IAiComponent);
+      }
+
+      if (!Components.ContainsKey(compType))
+      {
+        Components.Add(compType, component);
         component.EntityAttachedTo = this;
       }
       else

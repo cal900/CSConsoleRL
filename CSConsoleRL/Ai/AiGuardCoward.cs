@@ -2,6 +2,7 @@ using CSConsoleRL.Ai.Interfaces;
 using CSConsoleRL.Entities;
 using CSConsoleRL.Helpers;
 using CSConsoleRL.Ai.States;
+using CSConsoleRL.Events;
 
 namespace CSConsoleRL.Ai
 {
@@ -46,15 +47,15 @@ namespace CSConsoleRL.Ai
 
     }
 
-    public void GetAiResponse(GameStateHelper gameStateHelper)
+    public IGameEvent GetAiResponse(GameStateHelper gameStateHelper)
     {
-      _aiStateMachine.GetCurrentStateResponse(_entity, gameStateHelper);
+      return _aiStateMachine.GetCurrentStateResponse(_entity, gameStateHelper);
     }
 
     public void ConstructAiStateMachine()
     {
-      _aiStateMachine.AddState("Patrol1", new Patrol());
-      _aiStateMachine.AddState("MeleeSeek1", new MeleeSeek());
+      _aiStateMachine.AddState("Patrol1", new Patrol(_entity));
+      _aiStateMachine.AddState("MeleeSeek1", new MeleeSeek(_entity));
 
       _aiStateMachine.AddStateChange("Patrol1", "MeleeSeek1", Patrol1ToMeleeSeek1);
       _aiStateMachine.AddStateChange("MeleeSeek1", "Patrol1", MeleeSeek1ToPatrol1);

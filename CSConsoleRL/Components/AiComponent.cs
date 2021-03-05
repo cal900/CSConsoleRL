@@ -45,9 +45,9 @@ namespace CSConsoleRL.Components
     }
   }
 
-  public interface IAiComponent
+  public interface IAiComponent : IComponent
   {
-    public void GetAiComponentResponse(GameStateHelper gameStateHelper);
+    public IGameEvent GetAiComponentResponse(GameStateHelper gameStateHelper);
   }
 
   public class SeekerAiComponent : AiComponent
@@ -57,15 +57,17 @@ namespace CSConsoleRL.Components
 
   public class AiTestComponent : IAiComponent
   {
+    public Entity EntityAttachedTo { get; set; }
     private readonly AiGuardCoward _ai;
     public AiTestComponent(Entity entity)
     {
+      EntityAttachedTo = entity;
       _ai = new AiGuardCoward(entity);
     }
 
-    public void GetAiComponentResponse(GameStateHelper gameStateHelper)
+    public IGameEvent GetAiComponentResponse(GameStateHelper gameStateHelper)
     {
-      _ai.GetAiResponse(gameStateHelper);
+      return _ai.GetAiResponse(gameStateHelper);
     }
   }
 }

@@ -163,7 +163,7 @@ namespace CSConsoleRL.GameSystems
       _supportedShellFunctions.Add("ce", new ShellCommand()
       {
         Desc = "Create Entity",
-        SupportedInputs = new List<string>() { "marker, seeker, seekerPistol, seekerKnife, fadingcolor", "x-coord", "y-coord" },
+        SupportedInputs = new List<string>() { "marker, seeker, seekerPistol, seekerKnife, seekeraitest, fadingcolor", "x-coord", "y-coord" },
         ShellFunction = CreateEntity
       });
       _supportedShellFunctions.Add("le", new ShellCommand()

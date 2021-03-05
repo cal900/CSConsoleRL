@@ -19,16 +19,18 @@ namespace CSConsoleRL.GameSystems
 {
   public class AiSystem : GameSystem
   {
-    private Tile[,] _gameTiles;
+    private readonly Tile[,] _gameTiles;
     private ActorEntity _actorEntity;
     private bool _aiEnabled;
+    private readonly GameStateHelper _gameStateHelper;
 
-    public AiSystem(GameSystemManager _manager, Tile[,] _gameTiles)
+    public AiSystem(GameSystemManager _manager, Tile[,] _gameTiles, GameStateHelper gameStateHelper)
     {
       SystemManager = _manager;
       _systemEntities = new List<Entity>();
       this._gameTiles = _gameTiles;
       _aiEnabled = true;
+      _gameStateHelper = gameStateHelper;
     }
 
     public override void InitializeSystem()
@@ -43,7 +45,8 @@ namespace CSConsoleRL.GameSystems
         _actorEntity = (ActorEntity)entity;
       }
       if (entity.Components.ContainsKey(typeof(AiComponent))
-          || entity.Components.ContainsKey(typeof(SeekerAiComponent)))
+          //|| entity.Components.ContainsKey(typeof(SeekerAiComponent))
+          || entity.Components.ContainsKey(typeof(IAiComponent)))
       {
         _systemEntities.Add(entity);
       }
@@ -80,8 +83,10 @@ namespace CSConsoleRL.GameSystems
 
     private void GetAiResponse(Entity ent)
     {
-
-      GetSeekerResponse(ent);
+      var ai = ent.GetComponent<IAiComponent>();
+      var resp = ai.GetAiComponentResponse(_gameStateHelper);
+      if (resp != null) BroadcastMessage(resp);
+      // GetSeekerResponse(ent);
     }
 
     private void GetSeekerResponse(Entity ent)
