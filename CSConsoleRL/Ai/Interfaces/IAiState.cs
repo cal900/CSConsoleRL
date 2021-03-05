@@ -1,8 +1,10 @@
+using CSConsoleRL.Helpers;
+
 namespace CSConsoleRL.Ai.Interfaces
 {
-  public interface IAi
+  public interface IAiState
   {
-    public void ParseEntity();
-    public void GetAiResponse();
+    public string GetName();
+    public void GetAiStateResponse(GameStateHelper gameStateHelper);
   }
 }

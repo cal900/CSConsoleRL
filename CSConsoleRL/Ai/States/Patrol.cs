@@ -1,4 +1,5 @@
 using CSConsoleRL.Ai.Interfaces;
+using CSConsoleRL.Helpers;
 
 namespace CSConsoleRL.Ai.States
 {
@@ -9,7 +10,12 @@ namespace CSConsoleRL.Ai.States
 
     }
 
-    public void GetAiStateResponse()
+    public string GetName()
+    {
+      return "Patrol";
+    }
+
+    public void GetAiStateResponse(GameStateHelper gameStateHelper)
     {
 
     }

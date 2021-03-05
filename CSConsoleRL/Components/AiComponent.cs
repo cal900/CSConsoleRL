@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SFML.System;
 using CSConsoleRL.Components.Interfaces;
 using CSConsoleRL.Entities;
 using CSConsoleRL.Events;
-using SFML.System;
+using CSConsoleRL.Ai;
+using CSConsoleRL.Helpers;
 
 namespace CSConsoleRL.Components
 {
@@ -43,8 +45,27 @@ namespace CSConsoleRL.Components
     }
   }
 
+  public interface IAiComponent
+  {
+    public void GetAiComponentResponse(GameStateHelper gameStateHelper);
+  }
+
   public class SeekerAiComponent : AiComponent
   {
     public SeekerAiComponent(Entity entity) : base(entity) { }
+  }
+
+  public class AiTestComponent : IAiComponent
+  {
+    private readonly AiGuardCoward _ai;
+    public AiTestComponent(Entity entity)
+    {
+      _ai = new AiGuardCoward(entity);
+    }
+
+    public void GetAiComponentResponse(GameStateHelper gameStateHelper)
+    {
+      _ai.GetAiResponse(gameStateHelper);
+    }
   }
 }

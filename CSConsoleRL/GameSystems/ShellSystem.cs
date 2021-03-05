@@ -260,6 +260,12 @@ namespace CSConsoleRL.GameSystems
           seekerKnifeEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = int.Parse(inputs[2]);
           SystemManager.RegisterEntity(seekerKnifeEnt);
           return string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[1], inputs[2]);
+        case "seekeraitest":
+          var seekerAiTestEnt = new SeekerAiTestEntity();
+          seekerAiTestEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = int.Parse(inputs[1]);
+          seekerAiTestEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = int.Parse(inputs[2]);
+          SystemManager.RegisterEntity(seekerAiTestEnt);
+          return string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[1], inputs[2]);
         case "fadingcolor":
           var fadingColorEnt = new FadingColorEntity(inputs[1]);
           fadingColorEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = int.Parse(inputs[2]);
