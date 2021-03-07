@@ -70,6 +70,7 @@ namespace CSConsoleRL.Game.Managers
       DependencyInjectionHelper.Register(_gameMap.TileSet);
       DependencyInjectionHelper.Resolve(typeof(GameStateHelper));
       ((GameStateHelper)DependencyInjectionHelper.Resolve(typeof(GameStateHelper))).SetVar("MainEntity", _mainEntity);
+      ((GameStateHelper)DependencyInjectionHelper.Resolve(typeof(GameStateHelper))).SetVar("GameTiles", DependencyInjectionHelper.Resolve(typeof(Tile[,])));
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(GameStateSystem)));
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(MovementSystem)));
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(LosSystem)));

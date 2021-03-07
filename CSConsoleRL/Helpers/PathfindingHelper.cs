@@ -82,6 +82,8 @@ namespace CSConsoleRL.Helpers
           path.RemoveAt((path.Count - 1));
           path.Reverse();
 
+          GameLogger.Instance().LogDebug($"openPath: ${openPath.Count}, closedPath: ${closedPath.Count}");
+
           return path;
         }
 

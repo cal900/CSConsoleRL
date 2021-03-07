@@ -14,6 +14,7 @@ namespace CSConsoleRL.Ai
 
     protected bool Patrol1ToMeleeSeek1(Entity entity, GameStateHelper gameStateHelper)
     {
+      return true;
       _counter++;
       if (_counter >= 5)
       {
@@ -25,6 +26,7 @@ namespace CSConsoleRL.Ai
 
     protected bool MeleeSeek1ToPatrol1(Entity entity, GameStateHelper gameStateHelper)
     {
+      return false;
       _counter--;
       if (_counter <= 0)
       {
