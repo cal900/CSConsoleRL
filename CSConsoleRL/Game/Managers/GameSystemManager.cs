@@ -80,6 +80,7 @@ namespace CSConsoleRL.Game.Managers
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(AiSystem)));
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(InventorySystem)));
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(TargetingSystem)));
+      RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(HealthSystem)));
     }
 
     private void InitializeSystems()

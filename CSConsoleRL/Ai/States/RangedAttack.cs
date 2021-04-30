@@ -9,13 +9,13 @@ using GameTiles.Tiles;
 
 namespace CSConsoleRL.Ai.States
 {
-  public class MeleeSeek : IAiState
+  public class RangedAttack : IAiState
   {
     private readonly Entity _entity;
     private int _counter;
     private List<Vector2i> _path;
 
-    public MeleeSeek(Entity entity)
+    public RangedAttack(Entity entity)
     {
       _entity = entity;
       _path = new List<Vector2i>();

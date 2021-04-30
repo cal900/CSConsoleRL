@@ -18,6 +18,7 @@ namespace CSConsoleRL.Entities
       AddComponent(new UserInputComponent(this));
       AddComponent(new CollisionComponent(this));
       AddComponent(new InventoryComponent(this));
+      AddComponent(new HealthComponent(this, 100));
     }
   }
 }

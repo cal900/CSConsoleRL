@@ -294,33 +294,44 @@ namespace CSConsoleRL.GameSystems
 
     private void DrawUi()
     {
-      DrawActiveItemUi();
+      DrawHealthUi();
       DrawGameStateUi();
+      DrawActiveItemUi();
     }
 
-    private void DrawActiveItemUi()
+    private void DrawHealthUi()
     {
-      //Currently Active Item - Square in bottom right
-      var borderRect = new RectangleShape(new Vector2f((float)(_tilePixelSize * 2 + 10), (float)(_tilePixelSize * 2 + 10)));
-      var itemRect = new RectangleShape(new Vector2f((_tilePixelSize * 2), (_tilePixelSize * 2)));
+      var mainEnt = _gameStateHelper.GetVar<Entity>("MainEntity");
+      var healthComp = mainEnt.GetComponent<HealthComponent>();
+      var maxHealth = healthComp.MaxHealth;
+      var currentHealth = healthComp.CurrentHealth;
 
-      var itemXCoord = _windowXSize - (_tilePixelSize * 2) - 15;
-      var itemYCoord = _windowYSize - (_tilePixelSize * 2) - 15;
-      borderRect.Position = new Vector2f(itemXCoord, itemYCoord);
-      itemRect.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
+      var textStr = $"{currentHealth}/{maxHealth}";
+      var text = new Text(textStr, _gameFont, _termCharSize);
 
+      var borderThickness = 5;
+      var boxWidth = text.GetLocalBounds().Width + (borderThickness * 4);
+      var boxHeight = text.GetLocalBounds().Height + (borderThickness * 4);
+
+      var borderStartingXPos = 15;
+
+      var borderVect = new Vector2f(boxWidth, boxHeight);
+      var textVect = new Vector2f(boxWidth - (borderThickness * 2), boxHeight - (borderThickness * 2));
+
+      var borderRect = new RectangleShape(borderVect);
+      var textRect = new RectangleShape(textVect);
+      borderRect.Position = new Vector2f(borderStartingXPos, _windowYSize - (_tilePixelSize * 2) - 15);
+      textRect.Position = new Vector2f(borderStartingXPos + borderThickness, borderRect.Position.Y + borderThickness);
       borderRect.FillColor = new Color(155, 155, 0);
-      itemRect.FillColor = new Color(25, 25, 25);
+      textRect.FillColor = new Color(25, 25, 25);
 
-      //Get currently active item
-      BroadcastMessage(new RequestActiveItemEvent(_cameraHelper.GetEntity().Id));
-      var itemSprite = new Sprite(_textureDictionary[GetItemSpriteEnum(_activeItem.ItemType)]);
-      itemSprite.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
-      itemSprite.Scale = new Vector2f(2, 2);
+      var textColor = new Color(255, 255, 255);
+      text.Color = textColor;
+      text.Position = new Vector2f(textRect.Position.X + borderThickness, textRect.Position.Y + borderThickness);
 
       _sfmlWindow.Draw(borderRect);
-      _sfmlWindow.Draw(itemRect);
-      _sfmlWindow.Draw(itemSprite);
+      _sfmlWindow.Draw(textRect);
+      _sfmlWindow.Draw(text);
     }
 
     private void DrawGameStateUi()
@@ -367,6 +378,31 @@ namespace CSConsoleRL.GameSystems
       _sfmlWindow.Draw(borderRect);
       _sfmlWindow.Draw(textRect);
       _sfmlWindow.Draw(text);
+    }
+
+    private void DrawActiveItemUi()
+    {
+      //Currently Active Item - Square in bottom right
+      var borderRect = new RectangleShape(new Vector2f((float)(_tilePixelSize * 2 + 10), (float)(_tilePixelSize * 2 + 10)));
+      var itemRect = new RectangleShape(new Vector2f((_tilePixelSize * 2), (_tilePixelSize * 2)));
+
+      var itemXCoord = _windowXSize - (_tilePixelSize * 2) - 15;
+      var itemYCoord = _windowYSize - (_tilePixelSize * 2) - 15;
+      borderRect.Position = new Vector2f(itemXCoord, itemYCoord);
+      itemRect.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
+
+      borderRect.FillColor = new Color(155, 155, 0);
+      itemRect.FillColor = new Color(25, 25, 25);
+
+      //Get currently active item
+      BroadcastMessage(new RequestActiveItemEvent(_cameraHelper.GetEntity().Id));
+      var itemSprite = new Sprite(_textureDictionary[GetItemSpriteEnum(_activeItem.ItemType)]);
+      itemSprite.Position = new Vector2f(borderRect.Position.X + 5, borderRect.Position.Y + 5);
+      itemSprite.Scale = new Vector2f(2, 2);
+
+      _sfmlWindow.Draw(borderRect);
+      _sfmlWindow.Draw(itemRect);
+      _sfmlWindow.Draw(itemSprite);
     }
 
     private void LoadGlobals()
