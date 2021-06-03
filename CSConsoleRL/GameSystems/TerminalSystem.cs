@@ -3,6 +3,7 @@ using CSConsoleRL.Entities;
 using CSConsoleRL.Events;
 using CSConsoleRL.Game.Managers;
 using SFML.Window;
+using System;
 using System.Collections.Generic;
 
 namespace CSConsoleRL.GameSystems
@@ -61,9 +62,12 @@ namespace CSConsoleRL.GameSystems
         _termLines.Add("");
       }
 
-      public void AddLine(string line)
+      public void AddLines(List<string> lines)
       {
-        _termLines.Add(line);
+        foreach (var line in lines)
+        {
+          _termLines.Add(line);
+        }
       }
 
       public void AddCommand()
@@ -89,12 +93,12 @@ namespace CSConsoleRL.GameSystems
     }
 
     private bool consoleOn;
-    private gameTerminal console;
+    private gameTerminal shell;
 
     public TerminalSystem(GameSystemManager manager)
     {
       SystemManager = manager;
-      console = new gameTerminal();
+      shell = new gameTerminal();
 
       _systemEntities = new List<Entity>();
 
@@ -126,7 +130,7 @@ namespace CSConsoleRL.GameSystems
           if (consoleOn) HandleKeyPressed((Keyboard.Key)((KeyPressedEvent)gameEvent).EventParams[0]);
           break;
         case "RequestTerminalData":
-          BroadcastMessage(new SendTerminalDataEvent(console.GetTermLines((int)gameEvent.EventParams[0])));
+          BroadcastMessage(new SendTerminalDataEvent(shell.GetTermLines((int)gameEvent.EventParams[0])));
           break;
       }
     }
@@ -146,8 +150,8 @@ namespace CSConsoleRL.GameSystems
     {
       if (key == Keyboard.Key.Enter)
       {
-        if (console.ActiveLine.Length > 1) console.AddLine(_shellSystem.HandleInput(console.ActiveLine.Substring(1))); //Start at index 1 to get rid of '>' char
-        console.AddCommand();
+        if (shell.ActiveLine.Length > 1) shell.AddLines(_shellSystem.HandleInput(shell.ActiveLine.Substring(1))); //Start at index 1 to get rid of '>' char
+        shell.AddCommand();
       }
       else if (key == Keyboard.Key.Tilde)
       {
@@ -159,35 +163,35 @@ namespace CSConsoleRL.GameSystems
       }
       else if (key == Keyboard.Key.Backspace)
       {
-        if (console.ActiveLine.Length > 1) console.ActiveLine = console.ActiveLine.Remove(console.ActiveLine.Length - 1);
+        if (shell.ActiveLine.Length > 1) shell.ActiveLine = shell.ActiveLine.Remove(shell.ActiveLine.Length - 1);
       }
       else if (key == Keyboard.Key.Up)
       {
-        console.ActiveLine = ">" + _shellSystem.GetPrev();
+        shell.ActiveLine = ">" + _shellSystem.GetPrev();
       }
       else if (key == Keyboard.Key.Down)
       {
-        console.ActiveLine = ">" + _shellSystem.GetNext();
+        shell.ActiveLine = ">" + _shellSystem.GetNext();
       }
       else if (key == Keyboard.Key.PageUp)
       {
-        console.ViewportUp();
+        shell.ViewportUp();
       }
       else if (key == Keyboard.Key.PageDown)
       {
-        console.ViewportDown();
+        shell.ViewportDown();
       }
       else if (key == Keyboard.Key.Space)
       {
-        console.ActiveLine += " ";
+        shell.ActiveLine += " ";
       }
       else if ((int)key >= 26 && (int)key <= 35)
       {
-        console.ActiveLine += key.ToString().Substring(3);
+        shell.ActiveLine += key.ToString().Substring(3);
       }
       else
       {
-        console.ActiveLine += key.ToString().ToLower();
+        shell.ActiveLine += key.ToString().ToLower();
       }
     }
   }

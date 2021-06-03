@@ -16,7 +16,7 @@ namespace CSConsoleRL.GameSystems
     {
       public string Desc;
       public List<string> SupportedInputs;
-      public Func<List<string>, string> ShellFunction;
+      public Func<List<string>, List<string>> ShellFunction;
     }
 
     private class shellHistory
@@ -87,9 +87,9 @@ namespace CSConsoleRL.GameSystems
 
     }
 
-    public string HandleInput(string input)
+    public List<string> HandleInput(string input)
     {
-      if (string.IsNullOrWhiteSpace(input)) return "";
+      if (string.IsNullOrWhiteSpace(input)) return new List<string>() { "" };
 
       _shellHistory.AddInputToHistory(input);
 
@@ -105,12 +105,12 @@ namespace CSConsoleRL.GameSystems
         }
         catch (Exception e)
         {
-          return e.Message;
+          return new List<string>() { e.Message };
         }
       }
       else
       {
-        return string.Format("Command {0} not recognized, type 'help' for supported commands", input);
+        return new List<string>() { string.Format("Command {0} not recognized, type 'help' for supported commands", input) };
       }
     }
 
@@ -174,43 +174,45 @@ namespace CSConsoleRL.GameSystems
       });
     }
 
-    private string ListShellCommands(List<string> inputs)
+    private List<string> ListShellCommands(List<string> inputs)
     {
       var verbose = (inputs != null && inputs.Count > 0 && inputs[0] == "v") ? true : false;
-      var shellCommands = new StringBuilder();
+      var shellCommands = new List<string>();
 
-      shellCommands.AppendLine("");
-      if (!verbose) shellCommands.AppendLine("Add input 'v' for verbose help - shows all supported inputs for each command");
+      shellCommands.Add("");
+      if (!verbose) shellCommands.Add("Add input 'v' for verbose help - shows all supported inputs for each command");
 
       foreach (var shellCmd in _supportedShellFunctions)
       {
-        shellCommands.AppendLine(shellCmd.Key + " - " + shellCmd.Value.Desc);
+        shellCommands.Add(shellCmd.Key + " - " + shellCmd.Value.Desc);
 
         if (verbose && shellCmd.Value.SupportedInputs != null && shellCmd.Value.SupportedInputs.Count > 0)
         {
           foreach (var input in shellCmd.Value.SupportedInputs)
           {
-            shellCommands.AppendLine('\t' + input);
+            shellCommands.Add('\t' + input);
           }
         }
       }
 
-      return shellCommands.ToString();
+      shellCommands.Add("");
+
+      return shellCommands;
     }
 
-    private string QuitTerminal(List<string> inputs)
+    private List<string> QuitTerminal(List<string> inputs)
     {
       BroadcastMessage(new ToggleConsoleEvent());
-      return "Exiting terminal";
+      return new List<string>() { "Exiting terminal" };
     }
 
-    private string ExitGame(List<string> inputs)
+    private List<string> ExitGame(List<string> inputs)
     {
       BroadcastMessage(new ExitGameEvent());
-      return "Exiting game";
+      return new List<string>() { "Exiting game" };
     }
 
-    private string Toggle(List<string> inputs)
+    private List<string> Toggle(List<string> inputs)
     {
       var toggleArg = inputs[0];
 
@@ -218,20 +220,20 @@ namespace CSConsoleRL.GameSystems
       {
         case "fow":
           BroadcastMessage(new ToggleFowEvent());
-          return string.Format("Toggling Fog of War (FOW)");
+          return new List<string>() { string.Format("Toggling Fog of War (FOW)") };
         case "ai":
           BroadcastMessage(new ToggleAiEvent());
-          return string.Format("Toggling AI for NPCs");
+          return new List<string>() { string.Format("Toggling AI for NPCs") };
         default:
-          return string.Format("Unrecognized input to toggle: {0}", toggleArg);
+          return new List<string>() { string.Format("Unrecognized input to toggle: {0}", toggleArg) };
       }
     }
 
-    private string CreateEntity(List<string> inputs)
+    private List<string> CreateEntity(List<string> inputs)
     {
       if (inputs.Count < 3)
       {
-        return string.Format("CreateEntity requires 3 inputs");
+        return new List<string>() { string.Format("CreateEntity requires 3 inputs") };
       }
 
       switch (inputs[0])
@@ -241,45 +243,45 @@ namespace CSConsoleRL.GameSystems
           markerEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = int.Parse(inputs[1]);
           markerEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = int.Parse(inputs[2]);
           SystemManager.RegisterEntity(markerEnt);
-          return string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[1], inputs[2]);
+          return new List<string>() { string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[1], inputs[2]) };
         case "seeker":
           var seekerEnt = new SeekerEntity();
           seekerEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = int.Parse(inputs[1]);
           seekerEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = int.Parse(inputs[2]);
           SystemManager.RegisterEntity(seekerEnt);
-          return string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[1], inputs[2]);
+          return new List<string>() { string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[1], inputs[2]) };
         case "seekerpistol":
           var seekerPistolEnt = new SeekerPistolEntity();
           seekerPistolEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = int.Parse(inputs[1]);
           seekerPistolEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = int.Parse(inputs[2]);
           SystemManager.RegisterEntity(seekerPistolEnt);
-          return string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[1], inputs[2]);
+          return new List<string>() { string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[1], inputs[2]) };
         case "seekerknife":
           var seekerKnifeEnt = new SeekerKnifeEntity();
           seekerKnifeEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = int.Parse(inputs[1]);
           seekerKnifeEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = int.Parse(inputs[2]);
           SystemManager.RegisterEntity(seekerKnifeEnt);
-          return string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[1], inputs[2]);
+          return new List<string>() { string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[1], inputs[2]) };
         case "seekeraitest":
           var seekerAiTestEnt = new SeekerAiTestEntity();
           seekerAiTestEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = int.Parse(inputs[1]);
           seekerAiTestEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = int.Parse(inputs[2]);
           SystemManager.RegisterEntity(seekerAiTestEnt);
-          return string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[1], inputs[2]);
+          return new List<string>() { string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[1], inputs[2]) };
         case "fadingcolor":
           var fadingColorEnt = new FadingColorEntity(inputs[1]);
           fadingColorEnt.GetComponent<PositionComponent>().ComponentXPositionOnMap = int.Parse(inputs[2]);
           fadingColorEnt.GetComponent<PositionComponent>().ComponentYPositionOnMap = int.Parse(inputs[3]);
           SystemManager.RegisterEntity(fadingColorEnt);
-          return string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[2], inputs[3]);
+          return new List<string>() { string.Format("Creating entity {0} at co-ordinates [x->{1}, y->{2}]", inputs[0], inputs[2], inputs[3]) };
         default:
-          return string.Format("Specified entity {0} is unrecognized", inputs[0]);
+          return new List<string>() { string.Format("Specified entity {0} is unrecognized", inputs[0]) };
       }
     }
 
-    private string ListEntities(List<string> inputs)
+    private List<string> ListEntities(List<string> inputs)
     {
-      var output = new StringBuilder();
+      var output = new List<string>();
 
       if (inputs.Count == 0)
       {
@@ -287,7 +289,7 @@ namespace CSConsoleRL.GameSystems
         foreach (var ent in ents)
         {
           var positionComponent = ((PositionComponent)ent.Components[typeof(PositionComponent)]);
-          output.AppendLine(string.Format("Id: {0}, x: {1}, y: {2}", ent.Id, positionComponent.ComponentXPositionOnMap, positionComponent.ComponentYPositionOnMap));
+          output.Add(string.Format("Id: {0}, x: {1}, y: {2}", ent.Id, positionComponent.ComponentXPositionOnMap, positionComponent.ComponentYPositionOnMap));
         }
       }
       else
@@ -299,13 +301,13 @@ namespace CSConsoleRL.GameSystems
             foreach (var ent in ents)
             {
               var positionComponent = ((PositionComponent)ent.Components[typeof(PositionComponent)]);
-              output.AppendLine(string.Format("Id: {0}, x: {1}, y: {2}", ent.Id, positionComponent.ComponentXPositionOnMap, positionComponent.ComponentYPositionOnMap));
+              output.Add(string.Format("Id: {0}, x: {1}, y: {2}", ent.Id, positionComponent.ComponentXPositionOnMap, positionComponent.ComponentYPositionOnMap));
             }
             break;
         }
       }
 
-      return output.ToString();
+      return output;
     }
   }
 }
