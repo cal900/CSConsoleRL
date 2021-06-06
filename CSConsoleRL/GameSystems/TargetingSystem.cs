@@ -59,6 +59,9 @@ namespace CSConsoleRL.GameSystems
           var dir = (EnumDirections)gameEvent.EventParams[0];
           MoveTargetingCursor(dir);
           break;
+        case "PlayerRequestAttack":
+          PlayerRequestAttack();
+          break;
       }
     }
 
@@ -208,6 +211,11 @@ namespace CSConsoleRL.GameSystems
         return true;
       else
         return false;
+    }
+
+    private void PlayerRequestAttack()
+    {
+
     }
   }
 }
