@@ -201,6 +201,7 @@ namespace CSConsoleRL.GameSystems
       return path;
     }
 
+    // TODO: add other entities in the way to this check
     private bool TargetingShouldStop(int x, int y, int distance)
     {
       // Targeting hit obstacle

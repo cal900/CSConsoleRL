@@ -9,14 +9,14 @@ using CSConsoleRL.Data;
 
 namespace CSConsoleRL.Events
 {
-  public class PlayerRequestAttackEvent : IGameEvent
+  public class EntityRequestAttackEvent : IGameEvent
   {
-    public string EventName { get { return "PlayerRequestAttack"; } }
+    public string EventName { get { return "EntityRequestAttack"; } }
     public List<object> EventParams { get; set; }
 
-    public PlayerRequestAttackEvent()
+    public EntityRequestAttackEvent(Entity entity, int targetX, int targetY)
     {
-      EventParams = new List<object>() { };
+      EventParams = new List<object>() { entity, targetX, targetY };
     }
   }
 }
