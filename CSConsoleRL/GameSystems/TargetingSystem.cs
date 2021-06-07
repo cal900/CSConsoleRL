@@ -62,6 +62,9 @@ namespace CSConsoleRL.GameSystems
         case "PlayerRequestAttack":
           PlayerRequestAttack();
           break;
+        case "EntityRequestAttack":
+          EntityRequestAttack((EntityRequestAttackEvent)gameEvent);
+          break;
       }
     }
 
@@ -216,7 +219,31 @@ namespace CSConsoleRL.GameSystems
 
     private void PlayerRequestAttack()
     {
+      var mainChar = _gameStateHelper.GetVar<ActorEntity>("MainEntity");
 
+      SystemManager.BroadcastEvent(new EntityRequestAttackEvent(mainChar, _targetedCoords.X, _targetedCoords.Y));
+    }
+
+    /// <summary>
+    /// When entity wants to attack, we need to check whether the attack is blocked in some way
+    /// </summary>
+    /// <param name="gameEvent"></param>
+    private void EntityRequestAttack(EntityRequestAttackEvent gameEvent)
+    {
+      var entity = (Entity)gameEvent.EventParams[0];
+      var targetX = (int)gameEvent.EventParams[1];
+      var targetY = (int)gameEvent.EventParams[2];
+
+      var entPos = entity.GetComponent<PositionComponent>();
+      var startingX = entPos.ComponentXPositionOnMap;
+      var startingY = entPos.ComponentYPositionOnMap;
+
+      // Gives us true target co-ordinates, if path to target is obscured target will be the obstruction
+      var path = PlotCourse(new Vector2i(startingX, startingY), new Vector2i(targetX, targetY));
+      var attackX = path[path.Count - 1].X;
+      var attackY = path[path.Count - 1].Y;
+
+      SystemManager.BroadcastEvent(new EntityAttackCoordsEvent(entity, attackX, attackY));
     }
   }
 }

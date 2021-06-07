@@ -34,12 +34,15 @@ namespace CSConsoleRL.GameSystems
     {
       switch (gameEvent.EventName)
       {
-        case "ChangeEntityHealth":
-          var guid = (Guid)gameEvent.EventParams[0];
-          var ent = _systemEntities.Where(e => e.Id == guid).FirstOrDefault();
-          var amount = (int)gameEvent.EventParams[1];
+        case "EntityAttackCoords":
+          EntityAttackCoords((EntityAttackCoordsEvent)gameEvent);
           break;
       }
+    }
+
+    private void EntityAttackCoords(EntityAttackCoordsEvent gameEvent)
+    {
+
     }
   }
 }
