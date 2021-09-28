@@ -15,6 +15,7 @@ namespace CSConsoleRL.GameSystems
     private class gameTerminal
     {
       private int _termViewportStart;
+      private int _termViewportSize;
       private List<string> _termLines;
       public string ActiveLine
       {
@@ -30,7 +31,16 @@ namespace CSConsoleRL.GameSystems
       }
 
       // Initialize with a string so ActiveCommand doesn't get messed up by Count of 0
-      public gameTerminal() { _termLines = new List<string>() { ">" }; }
+      public gameTerminal()
+      {
+        _termLines = new List<string>() { ">" };
+        _termViewportSize = 15;
+      }
+
+      public void SetViewportSize(int lines)
+      {
+        _termViewportSize = lines;
+      }
 
       public List<string> GetTermLines(int numLines)
       {
@@ -46,7 +56,7 @@ namespace CSConsoleRL.GameSystems
           // If viewport is so low would go past terminal lines, just return bottom terminal lines equal to numLines
           if (_termViewportStart + numLines >= _termLines.Count)
           {
-            requestedTermLines = _termLines.GetRange(_termLines.Count - numLines, numLines);
+            requestedTermLines = _termLines.GetRange(_termViewportStart, _termLines.Count - _termViewportStart);
           }
           else
           {
@@ -130,7 +140,9 @@ namespace CSConsoleRL.GameSystems
           if (consoleOn) HandleKeyPressed((Keyboard.Key)((KeyPressedEvent)gameEvent).EventParams[0]);
           break;
         case "RequestTerminalData":
-          BroadcastMessage(new SendTerminalDataEvent(shell.GetTermLines((int)gameEvent.EventParams[0])));
+          var lines = (int)gameEvent.EventParams[0];
+          shell.SetViewportSize(lines);
+          BroadcastMessage(new SendTerminalDataEvent(shell.GetTermLines(lines)));
           break;
       }
     }

@@ -14,9 +14,9 @@ namespace CSConsoleRL.Events
     public string EventName { get { return "EntityAttackCoords"; } }
     public List<object> EventParams { get; set; }
 
-    public EntityAttackCoordsEvent(Entity entity, int targetX, int targetY)
+    public EntityAttackCoordsEvent(Entity entity, int baseDamage, int targetX, int targetY)
     {
-      EventParams = new List<object>() { entity, targetX, targetY };
+      EventParams = new List<object>() { entity, baseDamage, targetX, targetY };
     }
   }
 }

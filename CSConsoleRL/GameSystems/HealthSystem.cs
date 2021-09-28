@@ -9,11 +9,11 @@ using CSConsoleRL.Helpers;
 
 namespace CSConsoleRL.GameSystems
 {
-  public class CombatSystem : GameSystem
+  public class HealthSystem : GameSystem
   {
     private readonly GameStateHelper _gameStateHelper;
 
-    public CombatSystem(GameSystemManager manager, GameStateHelper gameStateHelper)
+    public HealthSystem(GameSystemManager manager, GameStateHelper gameStateHelper)
     {
       SystemManager = manager;
       _systemEntities = new List<Entity>();
@@ -50,13 +50,13 @@ namespace CSConsoleRL.GameSystems
     {
       var healthComponent = entity.GetComponent<HealthComponent>();
       var currentHealth = healthComponent.CurrentHealth;
-      var newHealth = currentHealth;
+      var newHealth = currentHealth + amount;
 
-      if (currentHealth + amount > healthComponent.MaxHealth)
+      if (newHealth > healthComponent.MaxHealth)
       {
         newHealth = healthComponent.MaxHealth;
       }
-      else if (currentHealth + amount < 0)
+      else if (newHealth < 0)
       {
         newHealth = 0;
       }

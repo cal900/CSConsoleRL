@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using SFML.System;
 using CSConsoleRL.Components;
 using GameTiles.Tiles;
+using System;
 
 namespace CSConsoleRL.Ai.States
 {
@@ -79,7 +80,16 @@ namespace CSConsoleRL.Ai.States
         verMovement--;
       }
 
-      return new MovementInputEvent(_entity.Id, horMovement, verMovement);
+      // If within attack range attack instead of moving
+      if (Math.Abs(position.ComponentXPositionOnMap - mainCharX) <= 1
+        && Math.Abs(position.ComponentYPositionOnMap - mainCharY) <= 1)
+      {
+        return new EntityRequestAttackEvent(_entity, mainCharX, mainCharY);
+      }
+      else
+      {
+        return new MovementInputEvent(_entity.Id, horMovement, verMovement);
+      }
     }
   }
 }

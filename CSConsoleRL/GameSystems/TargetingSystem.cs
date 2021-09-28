@@ -119,17 +119,16 @@ namespace CSConsoleRL.GameSystems
           break;
       }
 
-      _gameStateHelper.SetVar("TargetingData", new TargetingData(PlotCourse(_startingCoords, _targetedCoords), _targetedCoords));
+      _gameStateHelper.SetVar("TargetingData", new TargetingData(PlotCourse(_gameStateHelper.GetVar<ActorEntity>("MainEntity"), _startingCoords, _targetedCoords), _targetedCoords));
     }
 
-    private List<Vector2i> PlotCourse(Vector2i start, Vector2i end)
+    private List<Vector2i> PlotCourse(Entity entity, Vector2i start, Vector2i end)
     {
       var path = new List<Vector2i>();
       var xDiff = end.X - start.X;
       var yDiff = end.Y - start.Y;
       var slope = 0D;
-      var mainChar = _gameStateHelper.GetVar<ActorEntity>("MainEntity");
-      var range = ((Weapon)mainChar.GetComponent<InventoryComponent>().GetActiveItem()).Range;
+      var range = ((Weapon)entity.GetComponent<InventoryComponent>().GetActiveItem()).Range;
 
       if (xDiff == 0 && yDiff == 0)
       {
@@ -160,7 +159,7 @@ namespace CSConsoleRL.GameSystems
 
             path.Add(new Vector2i(start.X + x, start.Y + y));
 
-            if (TargetingShouldStop(start.X + x, start.Y + y, x)) break;
+            if (TargetingShouldStop(start.X + x, start.Y + y, x, range)) break;
           }
         }
         else
@@ -171,7 +170,7 @@ namespace CSConsoleRL.GameSystems
 
             path.Add(new Vector2i(start.X + x, start.Y + y));
 
-            if (TargetingShouldStop(start.X + x, start.Y + y, x)) break;
+            if (TargetingShouldStop(start.X + x, start.Y + y, x, range)) break;
           }
         }
       }
@@ -179,13 +178,13 @@ namespace CSConsoleRL.GameSystems
       {
         if (yDiff >= 0)
         {
-          for (int y = 0; y <= Math.Abs(yDiff); y++)
+          for (int y = 0; y <= yDiff; y++)
           {
             var x = (int)Math.Round((double)y / slope);
 
             path.Add(new Vector2i(start.X + x, start.Y + y));
 
-            if (TargetingShouldStop(start.X + x, start.Y + y, y)) break;
+            if (TargetingShouldStop(start.X + x, start.Y + y, y, range)) break;
           }
         }
         else
@@ -196,7 +195,7 @@ namespace CSConsoleRL.GameSystems
 
             path.Add(new Vector2i(start.X + x, start.Y + y));
 
-            if (TargetingShouldStop(start.X + x, start.Y + y, y)) break;
+            if (TargetingShouldStop(start.X + x, start.Y + y, y, range)) break;
           }
         }
       }
@@ -205,13 +204,13 @@ namespace CSConsoleRL.GameSystems
     }
 
     // TODO: add other entities in the way to this check
-    private bool TargetingShouldStop(int x, int y, int distance)
+    private bool TargetingShouldStop(int x, int y, int distance, int weaponRange)
     {
       // Targeting hit obstacle
-      if (x < 0 || y < 0 || x > _gameTiles.GetLength(0) - 1 || y > _gameTiles.GetLength(1) - 1
+      if (x < 0 || y < 0 || x >= _gameTiles.GetLength(0) || y >= _gameTiles.GetLength(1)
         || _tileDictionary[_gameTiles[x, y].TileType].BlocksProjectiles)
         return true;
-      else if (Math.Abs(distance) >= _targetingRange)
+      else if (Math.Abs(distance) >= weaponRange)
         return true;
       else
         return false;
@@ -239,11 +238,11 @@ namespace CSConsoleRL.GameSystems
       var startingY = entPos.ComponentYPositionOnMap;
 
       // Gives us true target co-ordinates, if path to target is obscured target will be the obstruction
-      var path = PlotCourse(new Vector2i(startingX, startingY), new Vector2i(targetX, targetY));
+      var path = PlotCourse(entity, new Vector2i(startingX, startingY), new Vector2i(targetX, targetY));
       var attackX = path[path.Count - 1].X;
       var attackY = path[path.Count - 1].Y;
 
-      SystemManager.BroadcastEvent(new EntityAttackCoordsEvent(entity, attackX, attackY));
+      SystemManager.BroadcastEvent(new EntityAttackCoordsEvent(entity, 1, attackX, attackY));
     }
   }
 }

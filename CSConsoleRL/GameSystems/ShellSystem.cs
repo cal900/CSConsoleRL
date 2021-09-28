@@ -224,6 +224,9 @@ namespace CSConsoleRL.GameSystems
         case "ai":
           BroadcastMessage(new ToggleAiEvent());
           return new List<string>() { string.Format("Toggling AI for NPCs") };
+        case "debug":
+          BroadcastMessage(new ToggleDebugModeEvent());
+          return new List<string>() { string.Format("Toggling debug mode") };
         default:
           return new List<string>() { string.Format("Unrecognized input to toggle: {0}", toggleArg) };
       }

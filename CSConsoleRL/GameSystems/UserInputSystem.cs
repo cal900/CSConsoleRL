@@ -36,6 +36,7 @@ namespace CSConsoleRL.GameSystems
     private const Keyboard.Key _inputToggleConsole = Keyboard.Key.Tilde;
     private const Keyboard.Key _inputToggleActiveItem = Keyboard.Key.Tab;
     private const Keyboard.Key _inputToggleTargetingSystem = Keyboard.Key.F;
+    private const Keyboard.Key _inputAttack = Keyboard.Key.Space;
 
     private Keyboard.Key _lastKeyPressed;
     private bool _lastKeyPressedIsDirty; //Used for situations such as console open where don't want to take multiple from a key being held down
@@ -222,6 +223,9 @@ namespace CSConsoleRL.GameSystems
           break;
         case _inputToggleTargetingSystem:
           BroadcastMessage(new RequestChangeGameStateEvent(EnumGameState.RegularGame));
+          break;
+        case _inputAttack:
+          BroadcastMessage(new PlayerRequestAttackEvent());
           break;
         case Keyboard.Key.Escape:
           BroadcastMessage(new RequestChangeGameStateEvent(EnumGameState.RegularGame));

@@ -239,6 +239,11 @@ namespace CSConsoleRL.GameSystems
 
       //Draw UI
       DrawUi();
+
+      if (_gameStateHelper.DebugMode)
+      {
+        DrawDebugInfo(xPixelOnMap, yPixelOnMap);
+      }
     }
 
     private void DrawConsole()
@@ -252,10 +257,18 @@ namespace CSConsoleRL.GameSystems
       //Draw console command text
       var textColor = new Color(255, 255, 255);
       //Iterate through commands, write line by line to console
-      for (int i = _terminalLines.Count - 1; i >= 0; i--)
+      // for (int i = _terminalLines.Count - 1; i >= 0; i--)
+      // {
+      //   var lineStartYCoord = (_terminalDisplayLines - i) * _termCharSize;
+      //   var lineText = new Text(_terminalLines[_terminalLines.Count - 1 - i], _gameFont, _termCharSize);
+      //   lineText.Color = textColor;
+      //   lineText.Position = new Vector2f(0, lineStartYCoord);
+      //   _sfmlWindow.Draw(lineText);
+      // }
+      for (int i = 0; i < _terminalLines.Count; i++)
       {
-        var lineStartYCoord = (_terminalDisplayLines - i) * _termCharSize;
-        var lineText = new Text(_terminalLines[_terminalLines.Count - 1 - i], _gameFont, _termCharSize);
+        var lineStartYCoord = i * _termCharSize;
+        var lineText = new Text(_terminalLines[i], _gameFont, _termCharSize);
         lineText.Color = textColor;
         lineText.Position = new Vector2f(0, lineStartYCoord);
         _sfmlWindow.Draw(lineText);
@@ -386,6 +399,37 @@ namespace CSConsoleRL.GameSystems
       _sfmlWindow.Draw(borderRect);
       _sfmlWindow.Draw(itemRect);
       _sfmlWindow.Draw(itemSprite);
+    }
+
+    private void DrawDebugInfo(int xPixelOnMap, int yPixelOnMap)
+    {
+      DrawHealthBars(xPixelOnMap, yPixelOnMap);
+    }
+
+    private void DrawHealthBars(int xPixelOnMap, int yPixelOnMap)
+    {
+      foreach (Entity entity in _systemEntities.Where(ent => ent.HasComponent<DrawableSfmlComponent>() && ent.HasComponent<HealthComponent>()))
+      {
+        var healthComponent = entity.GetComponent<HealthComponent>();
+        var sfmlComponent = entity.GetComponent<DrawableSfmlComponent>();
+        var positionComponent = entity.GetComponent<PositionComponent>();
+
+        var healthRatio = (double)healthComponent.CurrentHealth / healthComponent.MaxHealth;
+
+        int spriteXPosition = (positionComponent.ComponentXPositionOnMap - windowXPositionInWorld) * _tilePixelSize;
+        int spriteYPosition = (positionComponent.ComponentYPositionOnMap - windowYPositionInWorld) * _tilePixelSize;
+
+        // Lifebar will be black rect, then red rect drawn on top to signafy remaining hp
+        var healthBackgroundRect = new RectangleShape(new Vector2f((float)(_tilePixelSize), 10f));
+        var healthRemRect = new RectangleShape(new Vector2f((float)(_tilePixelSize * healthRatio), 10f));
+        healthBackgroundRect.Position = new Vector2f(spriteXPosition - xPixelOnMap, spriteYPosition - yPixelOnMap - 12);
+        healthBackgroundRect.FillColor = new Color(0, 0, 0);
+        healthRemRect.Position = new Vector2f(healthBackgroundRect.Position.X, healthBackgroundRect.Position.Y);
+        healthRemRect.FillColor = new Color(255, 25, 25);
+
+        _sfmlWindow.Draw(healthBackgroundRect);
+        _sfmlWindow.Draw(healthRemRect);
+      }
     }
 
     private void LoadGlobals()

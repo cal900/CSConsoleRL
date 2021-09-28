@@ -20,15 +20,23 @@ namespace CSConsoleRL.Helpers
     private readonly Dictionary<string, object> _gameState;
     public EnumGameState GameState { get; private set; }
     public Vector2i CameraCoords { get; private set; }
+    public bool DebugMode { get; private set; }
+
     public GameStateHelper()
     {
       _gameState = new Dictionary<string, object>();
       GameState = EnumGameState.RegularGame;
+      DebugMode = true;
     }
 
     public void SetGameState(EnumGameState newState)
     {
       GameState = newState;
+    }
+
+    public void SetDebugMode(bool debug)
+    {
+      DebugMode = debug;
     }
 
     public void SetCameraCoords(int x, int y)

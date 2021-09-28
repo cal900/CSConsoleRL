@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CSConsoleRL.Components;
+using CSConsoleRL.Data;
 
 namespace CSConsoleRL.Entities
 {
@@ -16,6 +17,8 @@ namespace CSConsoleRL.Entities
       AddComponent(new DrawableSfmlComponent(this, Enums.EnumSfmlSprites.Seeker));
       AddComponent(new CollisionComponent(this));
       AddComponent(new AiTestComponent(this));
+      AddComponent(new InventoryComponent(this));
+      this.GetComponent<InventoryComponent>().AddItem(new Weapon(EnumItemTypes.Knife));
     }
   }
 }
