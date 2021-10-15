@@ -14,14 +14,21 @@ namespace MapFileHandler
   {
     MapFileLoadSave mapFileLoadSave;
 
-    public MapFileHandler(ref MapFile mapFileToSave)
+    public MapFileHandler(ref MapFile mapFileToSave, string mapIndex = null)
     {
       mapFileLoadSave = new MapFileLoadSave();
-      OpenEditorMenu(ref mapFileToSave);
+      OpenEditorMenu(ref mapFileToSave, mapIndex);
     }
 
-    public void OpenEditorMenu(ref MapFile mapFileToSave)
+    public void OpenEditorMenu(ref MapFile mapFileToSave, string mapIndex = null)
     {
+      // mapIndex having a value indicates we pass in on app launch
+      if (!String.IsNullOrWhiteSpace(mapIndex))
+      {
+        mapFileLoadSave.LoadMapFileBrowser(ref mapFileToSave, mapIndex);
+        return;
+      }
+
       Console.Clear();
 
       Console.ForegroundColor = ConsoleColor.White;
@@ -125,14 +132,22 @@ namespace MapFileHandler
       }
     }
 
-    public void LoadMapFileBrowser(ref MapFile mapFileToLoadTo)
+    public void LoadMapFileBrowser(ref MapFile mapFileToLoadTo, string mapIndex = null)
     {
       var mapDir = GameGlobals.Instance().Get<string>("mapDir");
       if (!Directory.Exists(mapDir)) mapDir = @"H:\Programming\CSConsoleRL\Data\Maps\";
       string[] filesInDirectory = Directory.GetFiles(mapDir, "*.csr");
-
-      string input = "";
       int tempInt = 0;
+      string input = "";
+
+      if (!String.IsNullOrWhiteSpace(mapIndex))
+      {
+        if (int.TryParse(mapIndex, out tempInt) && tempInt != 0 && tempInt <= filesInDirectory.GetLength(0))
+        {
+          LoadMap(filesInDirectory[tempInt - 1], ref mapFileToLoadTo);
+          return;
+        }
+      }
 
       while (string.Compare(input, "exit", true) != 0)
       {

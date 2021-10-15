@@ -46,6 +46,9 @@ namespace CSConsoleRL.GameSystems
     private List<string> _terminalLines;
     private const uint _termCharSize = 16;
 
+    private List<string> _gameLogLines;
+    private const uint _gameLogCharSize = 14;
+
     private TileTypeDictionary _tileDictionary;
     private SfmlTextureDictionary _textureDictionary;
     private CameraHelper _cameraHelper;
@@ -116,6 +119,9 @@ namespace CSConsoleRL.GameSystems
           break;
         case "SendActiveItem":
           _activeItem = (Item)gameEvent.EventParams[0];
+          break;
+        case "SendGameLogMessages":
+          _gameLogLines = (List<string>)gameEvent.EventParams[0];
           break;
       }
     }
@@ -257,19 +263,11 @@ namespace CSConsoleRL.GameSystems
       //Draw console command text
       var textColor = new Color(255, 255, 255);
       //Iterate through commands, write line by line to console
-      // for (int i = _terminalLines.Count - 1; i >= 0; i--)
-      // {
-      //   var lineStartYCoord = (_terminalDisplayLines - i) * _termCharSize;
-      //   var lineText = new Text(_terminalLines[_terminalLines.Count - 1 - i], _gameFont, _termCharSize);
-      //   lineText.Color = textColor;
-      //   lineText.Position = new Vector2f(0, lineStartYCoord);
-      //   _sfmlWindow.Draw(lineText);
-      // }
       for (int i = 0; i < _terminalLines.Count; i++)
       {
         var lineStartYCoord = i * _termCharSize;
         var lineText = new Text(_terminalLines[i], _gameFont, _termCharSize);
-        lineText.Color = textColor;
+        lineText.FillColor = textColor;
         lineText.Position = new Vector2f(0, lineStartYCoord);
         _sfmlWindow.Draw(lineText);
       }
@@ -310,10 +308,13 @@ namespace CSConsoleRL.GameSystems
       DrawHealthUi();
       DrawGameStateUi();
       DrawActiveItemUi();
+      DrawGameLogUi();
     }
 
-    private void DrawTextWithBorder(Text text, Color borderColor, Color backgroundColor, float borderStartingXPos, float borderThickness)
+    private void DrawTextWithBorder(Text text, Color borderColor, Color backgroundColor, float borderStartingXPos, float? borderStartingYPos, float borderThickness)
     {
+      float borderRectY = borderStartingYPos != null ? (float)borderStartingYPos : _windowYSize - (_tilePixelSize * 2) - 15;
+
       var boxWidth = text.GetLocalBounds().Width + (borderThickness * 4);
       var boxHeight = text.GetLocalBounds().Height + (borderThickness * 4);
 
@@ -322,7 +323,7 @@ namespace CSConsoleRL.GameSystems
 
       var borderRect = new RectangleShape(borderVect);
       var textRect = new RectangleShape(textVect);
-      borderRect.Position = new Vector2f(borderStartingXPos, _windowYSize - (_tilePixelSize * 2) - 15);
+      borderRect.Position = new Vector2f(borderStartingXPos, borderRectY);
       textRect.Position = new Vector2f(borderStartingXPos + borderThickness, borderRect.Position.Y + borderThickness);
       borderRect.FillColor = borderColor;
       textRect.FillColor = backgroundColor;
@@ -341,11 +342,14 @@ namespace CSConsoleRL.GameSystems
       var maxHealth = healthComp.MaxHealth;
       var currentHealth = healthComp.CurrentHealth;
 
-      var textStr = $"{currentHealth}/{maxHealth}";
+      var textStr = $"{currentHealth} / {maxHealth}";
       var text = new Text(textStr, _gameFont, _termCharSize);
       text.FillColor = new Color(255, 255, 255);
 
-      DrawTextWithBorder(text, new Color(155, 155, 0), new Color(25, 25, 25), 15f, 5f);
+      float healthXCoord = _windowXSize - (_tilePixelSize * 2) - 50;
+      float healthYCoord = _windowYSize - (_tilePixelSize * 2) - 50;
+
+      DrawTextWithBorder(text, new Color(155, 155, 0), new Color(25, 25, 25), healthXCoord, healthYCoord, 5f);
     }
 
     private void DrawGameStateUi()
@@ -373,7 +377,10 @@ namespace CSConsoleRL.GameSystems
 
       var boxWidth = text.GetLocalBounds().Width + (borderThickness * 4);
 
-      DrawTextWithBorder(text, new Color(155, 155, 0), new Color(25, 25, 25), (_windowXSize - boxWidth) / 2, 5f);
+      float healthXCoord = _windowXSize - (_tilePixelSize * 2) - 87;
+      float healthYCoord = _windowYSize - (_tilePixelSize * 2) - 88;
+
+      DrawTextWithBorder(text, new Color(155, 155, 0), new Color(25, 25, 25), healthXCoord, healthYCoord, 5f);
     }
 
     private void DrawActiveItemUi()
@@ -399,6 +406,38 @@ namespace CSConsoleRL.GameSystems
       _sfmlWindow.Draw(borderRect);
       _sfmlWindow.Draw(itemRect);
       _sfmlWindow.Draw(itemSprite);
+    }
+
+    private void DrawGameLogUi()
+    {
+      BroadcastMessage(new RequestGameLogMessagesEvent());
+
+      for (int i = 0; i < _gameLogLines.Count; i++)
+      {
+        int yCoord = _windowYSize - 20 - (i * ((int)_gameLogCharSize + 4));
+        DrawGameLogMessage(yCoord, _gameLogLines[i]);
+      }
+    }
+
+    private void DrawGameLogMessage(int yCoord, string msg)
+    {
+      var mod = msg.IndexOf('<');
+      while (mod != -1)
+      {
+
+
+        mod = msg.IndexOf('<');
+      }
+    }
+
+    private void DrawGameLogMessageFragment(int xCoord, int yCoord, string msg)
+    {
+      var text = new Text(msg, _gameFont, _gameLogCharSize);
+      text.FillColor = new Color(255, 255, 255);
+      text.OutlineColor = new Color(0, 0, 0);
+      text.OutlineThickness = 1;
+      text.Position = new Vector2f(xCoord, yCoord);
+      _sfmlWindow.Draw(text);
     }
 
     private void DrawDebugInfo(int xPixelOnMap, int yPixelOnMap)

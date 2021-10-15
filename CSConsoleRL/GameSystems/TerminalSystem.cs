@@ -26,7 +26,7 @@ namespace CSConsoleRL.GameSystems
         set
         {
           _termLines[_termLines.Count - 1] = value;
-          _termViewportStart = _termLines.Count;
+          ScrollActiveLineIntoViewport();
         }
       }
 
@@ -35,6 +35,17 @@ namespace CSConsoleRL.GameSystems
       {
         _termLines = new List<string>() { ">" };
         _termViewportSize = 15;
+      }
+
+      private void ScrollActiveLineIntoViewport()
+      {
+        // Calculate if active line is in viewport
+        if (_termViewportStart + _termViewportSize >= _termLines.Count)
+        {
+          return;
+        }
+
+        _termViewportStart = _termLines.Count - _termViewportSize;
       }
 
       public void SetViewportSize(int lines)
@@ -83,6 +94,7 @@ namespace CSConsoleRL.GameSystems
       public void AddCommand()
       {
         _termLines.Add(">");
+        ScrollActiveLineIntoViewport();
       }
 
       public void WriteText(string text)
@@ -102,13 +114,13 @@ namespace CSConsoleRL.GameSystems
       }
     }
 
-    private bool consoleOn;
-    private gameTerminal shell;
+    private bool _consoleOn;
+    private gameTerminal _terminal;
 
     public TerminalSystem(GameSystemManager manager)
     {
       SystemManager = manager;
-      shell = new gameTerminal();
+      _terminal = new gameTerminal();
 
       _systemEntities = new List<Entity>();
 
@@ -134,15 +146,15 @@ namespace CSConsoleRL.GameSystems
           NextFrame();
           break;
         case "ToggleConsole":
-          consoleOn = !consoleOn;
+          _consoleOn = !_consoleOn;
           break;
         case "KeyPressed":
-          if (consoleOn) HandleKeyPressed((Keyboard.Key)((KeyPressedEvent)gameEvent).EventParams[0]);
+          if (_consoleOn) HandleKeyPressed((Keyboard.Key)((KeyPressedEvent)gameEvent).EventParams[0]);
           break;
         case "RequestTerminalData":
           var lines = (int)gameEvent.EventParams[0];
-          shell.SetViewportSize(lines);
-          BroadcastMessage(new SendTerminalDataEvent(shell.GetTermLines(lines)));
+          _terminal.SetViewportSize(lines);
+          BroadcastMessage(new SendTerminalDataEvent(_terminal.GetTermLines(lines)));
           break;
       }
     }
@@ -162,8 +174,8 @@ namespace CSConsoleRL.GameSystems
     {
       if (key == Keyboard.Key.Enter)
       {
-        if (shell.ActiveLine.Length > 1) shell.AddLines(_shellSystem.HandleInput(shell.ActiveLine.Substring(1))); //Start at index 1 to get rid of '>' char
-        shell.AddCommand();
+        if (_terminal.ActiveLine.Length > 1) _terminal.AddLines(_shellSystem.HandleInput(_terminal.ActiveLine.Substring(1))); //Start at index 1 to get rid of '>' char
+        _terminal.AddCommand();
       }
       else if (key == Keyboard.Key.Tilde)
       {
@@ -175,35 +187,35 @@ namespace CSConsoleRL.GameSystems
       }
       else if (key == Keyboard.Key.Backspace)
       {
-        if (shell.ActiveLine.Length > 1) shell.ActiveLine = shell.ActiveLine.Remove(shell.ActiveLine.Length - 1);
+        if (_terminal.ActiveLine.Length > 1) _terminal.ActiveLine = _terminal.ActiveLine.Remove(_terminal.ActiveLine.Length - 1);
       }
       else if (key == Keyboard.Key.Up)
       {
-        shell.ActiveLine = ">" + _shellSystem.GetPrev();
+        _terminal.ActiveLine = ">" + _shellSystem.GetPrev();
       }
       else if (key == Keyboard.Key.Down)
       {
-        shell.ActiveLine = ">" + _shellSystem.GetNext();
+        _terminal.ActiveLine = ">" + _shellSystem.GetNext();
       }
       else if (key == Keyboard.Key.PageUp)
       {
-        shell.ViewportUp();
+        _terminal.ViewportUp();
       }
       else if (key == Keyboard.Key.PageDown)
       {
-        shell.ViewportDown();
+        _terminal.ViewportDown();
       }
       else if (key == Keyboard.Key.Space)
       {
-        shell.ActiveLine += " ";
+        _terminal.ActiveLine += " ";
       }
       else if ((int)key >= 26 && (int)key <= 35)
       {
-        shell.ActiveLine += key.ToString().Substring(3);
+        _terminal.ActiveLine += key.ToString().Substring(3);
       }
       else
       {
-        shell.ActiveLine += key.ToString().ToLower();
+        _terminal.ActiveLine += key.ToString().ToLower();
       }
     }
   }

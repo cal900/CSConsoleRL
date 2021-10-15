@@ -83,6 +83,7 @@ namespace CSConsoleRL.Game.Managers
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(HealthSystem)));
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(CombatSystem)));
       RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(DebugSystem)));
+      RegisterSystem((GameSystem)DependencyInjectionHelper.Resolve(typeof(GameLogSystem)));
     }
 
     private void InitializeSystems()
