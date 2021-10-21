@@ -45,6 +45,7 @@ namespace CSConsoleRL.GameSystems
 
     private void EntityAttackCoords(EntityAttackCoordsEvent gameEvent)
     {
+      var entityAttacking = (Entity)gameEvent.EventParams[0];
       int baseDamage = (int)gameEvent.EventParams[1];
       int targetX = (int)gameEvent.EventParams[2];
       int targetY = (int)gameEvent.EventParams[3];
@@ -57,6 +58,7 @@ namespace CSConsoleRL.GameSystems
       }
       Console.WriteLine($"Attack succeeded, changing HP by {baseDamage}");
       SystemManager.BroadcastEvent(new ChangeEntityHealthEvent(entityAttacked.Id, baseDamage * -1));
+      SystemManager.BroadcastEvent(new AddGameLogMessageEvent($"<C=#FFFF00ff>{entityAttacking.Name}</C> did <C=#FF0000ff>{baseDamage}</C> damage to <C=#FFFF00ff>{entityAttacked.Name}</C>"));
     }
   }
 }

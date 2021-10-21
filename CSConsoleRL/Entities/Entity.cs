@@ -13,6 +13,7 @@ namespace CSConsoleRL.Entities
   {
     public Guid Id { get; set; }
     public Dictionary<Type, IComponent> Components { get; set; }
+    public abstract string Name { get; protected set; }
 
     public Entity()
     {

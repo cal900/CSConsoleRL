@@ -10,9 +10,12 @@ namespace CSConsoleRL.Entities
 {
   public class SeekerPistolEntity : Entity
   {
+    public override string Name { get; protected set; }
+
     public SeekerPistolEntity()
         : base()
     {
+      Name = "SeekerPistol";
       AddComponent(new PositionComponent(this));
       AddComponent(new DrawableSfmlComponent(this, Enums.EnumSfmlSprites.SeekerPistol));
       AddComponent(new CollisionComponent(this));

@@ -10,9 +10,12 @@ namespace CSConsoleRL.Entities
   //Meant to be used for player character
   public class ActorEntity : Entity
   {
+    public override string Name { get; protected set; }
+
     public ActorEntity()
         : base()
     {
+      Name = "Actor";
       AddComponent(new PositionComponent(this));
       AddComponent(new DrawableSfmlComponent(this, Enums.EnumSfmlSprites.MainCharacter));
       AddComponent(new UserInputComponent(this));

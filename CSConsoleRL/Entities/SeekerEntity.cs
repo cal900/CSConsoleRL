@@ -9,9 +9,12 @@ namespace CSConsoleRL.Entities
 {
   public class SeekerEntity : Entity
   {
+    public override string Name { get; protected set; }
+
     public SeekerEntity()
         : base()
     {
+      Name = "Seeker";
       AddComponent(new PositionComponent(this));
       AddComponent(new DrawableSfmlComponent(this, Enums.EnumSfmlSprites.Seeker));
       AddComponent(new CollisionComponent(this));

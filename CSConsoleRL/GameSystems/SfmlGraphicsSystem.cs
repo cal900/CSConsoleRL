@@ -48,6 +48,7 @@ namespace CSConsoleRL.GameSystems
 
     private List<string> _gameLogLines;
     private const uint _gameLogCharSize = 14;
+    private const string _gameLogMsgPrefix = "* ";
 
     private TileTypeDictionary _tileDictionary;
     private SfmlTextureDictionary _textureDictionary;
@@ -421,22 +422,147 @@ namespace CSConsoleRL.GameSystems
 
     private void DrawGameLogMessage(int yCoord, string msg)
     {
-      var mod = msg.IndexOf('<');
-      while (mod != -1)
+      var styleMods = new Stack<Text.Styles>();
+      styleMods.Push(Text.Styles.Regular);
+      var colorMods = new Stack<Color>();
+      colorMods.Push(Color.White);
+
+      var xCoord = 2f;
+      var text = new Text();
+      text.Font = _gameFont;
+      text.CharacterSize = _gameLogCharSize;
+      msg = _gameLogMsgPrefix + msg;
+
+      while (msg.Length > 0)
       {
+        text.Position = new Vector2f(xCoord, yCoord);
+        var nextMod = msg.IndexOf('<');
 
+        while (nextMod == 0)
+        {
+          int modCharLen = 0;
+          bool isModAdd = msg[nextMod + 1] == '/' ? false : true;
+          if (IsGameLogMessageStyleModifier(msg))
+          {
+            if (!isModAdd)
+            {
+              styleMods.Pop();
+              modCharLen = 4;
+            }
+            else
+            {
+              styleMods.Push(ParseGameLogMessageStyleModifier(msg));
+              modCharLen = 3;
+            }
+          }
+          else if (IsGameLogMessageColorModifier(msg))
+          {
+            if (!isModAdd)
+            {
+              colorMods.Pop();
+              modCharLen = 4;
+            }
+            else
+            {
+              colorMods.Push(ParseGameLogMessageColorModifier(msg));
+              modCharLen = 13;
+            }
+          }
 
-        mod = msg.IndexOf('<');
+          msg = msg.Substring(modCharLen, msg.Length - modCharLen);
+          nextMod = msg.IndexOf('<');
+        }
+
+        // Find next modifier which will end the current subStr
+        if (nextMod == -1)
+        {
+          nextMod = msg.Length;
+        }
+
+        text.DisplayedString = msg.Substring(0, nextMod);
+        text.Style = styleMods.Peek();
+        text.FillColor = colorMods.Peek();
+        DrawGameLogMessageFragment(text);
+
+        if (nextMod == msg.Length)
+        {
+          msg = "";
+        }
+        else
+        {
+          msg = msg.Substring(nextMod, msg.Length - nextMod);
+        }
+
+        xCoord = xCoord + text.GetGlobalBounds().Width;
       }
     }
 
-    private void DrawGameLogMessageFragment(int xCoord, int yCoord, string msg)
+    private bool IsGameLogMessageStyleModifier(string msg)
     {
-      var text = new Text(msg, _gameFont, _gameLogCharSize);
-      text.FillColor = new Color(255, 255, 255);
+      int i = msg[1] == '/' ? 2 : 1;
+      switch (msg[i])
+      {
+        case 'b':
+          return true;
+        case 'i':
+          return true;
+        case 'u':
+          return true;
+        case 's':
+          return true;
+        default:
+          return false;
+      }
+    }
+
+
+    private bool IsGameLogMessageColorModifier(string msg)
+    {
+      int i = msg[1] == '/' ? 2 : 1;
+      if (msg[i] == 'C')
+      {
+        return true;
+      }
+
+      return false;
+    }
+
+    private Text.Styles ParseGameLogMessageStyleModifier(string msg)
+    {
+      int i = msg[1] == '/' ? 2 : 1;
+      switch (msg[i])
+      {
+        case 'b':
+          return Text.Styles.Bold;
+        case 'i':
+          return Text.Styles.Italic;
+        case 'u':
+          return Text.Styles.Underlined;
+        case 's':
+          return Text.Styles.StrikeThrough;
+        default:
+          return Text.Styles.Regular;
+      }
+    }
+
+
+    private Color ParseGameLogMessageColorModifier(string msg)
+    {
+      int i = msg[1] == '/' ? 2 : 1;
+      if (msg[i] == 'C')
+      {
+        var colorHexStr = msg.Substring(i + 3, 8);
+        uint colorHex = Convert.ToUInt32(colorHexStr, 16);
+        return new Color(colorHex);
+      }
+
+      return new Color(Color.White);
+    }
+
+    private void DrawGameLogMessageFragment(Text text)
+    {
       text.OutlineColor = new Color(0, 0, 0);
       text.OutlineThickness = 1;
-      text.Position = new Vector2f(xCoord, yCoord);
       _sfmlWindow.Draw(text);
     }
 

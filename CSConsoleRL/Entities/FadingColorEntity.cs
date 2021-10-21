@@ -10,9 +10,12 @@ namespace CSConsoleRL.Entities
   //Meant for debugging, should color in square with solid color then fade out
   public class FadingColorEntity : Entity
   {
+    public override string Name { get; protected set; }
+
     public FadingColorEntity(string color)
         : base()
     {
+      Name = "FadingColor";
       AddComponent(new PositionComponent(this));
 
       if (color == null) color = "";

@@ -25,7 +25,7 @@ namespace CSConsoleRL.GameSystems
       };
       _activeMsgIndex = 0;
       AddGameLogMessage("<b>Bold</b>");
-      AddGameLogMessage("<Coylor=#f10203><b>Coloured and Bold</b></Color>");
+      AddGameLogMessage("<C=#f10203ff>Red <b>Bold Red </b>Red</C>");
       _visibleMessages = 4;
     }
 

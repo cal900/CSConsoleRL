@@ -226,6 +226,7 @@ namespace CSConsoleRL.GameSystems
           break;
         case _inputAttack:
           BroadcastMessage(new PlayerRequestAttackEvent());
+          BroadcastMessage(new RequestChangeGameStateEvent(EnumGameState.RegularGame));
           break;
         case Keyboard.Key.Escape:
           BroadcastMessage(new RequestChangeGameStateEvent(EnumGameState.RegularGame));

@@ -230,6 +230,22 @@ namespace CSConsoleRL.GameSystems
     private void EntityRequestAttack(EntityRequestAttackEvent gameEvent)
     {
       var entity = (Entity)gameEvent.EventParams[0];
+
+      var invComp = entity.GetComponent<InventoryComponent>();
+      var damage = 1;
+      if (invComp != null)
+      {
+        var item = invComp.GetActiveItem();
+        if (item != null)
+        {
+          var weapon = item as Weapon;
+          if (weapon != null)
+          {
+            damage = weapon.Damage;
+          }
+        }
+      }
+
       var targetX = (int)gameEvent.EventParams[1];
       var targetY = (int)gameEvent.EventParams[2];
 
@@ -242,7 +258,7 @@ namespace CSConsoleRL.GameSystems
       var attackX = path[path.Count - 1].X;
       var attackY = path[path.Count - 1].Y;
 
-      SystemManager.BroadcastEvent(new EntityAttackCoordsEvent(entity, 1, attackX, attackY));
+      SystemManager.BroadcastEvent(new EntityAttackCoordsEvent(entity, damage, attackX, attackY));
     }
   }
 }
