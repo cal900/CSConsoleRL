@@ -51,7 +51,7 @@ namespace MapEditor
     {
       DrawMap();
       ConsoleKeyInfo keyPressed;
-      keyPressed = Console.ReadKey(false);
+      keyPressed = Console.ReadKey(true);
       while (keyPressed.Key != ConsoleKey.Escape)
       {
         if (keyPressed.Key == ConsoleKey.W)
@@ -90,20 +90,24 @@ namespace MapEditor
           if (CursorXPosition < mapInfo.TileSet.GetLength(0) - 1) CursorXPosition++;
           if (CursorXPosition >= WindowXPosition + ScreenWidth) WindowXPosition++;
         }
+        else if (keyPressed.Key == ConsoleKey.B)
+        {
+          Console.Clear();
+          // Create new map with specified 
+          Console.WriteLine("Enter the new map width (in tiles)");
+          var newX = Console.ReadLine();
+          Console.WriteLine("Enter the new map height (in tiles)");
+          var newY = Console.ReadLine();
+          mapInfo = new MapFile(new Tile[int.Parse(newX), int.Parse(newY)], new List<Spawn>());
+          ResetMap();
+        }
         else if (keyPressed.Key == ConsoleKey.M)
         {
           var newFileMenu = new MapFileHandler.MapFileHandler(ref mapInfo);
         }
         else if (keyPressed.Key == ConsoleKey.N)
         {
-          //Reset/Clear map to all snow
-          for (int yIndex = 0; yIndex < mapInfo.TileSet.GetLength(1); yIndex++)
-          {
-            for (int xIndex = 0; xIndex < mapInfo.TileSet.GetLength(0); xIndex++)
-            {
-              mapInfo.TileSet[xIndex, yIndex].TileType = EnumTileTypes.Snow;
-            }
-          }
+          ResetMap();
         }
         else
         {
@@ -112,7 +116,19 @@ namespace MapEditor
 
         DrawMap();
 
-        keyPressed = Console.ReadKey(false);
+        keyPressed = Console.ReadKey(true);
+      }
+    }
+
+    public void ResetMap()
+    {
+      //Reset/Clear map to all snow
+      for (int yIndex = 0; yIndex < mapInfo.TileSet.GetLength(1); yIndex++)
+      {
+        for (int xIndex = 0; xIndex < mapInfo.TileSet.GetLength(0); xIndex++)
+        {
+          mapInfo.TileSet[xIndex, yIndex].TileType = EnumTileTypes.Snow;
+        }
       }
     }
 
@@ -127,6 +143,7 @@ namespace MapEditor
           //If the position is out of bounds for the map don't draw anything there
           if (x < 0 || y < 0 || x >= mapInfo.TileSet.GetLength(0) || y >= mapInfo.TileSet.GetLength(1))
           {
+            Console.SetCursorPosition(x, y);
             Console.Write("  ");
             continue;
           }
@@ -139,7 +156,8 @@ namespace MapEditor
       }
 
       Console.ForegroundColor = ConsoleColor.White;
-      Console.Write("\nCursorX\t" + CursorXPosition + "\nCursorY\t" + CursorYPosition + "\nWindowX\t" + WindowXPosition + "\nWindowY\t" + WindowYPosition);
+      Console.WriteLine(mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType);
+      Console.Write("CursorX\t" + CursorXPosition + "\nCursorY\t" + CursorYPosition + "\nWindowX\t" + WindowXPosition + "\nWindowY\t" + WindowYPosition);
     }
     public void HandleTileChangeKeyPressed(ConsoleKey keyPressed)
     {

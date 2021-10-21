@@ -163,11 +163,6 @@ namespace CSConsoleRL.Game.Managers
       }
     }
 
-    public void BroadcastUiEvent(/*GameEvent evt*/)
-    {
-      //if(_gameStateManager != null)_gameStateManager.CurrentState().HandleEvent(evt);
-    }
-
     public void BroadcastEvent(IGameEvent evnt)
     {
       if (evnt.EventName == "ExitGame")
@@ -179,11 +174,6 @@ namespace CSConsoleRL.Game.Managers
       {
         system.Value.HandleMessage(evnt);
       }
-    }
-
-    public Entity WithId(Guid id)
-    {
-      return Entities.SingleOrDefault(e => e.Id == id);
     }
 
     private void MainGameLoop()
