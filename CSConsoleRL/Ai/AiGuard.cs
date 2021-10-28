@@ -1,12 +1,14 @@
+using System.Collections.Generic;
 using CSConsoleRL.Ai.Interfaces;
 using CSConsoleRL.Entities;
 using CSConsoleRL.Helpers;
 using CSConsoleRL.Ai.States;
 using CSConsoleRL.Events;
+using SFML.System;
 
 namespace CSConsoleRL.Ai
 {
-  public class AiGuardCoward : IAi
+  public class AiGuard : IAi
   {
     protected readonly Entity _entity;
     protected readonly AiStateMachine _aiStateMachine;
@@ -14,7 +16,7 @@ namespace CSConsoleRL.Ai
 
     protected bool Patrol1ToMeleeSeek1(Entity entity, GameStateHelper gameStateHelper)
     {
-      return true;
+      return false;
       _counter++;
       if (_counter >= 5)
       {
@@ -26,7 +28,7 @@ namespace CSConsoleRL.Ai
 
     protected bool MeleeSeek1ToPatrol1(Entity entity, GameStateHelper gameStateHelper)
     {
-      return false;
+      return true;
       _counter--;
       if (_counter <= 0)
       {
@@ -36,7 +38,7 @@ namespace CSConsoleRL.Ai
       return false;
     }
 
-    public AiGuardCoward(Entity entity)
+    public AiGuard(Entity entity)
     {
       _entity = entity;
       _aiStateMachine = new AiStateMachine();
@@ -56,7 +58,7 @@ namespace CSConsoleRL.Ai
 
     public void ConstructAiStateMachine()
     {
-      _aiStateMachine.AddState("Patrol1", new Patrol(_entity));
+      _aiStateMachine.AddState("Patrol1", new Patrol(_entity, new List<Vector2i>() { new Vector2i(10, 10), new Vector2i(10, 20) }));
       _aiStateMachine.AddState("MeleeSeek1", new MeleeSeek(_entity));
 
       _aiStateMachine.AddStateChange("Patrol1", "MeleeSeek1", Patrol1ToMeleeSeek1);

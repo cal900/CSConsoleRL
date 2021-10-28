@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CSConsoleRL.Components;
 using CSConsoleRL.Data;
+using CSConsoleRL.Ai;
 
 namespace CSConsoleRL.Entities
 {
@@ -19,7 +20,7 @@ namespace CSConsoleRL.Entities
       AddComponent(new PositionComponent(this));
       AddComponent(new DrawableSfmlComponent(this, Enums.EnumSfmlSprites.SeekerKnife));
       AddComponent(new CollisionComponent(this));
-      AddComponent(new SeekerAiComponent(this));
+      AddComponent(new AiComponent(this, new AiGuard(this)));
       var inventory = new InventoryComponent(this);
       inventory.AddItem(new Item(EnumItemTypes.Knife));
       AddComponent(inventory);

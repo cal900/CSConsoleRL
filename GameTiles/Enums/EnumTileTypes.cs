@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace GameTiles.Enums
 {
-    public enum EnumTileTypes
-    {
-        Grass,
-        Snow,
-        SnowWalked,
-        Road,
-        CabinWall,
-        CabinFloor,
-        CabinDoor,
-        Tree,
-        River,
-        CabinWindow,
-        Mountain
-    }
+  public enum EnumTileTypes
+  {
+    Grass,
+    Snow,
+    SnowWalked,
+    Road,
+    CabinWall,
+    CabinFloor,
+    CabinDoor,
+    Tree,
+    River,
+    CabinWindow,
+    Mountain
+  }
 }

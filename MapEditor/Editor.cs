@@ -23,8 +23,9 @@ namespace MapEditor
     public int CursorYPosition;
     public int WindowXPosition;
     public int WindowYPosition;
-    public const int ScreenWidth = 20;
-    public const int ScreenHeight = 20;
+    public const int ScreenWidth = 21;
+    public const int ScreenHeight = 21;
+    private int _cursorSize;
 
     public MapEditor()
     {
@@ -32,6 +33,7 @@ namespace MapEditor
       CursorYPosition = 0;
       WindowXPosition = 0;
       WindowYPosition = 0;
+      _cursorSize = 1;
 
       mapInfo = new MapFile(new Tile[50, 50], new List<Spawn>());
       for (int y = 0; y < mapInfo.TileSet.GetLength(1); y++)
@@ -90,6 +92,20 @@ namespace MapEditor
           if (CursorXPosition < mapInfo.TileSet.GetLength(0) - 1) CursorXPosition++;
           if (CursorXPosition >= WindowXPosition + ScreenWidth) WindowXPosition++;
         }
+        else if (keyPressed.Key == ConsoleKey.Add)
+        {
+          if (_cursorSize < 2)
+          {
+            _cursorSize++;
+          }
+        }
+        else if (keyPressed.Key == ConsoleKey.Subtract)
+        {
+          if (_cursorSize > 0)
+          {
+            _cursorSize--;
+          }
+        }
         else if (keyPressed.Key == ConsoleKey.B)
         {
           Console.Clear();
@@ -136,20 +152,21 @@ namespace MapEditor
     {
       Console.Clear();
 
-      for (int y = WindowYPosition; y < WindowYPosition + ScreenHeight; y++)
+      var windowYPosition = CursorYPosition - (ScreenHeight - 1) / 2;
+      var windowXPosition = CursorXPosition - (ScreenWidth - 1) / 2;
+      for (int y = windowYPosition; y < windowYPosition + ScreenHeight; y++)
       {
-        for (int x = WindowXPosition; x < WindowXPosition + ScreenWidth; x++)
+        for (int x = windowXPosition; x < windowXPosition + ScreenWidth; x++)
         {
           //If the position is out of bounds for the map don't draw anything there
           if (x < 0 || y < 0 || x >= mapInfo.TileSet.GetLength(0) || y >= mapInfo.TileSet.GetLength(1))
           {
-            Console.SetCursorPosition(x, y);
             Console.Write("  ");
             continue;
           }
 
           Console.ForegroundColor = TileDictionary[mapInfo.TileSet[x, y].TileType].Color;
-          if (x == CursorXPosition && y == CursorYPosition) Console.ForegroundColor = ConsoleColor.Yellow;
+          if (IsCoordInCursor(x, y)) Console.ForegroundColor = ConsoleColor.Yellow;
           Console.Write(TileDictionary[mapInfo.TileSet[x, y].TileType].Character + " ");
         }
         Console.WriteLine("");
@@ -157,57 +174,86 @@ namespace MapEditor
 
       Console.ForegroundColor = ConsoleColor.White;
       Console.WriteLine(mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType);
-      Console.Write("CursorX\t" + CursorXPosition + "\nCursorY\t" + CursorYPosition + "\nWindowX\t" + WindowXPosition + "\nWindowY\t" + WindowYPosition);
+      Console.WriteLine("CursorX\t" + CursorXPosition);
+      Console.WriteLine("CursorY\t" + CursorYPosition);
+      Console.WriteLine("WindowX\t" + windowXPosition);
+      Console.WriteLine("WindowY\t" + windowYPosition);
+      Console.WriteLine("CursorSize\t" + _cursorSize);
     }
+
+    private bool IsCoordInCursor(int x, int y)
+    {
+      var xDiff = Math.Abs(x - CursorXPosition);
+      var yDiff = Math.Abs(y - CursorYPosition);
+
+      if (xDiff <= _cursorSize && yDiff <= _cursorSize)
+      {
+        return true;
+      }
+
+      return false;
+    }
+
     public void HandleTileChangeKeyPressed(ConsoleKey keyPressed)
     {
       if (keyPressed == ConsoleKey.D1)
       {
-        mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.Snow;
+        PaintSpecifiedTileType(CursorXPosition, CursorYPosition, EnumTileTypes.Snow);
       }
       else if (keyPressed == ConsoleKey.D2)
       {
-        mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.SnowWalked;
+        PaintSpecifiedTileType(CursorXPosition, CursorYPosition, EnumTileTypes.SnowWalked);
       }
       else if (keyPressed == ConsoleKey.D3)
       {
-        mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.Road;
+        PaintSpecifiedTileType(CursorXPosition, CursorYPosition, EnumTileTypes.Road);
       }
       else if (keyPressed == ConsoleKey.D4)
       {
-        mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.Grass;
+        PaintSpecifiedTileType(CursorXPosition, CursorYPosition, EnumTileTypes.Grass);
       }
       else if (keyPressed == ConsoleKey.D5)
       {
-        mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.CabinFloor;
+        PaintSpecifiedTileType(CursorXPosition, CursorYPosition, EnumTileTypes.CabinFloor);
       }
       else if (keyPressed == ConsoleKey.D6)
       {
-        mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.CabinWall;
+        PaintSpecifiedTileType(CursorXPosition, CursorYPosition, EnumTileTypes.CabinWall);
       }
       else if (keyPressed == ConsoleKey.D7)
       {
-        mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.CabinDoor;
+        PaintSpecifiedTileType(CursorXPosition, CursorYPosition, EnumTileTypes.CabinDoor);
       }
       else if (keyPressed == ConsoleKey.D8)
       {
-        mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.Tree;
+        PaintSpecifiedTileType(CursorXPosition, CursorYPosition, EnumTileTypes.Tree);
       }
       else if (keyPressed == ConsoleKey.D9)
       {
-        mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.River;
+        PaintSpecifiedTileType(CursorXPosition, CursorYPosition, EnumTileTypes.River);
       }
       else if (keyPressed == ConsoleKey.D0)
       {
-        mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.CabinWindow;
+        PaintSpecifiedTileType(CursorXPosition, CursorYPosition, EnumTileTypes.CabinWindow);
+      }
+      else if (keyPressed == ConsoleKey.Q)
+      {
+        PaintSpecifiedTileType(CursorXPosition, CursorYPosition, EnumTileTypes.Mountain);
       }
       else if (keyPressed == ConsoleKey.Z)
       {
         mapInfo.SpawnPoints.Add(new Spawn(EnumSpawnTypes.Player, CursorXPosition, CursorYPosition));
       }
-      else if (keyPressed == ConsoleKey.Q)
+    }
+
+    private void PaintSpecifiedTileType(int xMid, int yMid, EnumTileTypes tileType)
+    {
+      for (int y = yMid - _cursorSize; y <= yMid + _cursorSize; y++)
       {
-        mapInfo.TileSet[CursorXPosition, CursorYPosition].TileType = EnumTileTypes.Mountain;
+        for (int x = xMid - _cursorSize; x <= xMid + _cursorSize; x++)
+        {
+          mapInfo.TileSet[x, y].TileType = tileType;
+        }
       }
     }
   }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CSConsoleRL.Components;
+using CSConsoleRL.Ai;
 
 namespace CSConsoleRL.Entities
 {
@@ -18,7 +19,7 @@ namespace CSConsoleRL.Entities
       AddComponent(new PositionComponent(this));
       AddComponent(new DrawableSfmlComponent(this, Enums.EnumSfmlSprites.Seeker));
       AddComponent(new CollisionComponent(this));
-      AddComponent(new SeekerAiComponent(this));
+      AddComponent(new AiComponent(this, new AiGuard(this)));
     }
   }
 }
