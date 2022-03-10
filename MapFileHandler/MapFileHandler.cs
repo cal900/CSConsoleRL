@@ -137,6 +137,7 @@ namespace MapFileHandler
       var mapDir = GameGlobals.Instance().Get<string>("mapDir");
       if (!Directory.Exists(mapDir)) mapDir = @"H:\Programming\CSConsoleRL\Data\Maps\";
       if (!Directory.Exists(mapDir)) mapDir = @"/Users/jason/Dev/CSConsoleRL/Data/Maps";
+      if (!Directory.Exists(mapDir)) mapDir = @"F:\Programming\CSConsoleRL\Data\Maps\";
       string[] filesInDirectory = Directory.GetFiles(mapDir, "*.csr");
       int tempInt = 0;
       string input = "";
